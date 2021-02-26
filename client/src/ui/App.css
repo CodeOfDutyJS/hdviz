@@ -1,0 +1,49 @@
+#root {
+  height: 100%;
+}
+
+#hdviz {
+  height: 100%;
+}
+
+#app {
+  height: 100%;
+  padding: 24px;
+}
+
+#settingPanel {
+  background: none;
+  width: 40%;
+  height: 100%;
+  overflow: auto;
+}
+
+#visualization {
+  padding: 0 24px;
+  height: 100%;
+}
+
+/* MOBILE */
+@media (max-width: 767px) {
+  #hdviz {
+    height: auto;
+    min-height: 100%;
+  }
+
+  #app {
+    flex-direction: column;
+    height: auto;
+  }
+
+  #settingPanel {
+    background: none;
+    width: 100%;
+    height: auto;
+    overflow: auto;
+  }
+
+  #visualization {
+    padding: 24px 0;
+    height: auto;
+  }
+}

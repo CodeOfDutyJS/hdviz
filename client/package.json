@@ -1,6 +1,9 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "0.0.1",
+  "main": "/src/index.js",
+  "author": "Code of Duty",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.5.0",
@@ -18,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
