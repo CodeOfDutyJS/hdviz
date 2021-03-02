@@ -7,6 +7,7 @@ import { FileTextOutlined, DatabaseOutlined } from '@ant-design/icons';
 import UploadCSV from './UploadCSV';
 import DatabaseSelection from './DatabaseSelection';
 import VisualizationSelection from './VisualizationSelection';
+import DatasetManipulation from './DatasetManipulation';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
@@ -58,7 +59,13 @@ const SettingsPanel = () => {
         <Panel header="Visualization" key="2">
           <VisualizationSelection />
         </Panel>
-        <Panel header="This is panel header 3" key="3">
+        <Panel header="Dataset manipulation" key="3">
+          <DatasetManipulation />
+        </Panel>
+        <Panel header="Settings" key="4">
+          <p>{text}</p>
+        </Panel>
+        <Panel header="Dataset manipulation" key="5">
           <p>{text}</p>
         </Panel>
       </Collapse>

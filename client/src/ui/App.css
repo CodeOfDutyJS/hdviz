@@ -23,6 +23,14 @@
   height: 100%;
 }
 
+.ant-form-item{
+  margin-bottom: 12px;
+}
+
+.no-point > .ant-form-item-label > label::after{
+  content: none;
+}
+
 /* MOBILE */
 @media (max-width: 767px) {
   #hdviz {
