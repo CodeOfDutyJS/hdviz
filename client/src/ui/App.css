@@ -23,12 +23,20 @@
   height: 100%;
 }
 
-.ant-form-item{
+.ant-form-item {
   margin-bottom: 12px;
 }
 
-.no-point > .ant-form-item-label > label::after{
+.no-point > .ant-form-item-label > label::after {
   content: none;
+}
+
+.option-panel-header {
+  background-color: #353535;
+}
+
+.option-panel-header span {
+  color: white;
 }
 
 /* MOBILE */

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import { Layout, Collapse, Tabs } from 'antd';
+import {
+  Layout, Collapse, Tabs, PageHeader,
+} from 'antd';
 
 import { FileTextOutlined, DatabaseOutlined } from '@ant-design/icons';
 
@@ -15,7 +17,7 @@ const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
 // eslint-disable-next-line arrow-body-style
-const SettingsPanel = () => {
+const OptionPanel = () => {
   const callback = (e) => {
     console.log(e);
   };
@@ -28,6 +30,10 @@ const SettingsPanel = () => {
 
   return (
     <Sider id="settingPanel" width="none">
+      <PageHeader
+        className="option-panel-header"
+        title="Options Panel"
+      />
       <Collapse defaultActiveKey={['1', '2', '3']} onChange={callback}>
         <Panel header="Data source" key="1">
           <Tabs>
@@ -73,4 +79,4 @@ const SettingsPanel = () => {
   );
 };
 
-export default SettingsPanel;
+export default OptionPanel;

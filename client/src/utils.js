@@ -8,3 +8,8 @@ const VisualizationType = {
 };
 
 export default VisualizationType;
+
+export const DistanceType = {
+  EUCLIDEAN: 'euclidean',
+  MANHATTAN: 'manhattan',
+};

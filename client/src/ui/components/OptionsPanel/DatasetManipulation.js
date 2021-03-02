@@ -4,7 +4,7 @@ import { Form, Select, Checkbox } from 'antd';
 
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../controller/ControllerProvider';
-import VisualizationType from '../../../utils';
+import VisualizationType, { DistanceType } from '../../../utils';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -21,19 +21,13 @@ const DatasetManipulation = observer(() => {
 
   useEffect(() => {
     try {
-      // console.log(controller.getData());
-      setHeader(Object.keys(store.getData()[0]));
+      store.setColumnsFromModel();
+
+      setHeader(store.columns);
     } catch (error) {
       console.log(error);
     }
   }, [store.data]);
-
-  const onTargetChange = (_items) => {
-    console.log(_items);
-    if (_items > 2) {
-      _items.pop();
-    }
-  };
 
   const onNormalizeCheckboxChanged = (e) => {
     setNormalized(e.target.checked);
@@ -43,11 +37,26 @@ const DatasetManipulation = observer(() => {
     setDisanceMatrix(e.target.checked);
   };
 
+  const onFeaturesChanged = (_features) => {
+    store.setFeatures(_features);
+  };
+
+  const onTargetChanged = (_target) => {
+    if (_target.length > 2) {
+      _target.pop();
+    }
+    store.setTarget(_target);
+  };
+
+  const onDistanceChanged = (_distance) => {
+    store.setDistance(_distance);
+  };
+
   return (
     <Form onFinish={testConnection}>
       <Item label="Features" name="features" rules={[{ required: true, message: 'Please select a Database' }]}>
-        <Select placeholder="Database connection" mode="multiple">
-          {header.map((item, key) => <Option key={`f-${item}`}>{item}</Option>)}
+        <Select placeholder="Database connection" mode="multiple" onChange={onFeaturesChanged}>
+          {header.map((item, key) => <Option key={item}>{item}</Option>)}
         </Select>
       </Item>
       <Item
@@ -57,8 +66,8 @@ const DatasetManipulation = observer(() => {
           required: false, message: 'Max 2 target variables', type: 'array', max: 2,
         }]}
       >
-        <Select placeholder="Database connection" mode="multiple" onChange={onTargetChange}>
-          {header.map((item, key) => <Option key={`t-${item}`}>{item}</Option>)}
+        <Select placeholder="Database connection" mode="multiple" onChange={onTargetChanged}>
+          {header.map((item, key) => <Option key={item}>{item}</Option>)}
         </Select>
       </Item>
       <Item className="no-point" label={<Checkbox onChange={onNormalizeCheckboxChanged}>Normalize data</Checkbox>}>
@@ -76,10 +85,9 @@ const DatasetManipulation = observer(() => {
           // eslint-disable-next-line max-len
           <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={disanceMatrix}>Calculate Distance Matrix</Checkbox>}>
             {disanceMatrix ? (
-              <Select placeholder="Select distance">
-                <Option key="1">Euclidea</Option>
-                <Option key="2">Manthattan</Option>
-                <Option key="3">Colonne</Option>
+              <Select placeholder="Select distance" onChange={onDistanceChanged}>
+                <Option key={DistanceType.EUCLIDEAN}>Euclidea</Option>
+                <Option key={DistanceType.MANHATTAN}>Manthattan</Option>
               </Select>
             ) : null}
           </Item>

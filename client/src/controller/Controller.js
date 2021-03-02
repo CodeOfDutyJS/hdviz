@@ -6,7 +6,7 @@ import {
 import { getDatabases, getTables, getData } from './API';
 
 class Model {
-  title='';
+  title = '';
 
   constructor() {
     makeAutoObservable(this);
@@ -23,62 +23,87 @@ class Model {
 }
 
 class Controller {
- visualization = null;
+  visualizationSelected = null;
 
- databases = [];
+  columns = [];
 
- tables = [];
+  featuresSelected = [];
 
- data = [];
+  targetSelected = [];
 
- visualizationSelected = null;
+  distanceSelected = null;
 
- constructor() {
-   makeAutoObservable(this);
-   this.visualization = new Model();
- }
+  visualization = null;
 
- setVisualization(_visualization) {
-   this.visualizationSelected = _visualization;
- }
+  databases = [];
 
- getVisualizationSelected() {
-   return this.visualizationSelected;
- }
+  tables = [];
 
- getTitle() {
-   return this.visualization.Title;
- }
+  data = [];
 
- setTitle() {
-   this.visualization.Title = 'https://mobx.js.org/defining-data-stores.html';
- }
+  constructor() {
+    makeAutoObservable(this);
+    this.visualization = new Model();
+  }
 
- async setDatabases() {
-   this.databases = await getDatabases();
- }
+  setColumnsFromModel() {
+    // this.columns = model.qualcosa
+    this.columns = ['col1', 'col2', 'col3', 'col4', 'col5', 'col6'];
+  }
 
- async getDatabases() {
-   await this.setDatabases();
-   return this.databases;
- }
+  setFeatures(_features) {
+    this.featuresSelected = _features;
+  }
 
- async setTables(db_) {
-   this.tables = await getTables(db_);
- }
+  setTarget(_target) {
+    this.targetSelected = _target;
+  }
 
- async getTables(db_) {
-   await this.setTables(db_);
-   return this.tables;
- }
+  setDistance(_distance) {
+    this.distanceSelected = _distance;
+  }
 
- async setData(table_) {
-   this.data = await getData(table_);
- }
+  setVisualization(_visualization) {
+    this.visualizationSelected = _visualization;
+  }
 
- getData() {
-   return this.data;
- }
+  getVisualizationSelected() {
+    return this.visualizationSelected;
+  }
+
+  getTitle() {
+    return this.visualization.Title;
+  }
+
+  setTitle() {
+    this.visualization.Title = 'https://mobx.js.org/defining-data-stores.html';
+  }
+
+  async setDatabases() {
+    this.databases = await getDatabases();
+  }
+
+  async getDatabases() {
+    await this.setDatabases();
+    return this.databases;
+  }
+
+  async setTables(db_) {
+    this.tables = await getTables(db_);
+  }
+
+  async getTables(db_) {
+    await this.setTables(db_);
+    return this.tables;
+  }
+
+  async setData(table_) {
+    this.data = await getData(table_);
+  }
+
+  getData() {
+    return this.data;
+  }
 }
 
 export default Controller;
