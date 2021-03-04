@@ -125,6 +125,9 @@ class Controller {
 
     const parseFile = (rawFile) => new Promise((resolve) => {
       Papa.parse(rawFile, {
+        header: true,
+        dynamicTyping: true,
+        worker: true,
         complete: (results) => {
           resolve(results.data);
         },
