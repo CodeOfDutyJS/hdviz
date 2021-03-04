@@ -39,6 +39,15 @@
   color: white;
 }
 
+#start-button{
+  background-color: #353535;
+  padding: 1.5em 5em;
+}
+
+#start-button span{
+  color: #353535;
+}
+
 /* MOBILE */
 @media (max-width: 767px) {
   #hdviz {

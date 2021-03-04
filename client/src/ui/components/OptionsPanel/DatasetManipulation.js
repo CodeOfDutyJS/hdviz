@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import { Form, Select, Checkbox } from 'antd';
+import {
+  Form, Select, Checkbox, Button,
+} from 'antd';
 
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../controller/ControllerProvider';
@@ -11,23 +13,44 @@ const { Item } = Form;
 
 const DatasetManipulation = observer(() => {
   const store = useStore();
-  const [header, setHeader] = useState([]);
+  const [columns, setColumns] = useState([]);
   const [normalized, setNormalized] = useState(false);
   const [disanceMatrix, setDisanceMatrix] = useState(false);
+  const [features, setFeatures] = useState([]);
+  const [maxFeatures, setMaxFeatures] = useState(false);
+  const [targets, setTargets] = useState([]);
+  const [maxTarget, setMaxTarget] = useState(false);
 
-  const testConnection = (sa) => {
-    console.log(sa);
+  // eslint-disable-next-line max-len
+  const isMATRIX = (_f) => store.getVisualizationSelected() === VisualizationType.MATRIX && _f.length > 5;
+
+  const setFeaturesStore = (_f) => {
+    setFeatures(_f);
+    store.setFeatures(features);
   };
 
   useEffect(() => {
     try {
       store.setColumnsFromModel();
 
-      setHeader(store.columns);
+      setColumns(store.columns);
     } catch (error) {
       console.log(error);
     }
   }, [store.data]);
+
+  useEffect(() => {
+    if (isMATRIX(features)) {
+      setFeaturesStore(features.slice(0, 5));
+      setMaxFeatures(true);
+    } else {
+      setMaxFeatures(false);
+    }
+  }, [store.getVisualizationSelected()]);
+
+  useEffect(() => {
+    console.log(features);
+  }, [features]);
 
   const onNormalizeCheckboxChanged = (e) => {
     setNormalized(e.target.checked);
@@ -38,12 +61,22 @@ const DatasetManipulation = observer(() => {
   };
 
   const onFeaturesChanged = (_features) => {
-    store.setFeatures(_features);
+    console.log(_features);
+    if (isMATRIX(_features)) {
+      _features.pop();
+      setMaxFeatures(true);
+    } else {
+      setMaxFeatures(false);
+    }
+    setFeaturesStore(_features);
   };
 
   const onTargetChanged = (_target) => {
     if (_target.length > 2) {
       _target.pop();
+      setMaxTarget(true);
+    } else {
+      setMaxTarget(false);
     }
     store.setTarget(_target);
   };
@@ -53,21 +86,28 @@ const DatasetManipulation = observer(() => {
   };
 
   return (
-    <Form onFinish={testConnection}>
-      <Item label="Features" name="features" rules={[{ required: true, message: 'Please select a Database' }]}>
-        <Select placeholder="Database connection" mode="multiple" onChange={onFeaturesChanged}>
-          {header.map((item, key) => <Option key={item}>{item}</Option>)}
+    <Form>
+      <Item
+        label="Features"
+        name="features"
+        validateStatus={maxFeatures ? 'warning' : null}
+        hasFeedback
+        help={maxFeatures ? 'Max 5 feature variables' : null}
+      >
+        <Select placeholder="Database connection" mode="multiple" onChange={onFeaturesChanged} value={['col1', 'col2']} allowClear>
+          {columns.map((item, key) => <Option key={item}>{item}</Option>)}
         </Select>
+        <></>
       </Item>
       <Item
         label="Target"
         name="target"
-        rules={[{
-          required: false, message: 'Max 2 target variables', type: 'array', max: 2,
-        }]}
+        validateStatus={maxTarget ? 'warning' : null}
+        hasFeedback
+        help={maxTarget ? 'Max 2 target variables' : null}
       >
         <Select placeholder="Database connection" mode="multiple" onChange={onTargetChanged}>
-          {header.map((item, key) => <Option key={item}>{item}</Option>)}
+          {columns.map((item, key) => <Option key={item}>{item}</Option>)}
         </Select>
       </Item>
       <Item className="no-point" label={<Checkbox onChange={onNormalizeCheckboxChanged}>Normalize data</Checkbox>}>

@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 import { Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { useStore } from '../../../controller/ControllerProvider';
 
 const UploadCSV = () => {
   const [fileList, setFileList] = useState([]);
+  const store = useStore();
 
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList.slice(-1));
@@ -16,6 +18,8 @@ const UploadCSV = () => {
     if (!(file.type === 'application/vnd.ms-excel')) {
       onError(file);
     } else {
+      console.log(file);
+      store.testCSV(file);
       onSuccess(file);
     }
   };

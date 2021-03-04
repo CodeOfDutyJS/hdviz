@@ -1,7 +1,9 @@
 /* eslint-disable max-classes-per-file */
+import Paragraph from 'antd/lib/skeleton/Paragraph';
 import {
   makeAutoObservable, makeObservable, observable, computed, action,
 } from 'mobx';
+import Papa from 'papaparse';
 
 import { getDatabases, getTables, getData } from './API';
 
@@ -39,7 +41,9 @@ class Controller {
 
   tables = [];
 
-  data = [];
+  data;
+
+  loadingCompleted = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -65,6 +69,7 @@ class Controller {
 
   setVisualization(_visualization) {
     this.visualizationSelected = _visualization;
+    console.log(this.loadingData);
   }
 
   getVisualizationSelected() {
@@ -104,6 +109,39 @@ class Controller {
   getData() {
     return this.data;
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  async testCSV(file) {
+    // Papa.parsePromise(file)
+    //   .then((results) => { this.data = results; this.loadingData = true; });
+    // this.data = Papa.parse(file, {
+    //   header: true,
+    //   dynamicTyping: true,
+    //   worker: true,
+    //   complete: (r) => {
+    //     console.log(r);
+    //   },
+    // });
+
+    const parseFile = (rawFile) => new Promise((resolve) => {
+      Papa.parse(rawFile, {
+        complete: (results) => {
+          resolve(results.data);
+        },
+      });
+    });
+    this.data = await parseFile(file);
+    this.loadingCompleted = this.data != null;
+    // console.log('parsedData', parsedData);
+  }
 }
+
+Papa.parsePromise = function (file) {
+  return new Promise((complete, error) => {
+    Papa.parse(file, {
+      header: true, dynamicTyping: true, worker: true, complete, error,
+    });
+  });
+};
 
 export default Controller;
