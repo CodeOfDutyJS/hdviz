@@ -31,8 +31,7 @@ const DatasetManipulation = observer(() => {
 
   useEffect(() => {
     try {
-      store.setColumnsFromModel();
-
+      // store.setColumnsFromModel();
       setColumns(store.columns);
     } catch (error) {
       console.log(error);
@@ -61,7 +60,6 @@ const DatasetManipulation = observer(() => {
   };
 
   const onFeaturesChanged = (_features) => {
-    console.log(_features);
     if (isMATRIX(_features)) {
       _features.pop();
       setMaxFeatures(true);
@@ -94,7 +92,7 @@ const DatasetManipulation = observer(() => {
         hasFeedback
         help={maxFeatures ? 'Max 5 feature variables' : null}
       >
-        <Select placeholder="Database connection" mode="multiple" onChange={onFeaturesChanged} value={['col1', 'col2']} allowClear>
+        <Select placeholder="Database connection" mode="multiple" onChange={onFeaturesChanged} value={features} allowClear>
           {columns.map((item, key) => <Option key={item}>{item}</Option>)}
         </Select>
         <></>

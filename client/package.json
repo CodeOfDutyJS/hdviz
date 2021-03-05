@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^12.1.10",
     "antd": "4.12.3",
     "babel-eslint": "^10.1.0",
+    "d3": "^6.5.0",
     "less": "^4.1.1",
     "mobx": "^6.1.7",
     "mobx-react-lite": "^3.2.0",

@@ -8,9 +8,9 @@ import { useStore } from '../../../controller/ControllerProvider';
 const { Content } = Layout;
 
 const Visualization = observer(() => {
-  const a = useStore();
+  const store = useStore();
   return (
-    <Content id="visualization">{a.getTitle()}</Content>
+    <Content id="visualization">{store.getVisualization()}</Content>
   );
 });
 

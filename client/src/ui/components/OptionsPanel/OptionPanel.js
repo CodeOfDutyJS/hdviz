@@ -22,23 +22,15 @@ const { TabPane } = Tabs;
 const OptionPanel = observer(() => {
   const store = useStore();
   const [success, setSuccess] = useState(false);
-  const callback = (e) => {
-    console.log(e);
-  };
   const [loadingData, setLoadingData] = useState(!store.loadingData);
-
-  const text = `gfsdgdsfgsdg
-  sdgsd
-  g
-  dsgsd
-  gsdgsdgsdgsdgsd`;
 
   const showResult = () => {
     // logica con controller
     setSuccess(true);
   };
+
   useEffect(() => {
-    console.log(store.data);
+    console.log('ciao');
   }, [store.data]);
 
   return (
@@ -47,7 +39,7 @@ const OptionPanel = observer(() => {
         className="option-panel-header"
         title="Options Panel"
       />
-      <Collapse defaultActiveKey={['1', '2']} onChange={callback}>
+      <Collapse defaultActiveKey={['1', '2']}>
         <Panel header="Data source" key="1">
           <Tabs>
             <TabPane
@@ -82,7 +74,7 @@ const OptionPanel = observer(() => {
           <DatasetManipulation />
         </Panel>
         <Panel header="Settings" key="4" style={{ display: 'none' }}>
-          <p>{text}</p>
+          <p>Settings</p>
         </Panel>
       </Collapse>
       <Layout id="start-button">

@@ -4,6 +4,7 @@ import {
   makeAutoObservable, makeObservable, observable, computed, action,
 } from 'mobx';
 import Papa from 'papaparse';
+import VisualizationType, { DistanceType } from '../utils';
 
 import { getDatabases, getTables, getData } from './API';
 
@@ -50,21 +51,23 @@ class Controller {
     this.visualization = new Model();
   }
 
-  setColumnsFromModel() {
-    // this.columns = model.qualcosa
-    this.columns = ['col1', 'col2', 'col3', 'col4', 'col5', 'col6'];
-  }
-
   setFeatures(_features) {
     this.featuresSelected = _features;
+    this.model.setSelectedColumns(this.featuresSelected);
   }
 
   setTarget(_target) {
     this.targetSelected = _target;
+
+    this.model.ciao(this.targetSelected);
   }
 
   setDistance(_distance) {
     this.distanceSelected = _distance;
+
+    if (this.distanceSelected === DistanceType.EUCLIDEAN) {
+      this.model.setEuclideanDistance(12, 12);
+    }
   }
 
   setVisualization(_visualization) {
@@ -74,14 +77,6 @@ class Controller {
 
   getVisualizationSelected() {
     return this.visualizationSelected;
-  }
-
-  getTitle() {
-    return this.visualization.Title;
-  }
-
-  setTitle() {
-    this.visualization.Title = 'https://mobx.js.org/defining-data-stores.html';
   }
 
   async setDatabases() {
@@ -111,18 +106,9 @@ class Controller {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async testCSV(file) {
-    // Papa.parsePromise(file)
-    //   .then((results) => { this.data = results; this.loadingData = true; });
-    // this.data = Papa.parse(file, {
-    //   header: true,
-    //   dynamicTyping: true,
-    //   worker: true,
-    //   complete: (r) => {
-    //     console.log(r);
-    //   },
-    // });
-
+  async uploadCSV(file) {
+    this.loadingCompleted = false;
+    // Funzione per il parsing
     const parseFile = (rawFile) => new Promise((resolve) => {
       Papa.parse(rawFile, {
         header: true,
@@ -133,18 +119,23 @@ class Controller {
         },
       });
     });
-    this.data = await parseFile(file);
+
+    // Set data al modello
+    const _data = await parseFile(file);
+    // this.model.setData(_data);
+    this.data = _data;
+
+    // Set columns
+    this.columns = Object.keys(_data[0]);
+
+    // Set loadingCompleted
     this.loadingCompleted = this.data != null;
-    // console.log('parsedData', parsedData);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getVisualization() {
+    return 'Visualization';
   }
 }
-
-Papa.parsePromise = function (file) {
-  return new Promise((complete, error) => {
-    Papa.parse(file, {
-      header: true, dynamicTyping: true, worker: true, complete, error,
-    });
-  });
-};
 
 export default Controller;
