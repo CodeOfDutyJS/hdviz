@@ -27,6 +27,8 @@ const OptionPanel = observer(() => {
   const showResult = () => {
     // logica con controller
     setSuccess(true);
+
+    store.parti = true;
   };
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const OptionPanel = observer(() => {
           <DatasetManipulation />
         </Panel>
         <Panel header="Settings" key="4" style={{ display: 'none' }}>
-          <p>Settings</p>
+          <p>Settings </p>
         </Panel>
       </Collapse>
       <Layout id="start-button">
