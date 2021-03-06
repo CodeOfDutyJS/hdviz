@@ -17,7 +17,8 @@ const Visualization = observer(() => {
 
   return (
     <Content>
-      <svg id="area" height={600} width={606} />
+      {/* <svg id="area" height={600} width={606} /> */}
+      {store.parti ? store.getForceField() : null}
     </Content>
   );
 });
