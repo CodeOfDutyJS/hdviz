@@ -20,7 +20,7 @@ class Model {
   selectedColumns = [];
 
   addProgressiveId() {
-    for (let i = 0; i < this.selectedData.getData().nodes.length; i++) {
+    for (let i = 0; i <this.selectedData.getData().nodes.length ; i++) {
       const n = this.selectedData.getData().nodes[i];
       n.id = `node_${i}`;
     }
@@ -35,7 +35,7 @@ class Model {
   }
 
   setId(a) {
-    if (a === this.label.id || a === 'null' || a === 'undefined') return;
+    if ( a === 'null' || a === 'undefined') return;
     this.label.id = a;
     if (this.label.id === 'progressive') {
       this.addProgressiveId();
@@ -117,6 +117,7 @@ class Model {
           Object.values(this.selectedData.getData().nodes[i]),
           Object.values(this.selectedData.getData().nodes[j]),
         );
+
         if (distance / 1000 > 1) {
           this.selectedData.getData().links.push(
             {
@@ -143,6 +144,10 @@ class Model {
 
   reset() {
     this.data.dataFlush();
+    this.selectedData.dataFlush();
+  }
+
+  resetSelected() {
     this.selectedData.dataFlush();
   }
 

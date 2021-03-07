@@ -62,6 +62,7 @@ const DatasetManipulation = observer(() => {
       setMaxFeatures(false);
     }
     setFeatures(_features);
+    setDisanceMatrix(false)
   };
 
   const onTargetChanged = (_target) => {
