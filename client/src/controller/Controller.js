@@ -7,7 +7,6 @@ import Papa from 'papaparse';
 import * as d3 from 'd3';
 import Model from '../model/model';
 import { DistanceType } from '../utils';
-import useD3 from '../ui/hooks/useD3';
 
 import { getDatabases, getTables, getData } from './API';
 
@@ -43,8 +42,6 @@ class Controller {
 
   setFeatures(_features) {
     this.featuresSelected = _features;
-    this.model.setSelectedColumns(this.featuresSelected);
-    this.model.setFeatures(this.featuresSelected);
   }
 
   setTarget(_target) {
@@ -56,18 +53,14 @@ class Controller {
   setDistance(_distance) {
     this.distanceSelected = _distance;
 
-    if (this.distanceSelected === DistanceType.EUCLIDEAN) {
-      this.model.setEuclideanDistance(12);
-    }
+    // if (this.distanceSelected === DistanceType.EUCLIDEAN) {
+    //   this.model.setEuclideanDistance(12);
+    // }
   }
 
   setVisualization(_visualization) {
     this.visualizationSelected = _visualization;
     console.log(this.loadingData);
-  }
-
-  getVisualizationSelected() {
-    return this.visualizationSelected;
   }
 
   async setDatabases() {
@@ -92,13 +85,9 @@ class Controller {
     this.data = await getData(table_);
   }
 
-  getData() {
-    return this.data;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
   async uploadCSV(file) {
     this.loadingCompleted = false;
+
     // Funzione per il parsing
     const parseFile = (rawFile) => new Promise((resolve) => {
       Papa.parse(rawFile, {
@@ -114,92 +103,117 @@ class Controller {
     // Set data al modello
     const _data = await parseFile(file);
     this.model.setData(_data);
-    // this.data = _data;
-    console.log(this.model.getData());
-    console.log(this.model.getSelectedData());
 
     // Set columns
     this.columns = Object.keys(_data[0]);
-    this.model.setSelectedColumns(['housing_median_age', 'total_rooms', 'population']);
-    this.model.setId('progressive');
-    await this.model.setEuclideanDistance(12, 0);
-    console.log(this.model.getSelectedData());
+    // eslint-disable-next-line max-len
+    // this.model.setSelectedColumns(['housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income', 'median_house_value']);
+
+    // this.model.calculateDistance();
+
+    // await this.model.calculateDistance();
+    // this.model.setId('progressive');
+    // console.log(await this.model.getSelectedData());
 
     // Set loadingCompleted
-    this.loadingCompleted = this.model.data != null;
+    this.loadingCompleted = await this.model.data != null;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getForceField() {
-    const ffvisual = useD3((svg) => {
-      const { nodes } = this.model.getSelectedData();
-      const { links } = this.model.getSelectedData();
+  async start() {
+    this.model.setSelectedColumns(this.featuresSelected);
+    // this.model.setFeatures(this.featuresSelected);
 
-      const link = svg.select('.lines')
-        .attr('stroke', '#999')
-        .attr('stroke-opacity', 0.6)
-        .selectAll('line')
-        .data(links)
-        .join('line')
-        .attr('stroke-width', (d) => d.value);
+    if (this.distanceSelected === DistanceType.EUCLIDEAN) {
+      this.model.calculateDistance();
+      // this.model.setEuclideanDistance(400);
+      this.model.setId('progressive');
+      console.log(await this.model.getSelectedData());
+    }
 
-      const node = svg.select('.circles')
-        .attr('stroke', '#fff')
-        .attr('stroke-width', 1.5)
-        .selectAll('circle')
-        .data(nodes)
-        .join('circle')
-        .attr('r', 5)
-        .attr('fill', (d) => d3.schemeCategory10[d.group]);
-        // .call(d3.drag(simulation).on('start', (event) => {
-        //   if (!event.active) simulation.alphaTarget(0.3).restart();
-        //   event.subject.fx = event.x;
-        //   event.subject.fy = event.y;
-        // })
-        //   .on('drag', (event) => {
-        //     event.subject.fx = event.x;
-        //     event.subject.fy = event.y;
-        //   })
-        //   .on('end', (event) => {
-        //     if (!event.active) simulation.alphaTarget(0);
-        //     event.subject.fx = null;
-        //     event.subject.fy = null;
-        //   }));
+    this.forceField();
+  }
 
-      const simulation = d3.forceSimulation(nodes)
-        .force('charge', d3.forceManyBody().strength(-100))
-        .force('link', d3.forceLink(links).id((d) => d.id).strength((d) => d.value))
-        .force('center ', d3.forceCenter(300, 300))
-        .on('tick', () => {
-          node
-            .attr('cx', (d) => d.x)
-            .attr('cy', (d) => d.y);
+  forceField() {
+    const drag = (simulation) => {
+      function dragstarted(event) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+      }
 
-          link
-            .attr('x1', (d) => d.source.x)
-            .attr('y1', (d) => d.source.y)
-            .attr('x2', (d) => d.target.x)
-            .attr('y2', (d) => d.target.y);
-        });
+      function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+      }
 
-      const label = node.append('title')
-        .text((d) => d.label);
+      function dragended(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+      }
+
+      return d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended);
+    };
+
+    const colore = d3.scaleOrdinal(d3.schemeCategory10);
+    colore.domain(['NEAR BAY', 'INLAND', 'ISLAND', 'NEAR OCEAN', '<1H OCEAN']);
+
+    const verydata = this.model.getSelectedData();
+
+    const links = verydata.links.map((d) => Object.create(d));
+    const nodes = verydata.nodes.map((d) => Object.create(d));
+
+    console.log(links);
+    console.log(nodes);
+
+    const svg = d3.select('#area');
+
+    const width = 600 || svg.node().getBoundingClientRect().width;
+    const height = 600 || svg.node().getBoundingClientRect().height;
+
+    console.log(width);
+    console.log(height);
+
+    const simulation = d3.forceSimulation(nodes)
+      .force('link', d3.forceLink(links).distance((d) => d.value).strength((d) => (1 / d.value)).id((d) => d.id))
+      .force('charge', d3.forceManyBody())
+      .force('center', d3.forceCenter(width / 2, height / 2));
+
+    // const link = svg.append('g')
+    //   .attr('stroke', '#999')
+    //   .attr('stroke-opacity', 0.6)
+    //   .selectAll('line')
+    //   .data(links)
+    //   .join('line')
+    //   .attr('stroke-width', (d) => Math.sqrt(d.value/100));
+
+    const node = svg.append('g')
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 1.5)
+      .selectAll('circle')
+      .data(nodes)
+      .join('circle')
+      .attr('r', 5)
+      .attr('fill', (d) => colore(d.ocean_proximity))
+      .call(drag(simulation));
+
+    node.append('title')
+      .text((d) => d.id);
+
+    simulation.on('tick', () => {
+      // link
+      //   .attr('x1', (d) => d.source.x)
+      //   .attr('y1', (d) => d.source.y)
+      //   .attr('x2', (d) => d.target.x)
+      //   .attr('y2', (d) => d.target.y);
+
+      node
+        .attr('cx', (d) => d.x)
+        .attr('cy', (d) => d.y);
     });
-
-    return (
-      <svg
-        ref={ffvisual}
-        style={{
-          height: 600,
-          width: '100%',
-          marginRight: '0px',
-          marginLeft: '0px',
-        }}
-      >
-        <g className="lines" />
-        <g className="circles" />
-      </svg>
-    );
   }
 }
 

@@ -2,6 +2,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-param-reassign */
 import * as d3 from 'd3';
+import * as mldistance from 'ml-distance';
 import Dataset from './Dataset';
 import useD3 from '../ui/hooks/useD3';
 
@@ -105,6 +106,30 @@ class Model {
         }
       }
     }
+    this.selectedData.getData().nodes.length = numberOfNodes;
+  }
+
+  calculateDistance() {
+    this.selectedData.getData().links = [];
+    for (let i = 0; i < 400; i++) {
+      for (let j = 1 + i; j < 400; j++) {
+        const distance = mldistance.distance.manhattan(
+          Object.values(this.selectedData.getData().nodes[i]),
+          Object.values(this.selectedData.getData().nodes[j]),
+        );
+        if (distance / 1000 > 1) {
+          this.selectedData.getData().links.push(
+            {
+              source: `node_${i}`,
+              target: `node_${j}`,
+              value: distance / 1000,
+            },
+          );
+        }
+      }
+    }
+
+    this.selectedData.getData().nodes.length = 400;
   }
 
   setData(a) {

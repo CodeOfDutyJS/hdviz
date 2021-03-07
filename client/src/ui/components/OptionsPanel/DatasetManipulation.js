@@ -22,12 +22,7 @@ const DatasetManipulation = observer(() => {
   const [maxTarget, setMaxTarget] = useState(false);
 
   // eslint-disable-next-line max-len
-  const isMATRIX = (_f) => store.getVisualizationSelected() === VisualizationType.MATRIX && _f.length > 5;
-
-  const setFeaturesStore = (_f) => {
-    setFeatures(_f);
-    store.setFeatures(features);
-  };
+  const isMATRIX = (_f) => store.visualizationSelected === VisualizationType.MATRIX && _f.length > 5;
 
   useEffect(() => {
     try {
@@ -40,15 +35,15 @@ const DatasetManipulation = observer(() => {
 
   useEffect(() => {
     if (isMATRIX(features)) {
-      setFeaturesStore(features.slice(0, 5));
+      setFeatures(features.slice(0, 5));
       setMaxFeatures(true);
     } else {
       setMaxFeatures(false);
     }
-  }, [store.getVisualizationSelected()]);
+  }, [store.visualizationSelected]);
 
   useEffect(() => {
-    console.log(features);
+    store.setFeatures(features);
   }, [features]);
 
   const onNormalizeCheckboxChanged = (e) => {
@@ -66,7 +61,7 @@ const DatasetManipulation = observer(() => {
     } else {
       setMaxFeatures(false);
     }
-    setFeaturesStore(_features);
+    setFeatures(_features);
   };
 
   const onTargetChanged = (_target) => {
@@ -118,7 +113,7 @@ const DatasetManipulation = observer(() => {
         ) : null}
       </Item>
 
-      {store.getVisualizationSelected() === VisualizationType.FORCE
+      {store.visualizationSelected === VisualizationType.FORCE
         ? (
           // eslint-disable-next-line max-len
           <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={disanceMatrix}>Calculate Distance Matrix</Checkbox>}>

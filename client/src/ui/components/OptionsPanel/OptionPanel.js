@@ -26,7 +26,9 @@ const OptionPanel = observer(() => {
 
   const showResult = () => {
     // logica con controller
-    setSuccess(true);
+    // setSuccess(true);
+
+    store.start();
 
     store.parti = true;
   };

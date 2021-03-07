@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Layout } from 'antd';
 import { useStore } from '../../../controller/ControllerProvider';
-import ciao from './ciao';
+// import ciao from './ciao';
 
 const { Content } = Layout;
 
@@ -12,13 +12,24 @@ const Visualization = observer(() => {
   const store = useStore();
 
   useEffect(() => {
-    ciao();
+    // ciao();
   }, []);
 
   return (
     <Content>
-      {/* <svg id="area" height={600} width={606} /> */}
-      {store.parti ? store.getForceField() : null}
+      <svg
+        id="area"
+        style={{
+          height: '100%',
+          width: '100%',
+          marginRight: '0px',
+          marginLeft: '0px',
+        }}
+      >
+        <g className="lines" />
+        <g className="circles" />
+      </svg>
+      {/* {store.parti ? store.getForceField() : null} */}
     </Content>
   );
 });
