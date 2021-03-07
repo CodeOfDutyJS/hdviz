@@ -1,0 +1,6 @@
+{
+  "DB_Name":"TestHDViz",
+  "DB_Address": "localhost",
+  "DB_Username": "utente",
+  "DB_Password": "passw0rd"
+}
