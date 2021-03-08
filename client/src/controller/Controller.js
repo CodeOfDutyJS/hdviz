@@ -119,7 +119,15 @@ class Controller {
     this.loadingCompleted = await this.model.data != null;
   }
 
+  removeGraph() {
+    const svg = d3.select('#area')
+    const node=svg.selectAll('circle').remove()
+    svg.selectAll('line').remove()
+  }
+
   async start() {
+    this.removeGraph()
+    this.model.resetSelected()
     this.model.setSelectedColumns(this.featuresSelected);
     // this.model.setFeatures(this.featuresSelected);
 

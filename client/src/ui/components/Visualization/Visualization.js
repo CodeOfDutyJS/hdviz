@@ -26,8 +26,7 @@ const Visualization = observer(() => {
           marginLeft: '0px',
         }}
       >
-        <g className="lines" />
-        <g className="circles" />
+
       </svg>
       {/* {store.parti ? store.getForceField() : null} */}
     </Content>
