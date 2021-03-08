@@ -36,7 +36,7 @@ class Model {
   }
 
   setId(a) {
-    if (a === this.label.id || a === 'null' || a === 'undefined') return;
+    if (a === 'null' || a === 'undefined') return;
     this.label.id = a;
     if (this.label.id === 'progressive') {
       this.addProgressiveId();
@@ -121,10 +121,6 @@ class Model {
           Object.values(this.selectedData.getData().nodes[i]),
           Object.values(this.selectedData.getData().nodes[j]),
         );
-        // if (a === -1) {
-        //   console.log(distance);
-        //   a = distance / 20;
-        // }
         if (distance > 1) {
           this.selectedData.getData().links.push(
             {
@@ -163,6 +159,10 @@ class Model {
 
   reset() {
     this.data.dataFlush();
+    this.selectedData.dataFlush();
+  }
+
+  resetSelected() {
     this.selectedData.dataFlush();
   }
 

@@ -119,7 +119,16 @@ class Controller {
     this.loadingCompleted = await this.model.data != null;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  removeGraph() {
+    const svg = d3.select('#area');
+    const node = svg.selectAll('circle').remove();
+    svg.selectAll('line').remove();
+  }
+
   async start() {
+    this.removeGraph();
+    this.model.resetSelected();
     this.model.setSelectedColumns([...this.featuresSelected, ...this.targetSelected]);
     // this.model.setFeatures(this.featuresSelected);
 
