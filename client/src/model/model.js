@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-param-reassign */
@@ -111,25 +112,44 @@ class Model {
 
   calculateDistance() {
     this.selectedData.getData().links = [];
-    for (let i = 0; i < 400; i++) {
-      for (let j = 1 + i; j < 400; j++) {
+    const a = -1;
+    for (let i = 0; i < 151; i++) {
+      const colore = this.selectedData.getData().nodes[i][this.label.target[0]];
+      delete this.selectedData.getData().nodes[i][this.label.target[0]];
+      for (let j = 1 + i; j < 151; j++) {
         const distance = mldistance.distance.manhattan(
           Object.values(this.selectedData.getData().nodes[i]),
           Object.values(this.selectedData.getData().nodes[j]),
         );
-        if (distance / 1000 > 1) {
+        // if (a === -1) {
+        //   console.log(distance);
+        //   a = distance / 20;
+        // }
+        if (distance > 1) {
           this.selectedData.getData().links.push(
             {
               source: `node_${i}`,
               target: `node_${j}`,
-              value: distance / 1000,
+              value: distance,
             },
           );
         }
       }
+
+      this.selectedData.getData().nodes[i].colore = colore;
     }
 
-    this.selectedData.getData().nodes.length = 400;
+    const max = this.selectedData.getData().links.reduce((prev, current) => ((prev.value > current.value) ? prev : current)).value;
+    const min = this.selectedData.getData().links.reduce((prev, current) => ((prev.value < current.value) ? prev : current)).value;
+
+    // eslint-disable-next-line camelcase
+    const scale = (num, in_min, in_max, out_min, out_max) => ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
+
+    for (let i = 0; i < this.selectedData.getData().links.length; i++) {
+      this.selectedData.getData().links[i].value = scale(this.selectedData.getData().links[i].value, min, max, 1, 200);
+    }
+
+    this.selectedData.getData().nodes.length = 151;
   }
 
   setData(a) {

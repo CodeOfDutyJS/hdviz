@@ -2,6 +2,11 @@
   height: 100%;
 }
 
+#area{
+  width: 50%;
+  margin-left: 2em;
+}
+
 #hdviz {
   height: 100%;
 }

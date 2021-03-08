@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -103,7 +104,7 @@ const DatasetManipulation = observer(() => {
           {columns.map((item, key) => <Option key={item}>{item}</Option>)}
         </Select>
       </Item>
-      <Item className="no-point" label={<Checkbox onChange={onNormalizeCheckboxChanged}>Normalize data</Checkbox>}>
+      {/* <Item className="no-point" label={<Checkbox onChange={onNormalizeCheckboxChanged}>Normalize data</Checkbox>}>
         {normalized ? (
           <Select placeholder="Select what normalize">
             <Option key="1">Globale</Option>
@@ -111,7 +112,7 @@ const DatasetManipulation = observer(() => {
             <Option key="3">Colonne</Option>
           </Select>
         ) : null}
-      </Item>
+      </Item> */}
 
       {store.visualizationSelected === VisualizationType.FORCE
         ? (

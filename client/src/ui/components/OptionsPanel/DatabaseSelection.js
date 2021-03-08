@@ -15,6 +15,7 @@ const DatabaseSelection = () => {
   const [isDatabaseSelected, setIsDatabaseSelected] = useState(false);
   const [isDatabaseListLoading, setIsDatabaseListLoading] = useState(true);
   const [isTableListLoading, setIsTableListLoading] = useState(false);
+  const [dbSelected, setDbSelected] = useState();
 
   useEffect(() => {
     // Call API to get list of database connection available
@@ -31,31 +32,31 @@ const DatabaseSelection = () => {
   const onDatabaseSelection = async (_db) => {
     // Call API to get list of table available
     setIsTableListLoading(true);
+    setDbSelected(_db);
     setTableList(await controller.getTables(_db));
     setIsDatabaseSelected(true);
     setIsTableListLoading(false);
   };
 
   const onTableSelection = async (_table) => {
-    await controller.setData(_table);
-    console.log(controller.getData());
-    console.log(controller);
+    await controller.setData(dbSelected, _table);
+    console.log(controller.data);
   };
 
   return (
     <Form onFinish={testConnection}>
       <Item label="Database connection" name="db" rules={[{ required: true, message: 'Please select a Database' }]}>
         <Select placeholder="Database connection" disabled={isDatabaseListLoading} loading={isDatabaseListLoading} onSelect={onDatabaseSelection}>
-          {databaseList.map((item, key) => <Option key={item.id}>{item.name}</Option>)}
+          {databaseList.map((item, key) => <Option key={item.databases}>{item.databases}</Option>)}
         </Select>
       </Item>
       <Item label="Data Table" name="table" rules={[{ required: true, message: 'Please select a Database' }]}>
         <Select placeholder="Table" disabled={!isDatabaseSelected} loading={isTableListLoading} onSelect={onTableSelection}>
-          {tableList.map((item, key) => <Option key={item.id}>{item.name}</Option>)}
+          {tableList.map((item, key) => <Option key={item.table_name}>{item.table_name}</Option>)}
         </Select>
       </Item>
       <Item>
-        <Button type="primary" htmlType="submit">Test</Button>
+        <Button type="primary" htmlType="submit" disabled={controller.button}>Test</Button>
       </Item>
     </Form>
   );

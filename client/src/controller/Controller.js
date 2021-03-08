@@ -81,8 +81,8 @@ class Controller {
     return this.tables;
   }
 
-  async setData(table_) {
-    this.data = await getData(table_);
+  async setData(db_, table_) {
+    this.data = await getData(db_, table_);
   }
 
   async uploadCSV(file) {
@@ -120,7 +120,7 @@ class Controller {
   }
 
   async start() {
-    this.model.setSelectedColumns(this.featuresSelected);
+    this.model.setSelectedColumns([...this.featuresSelected, ...this.targetSelected]);
     // this.model.setFeatures(this.featuresSelected);
 
     if (this.distanceSelected === DistanceType.EUCLIDEAN) {
@@ -178,7 +178,7 @@ class Controller {
     console.log(height);
 
     const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).distance((d) => d.value).strength((d) => (1 / d.value)).id((d) => d.id))
+      .force('link', d3.forceLink(links).distance((d) => d.value * 1).strength((d) => (1 / (d.value * 1))).id((d) => d.id))
       .force('charge', d3.forceManyBody())
       .force('center', d3.forceCenter(width / 2, height / 2));
 
@@ -188,7 +188,7 @@ class Controller {
     //   .selectAll('line')
     //   .data(links)
     //   .join('line')
-    //   .attr('stroke-width', (d) => Math.sqrt(d.value/100));
+    //   .attr('stroke-width', (d) => Math.sqrt(d.value / 100));
 
     const node = svg.append('g')
       .attr('stroke', '#fff')
@@ -197,7 +197,7 @@ class Controller {
       .data(nodes)
       .join('circle')
       .attr('r', 5)
-      .attr('fill', (d) => colore(d.ocean_proximity))
+      .attr('fill', (d) => colore(d.colore))
       .call(drag(simulation));
 
     node.append('title')
