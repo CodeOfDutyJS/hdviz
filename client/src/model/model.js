@@ -113,10 +113,10 @@ class Model {
   calculateDistance() {
     this.selectedData.getData().links = [];
     const a = -1;
-    for (let i = 0; i < 151; i++) {
+    for (let i = 0; i < 150; i++) {
       const colore = this.selectedData.getData().nodes[i][this.label.target[0]];
       delete this.selectedData.getData().nodes[i][this.label.target[0]];
-      for (let j = 1 + i; j < 151; j++) {
+      for (let j = 1 + i; j < 150; j++) {
         const distance = mldistance.distance.manhattan(
           Object.values(this.selectedData.getData().nodes[i]),
           Object.values(this.selectedData.getData().nodes[j]),
@@ -145,7 +145,7 @@ class Model {
       this.selectedData.getData().links[i].value = scale(this.selectedData.getData().links[i].value, min, max, 1, 200);
     }
 
-    this.selectedData.getData().nodes.length = 151;
+    this.selectedData.getData().nodes.length = 150;
   }
 
   setData(a) {

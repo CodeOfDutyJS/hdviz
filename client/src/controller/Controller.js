@@ -33,7 +33,7 @@ class Controller {
 
   loadingCompleted = false;
 
-  parti = false;
+  // parti = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -82,10 +82,18 @@ class Controller {
   }
 
   async setData(db_, table_) {
-    this.data = await getData(db_, table_);
+    const _data = await getData(db_, table_);
+    this.model.setData(_data.rows);
+    console.log(this.model.data);
+    this.columns = Object.keys(_data.rows[0]);
+
+    this.loadingCompleted = await this.model.data != null;
   }
 
   async uploadCSV(file) {
+    this.featureSelected = [];
+    this.targetSelected = [];
+
     this.loadingCompleted = false;
 
     // Funzione per il parsing
@@ -102,10 +110,14 @@ class Controller {
 
     // Set data al modello
     const _data = await parseFile(file);
+    this.model.reset();
     this.model.setData(_data);
 
     // Set columns
     this.columns = Object.keys(_data[0]);
+
+    console.log(this.columns);
+
     // eslint-disable-next-line max-len
     // this.model.setSelectedColumns(['housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income', 'median_house_value']);
 
@@ -193,7 +205,7 @@ class Controller {
 
     // const link = svg.append('g')
     //   .attr('stroke', '#999')
-    //   .attr('stroke-opacity', 0.6)
+    //   .attr('stroke-opacity', 0.1)
     //   .selectAll('line')
     //   .data(links)
     //   .join('line')

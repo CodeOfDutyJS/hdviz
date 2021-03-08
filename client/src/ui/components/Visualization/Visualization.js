@@ -25,9 +25,7 @@ const Visualization = observer(() => {
           marginRight: '0px',
           marginLeft: '0px',
         }}
-      >
-
-      </svg>
+      />
       {/* {store.parti ? store.getForceField() : null} */}
     </Content>
   );

@@ -27,12 +27,11 @@ const DatasetManipulation = observer(() => {
 
   useEffect(() => {
     try {
-      // store.setColumnsFromModel();
       setColumns(store.columns);
     } catch (error) {
       console.log(error);
     }
-  }, [store.data]);
+  }, [store.columns]);
 
   useEffect(() => {
     if (isMATRIX(features)) {
@@ -44,8 +43,12 @@ const DatasetManipulation = observer(() => {
   }, [store.visualizationSelected]);
 
   useEffect(() => {
-    store.setFeatures(features);
-  }, [features]);
+    setFeatures(store.featuresSelected);
+  }, [store.featuresSelected]);
+
+  useEffect(() => {
+    setTargets(store.targetSelected);
+  }, [store.targetSelected]);
 
   const onNormalizeCheckboxChanged = (e) => {
     setNormalized(e.target.checked);
@@ -62,8 +65,8 @@ const DatasetManipulation = observer(() => {
     } else {
       setMaxFeatures(false);
     }
-    setFeatures(_features);
-    setDisanceMatrix(false)
+    store.setFeatures(_features);
+    setDisanceMatrix(false);
   };
 
   const onTargetChanged = (_target) => {

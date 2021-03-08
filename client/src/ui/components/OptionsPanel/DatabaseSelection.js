@@ -40,7 +40,7 @@ const DatabaseSelection = () => {
 
   const onTableSelection = async (_table) => {
     await controller.setData(dbSelected, _table);
-    console.log(controller.data);
+    // console.log(controller.data);
   };
 
   return (

@@ -45,6 +45,7 @@ app.get('/api/getDatabases/', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.json([output]);
   console.log('api/getDatabases/ terminated successfully');
+
 });
 
 app.get('/api/getTables/', (req, res) => {
@@ -77,8 +78,10 @@ app.get('/api/getTables/', (req, res) => {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.json(columns);
     }
+    // connection.end();
   });
   console.log('api/getDatabases/ terminated successfully');
+
 });
 
 const getMetaData = (connection, tableName, cb) => {
@@ -148,6 +151,7 @@ app.get('/api/getData/', (req, res) => {
         }
       });
     }
+    // connection.end();
   });
 });
 
