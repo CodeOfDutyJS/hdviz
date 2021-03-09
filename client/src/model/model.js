@@ -164,7 +164,6 @@ class Model {
   resetSelected() {
     this.selectedData.dataFlush();
   }
-
 }
 
 /*
