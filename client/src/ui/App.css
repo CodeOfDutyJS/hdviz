@@ -2,6 +2,11 @@
   height: 100%;
 }
 
+#area{
+  width: 50%;
+  margin-left: 2em;
+}
+
 #hdviz {
   height: 100%;
 }
@@ -21,6 +26,31 @@
 #visualization {
   padding: 0 24px;
   height: 100%;
+}
+
+.ant-form-item {
+  margin-bottom: 12px;
+}
+
+.no-point > .ant-form-item-label > label::after {
+  content: none;
+}
+
+.option-panel-header {
+  background-color: #353535;
+}
+
+.option-panel-header span {
+  color: white;
+}
+
+#start-button{
+  background-color: #353535;
+  padding: 1.5em 5em;
+}
+
+#start-button span{
+  color: #353535;
 }
 
 /* MOBILE */
