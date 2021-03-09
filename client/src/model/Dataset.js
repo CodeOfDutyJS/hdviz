@@ -11,8 +11,19 @@ export default class Dataset {
     }
   }
 
+  addLinkRow(row, next) {
+    this.data.links.push(row);
+    if (next) {
+      next(row);
+    }
+  }
+
   addData(a) {
     this.data.nodes = a;
+  }
+
+  addLinks(a) {
+    this.data.links = a;
   }
 
   static columnSelect(d, a, next) {
@@ -27,6 +38,10 @@ export default class Dataset {
   }
 
   getData() { return (this.data); }
+
+  getNodes() { return (this.data.nodes); }
+
+  getLinks() { return (this.data.links); }
 
   dataFlush() {
     this.data.nodes.length = 0;
