@@ -9,7 +9,7 @@ const { Content } = Layout;
 
 const Visualization = observer(() => {
   const store = useStore();
-  
+
   return (
     <Content>
       <svg
