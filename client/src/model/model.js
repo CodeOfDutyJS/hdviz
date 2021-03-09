@@ -117,7 +117,7 @@ class Model {
       const colore = this.selectedData.getData().nodes[i][this.label.target[0]];
       delete this.selectedData.getData().nodes[i][this.label.target[0]];
       for (let j = 1 + i; j < 150; j++) {
-        const distance = mldistance.distance.manhattan(
+        const distance = mldistance.distance.euclidean(
           Object.values(this.selectedData.getData().nodes[i]),
           Object.values(this.selectedData.getData().nodes[j]),
         );

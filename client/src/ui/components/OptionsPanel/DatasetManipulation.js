@@ -16,7 +16,7 @@ const DatasetManipulation = observer(() => {
   const store = useStore();
   const [columns, setColumns] = useState([]);
   const [normalized, setNormalized] = useState(false);
-  const [disanceMatrix, setDisanceMatrix] = useState(false);
+  const [disanceMatrix, setDisanceMatrix] = useState(true);
   const [features, setFeatures] = useState([]);
   const [maxFeatures, setMaxFeatures] = useState(false);
   const [targets, setTargets] = useState([]);
@@ -66,7 +66,6 @@ const DatasetManipulation = observer(() => {
       setMaxFeatures(false);
     }
     store.setFeatures(_features);
-    setDisanceMatrix(false);
   };
 
   const onTargetChanged = (_target) => {
@@ -92,7 +91,7 @@ const DatasetManipulation = observer(() => {
         hasFeedback
         help={maxFeatures ? 'Max 5 feature variables' : null}
       >
-        <Select placeholder="Database connection" mode="multiple" onChange={onFeaturesChanged} value={features} allowClear>
+        <Select placeholder="Select features" mode="multiple" onChange={onFeaturesChanged} value={features} allowClear>
           {columns.map((item, key) => <Option key={item}>{item}</Option>)}
         </Select>
         <></>
@@ -104,7 +103,7 @@ const DatasetManipulation = observer(() => {
         hasFeedback
         help={maxTarget ? 'Max 2 target variables' : null}
       >
-        <Select placeholder="Database connection" mode="multiple" onChange={onTargetChanged}>
+        <Select placeholder="Select target" mode="multiple" onChange={onTargetChanged} value={targets}>
           {columns.map((item, key) => <Option key={item}>{item}</Option>)}
         </Select>
       </Item>
@@ -125,7 +124,7 @@ const DatasetManipulation = observer(() => {
             {disanceMatrix ? (
               <Select placeholder="Select distance" onChange={onDistanceChanged}>
                 <Option key={DistanceType.EUCLIDEAN}>Euclidea</Option>
-                <Option key={DistanceType.MANHATTAN}>Manthattan</Option>
+                <Option key={DistanceType.MANHATTAN} disabled>Manthattan</Option>
               </Select>
             ) : null}
           </Item>

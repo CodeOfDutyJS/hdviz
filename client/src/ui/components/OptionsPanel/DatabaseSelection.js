@@ -55,9 +55,9 @@ const DatabaseSelection = () => {
           {tableList.map((item, key) => <Option key={item.table_name}>{item.table_name}</Option>)}
         </Select>
       </Item>
-      <Item>
+      {/* <Item>
         <Button type="primary" htmlType="submit" disabled={controller.button}>Test</Button>
-      </Item>
+      </Item> */}
     </Form>
   );
 };

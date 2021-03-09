@@ -4,17 +4,12 @@ import { observer } from 'mobx-react-lite';
 
 import { Layout } from 'antd';
 import { useStore } from '../../../controller/ControllerProvider';
-// import ciao from './ciao';
 
 const { Content } = Layout;
 
 const Visualization = observer(() => {
   const store = useStore();
-
-  useEffect(() => {
-    // ciao();
-  }, []);
-
+  
   return (
     <Content>
       <svg
@@ -26,7 +21,6 @@ const Visualization = observer(() => {
           marginLeft: '0px',
         }}
       />
-      {/* {store.parti ? store.getForceField() : null} */}
     </Content>
   );
 });

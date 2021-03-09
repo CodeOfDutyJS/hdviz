@@ -99,6 +99,7 @@ const getMetaData = (connection, tableName, cb) => {
     }
   });
 };
+
 const getData = (connection, tableName, cb) => {
   connection.query(`SELECT * FROM ${tableName}`, (err, rows, fields) => {
     if (err) {
@@ -121,12 +122,14 @@ app.get('/api/getData/', (req, res) => {
   if (configurazione == 0) {
     res.send(0); // Si Può?
   }
+
   const connection = mysql.createConnection({
     host: configurazione.DB_Address,
     user: configurazione.DB_Username,
     password: configurazione.DB_Password,
     database: configurazione.DB_Name,
   });
+  
   connection.connect((err) => {
     if (err) {
       console.log(err);

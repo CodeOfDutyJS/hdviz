@@ -82,6 +82,11 @@ class Controller {
   }
 
   async setData(db_, table_) {
+    this.featureSelected = null;
+    this.targetSelected = null;
+
+    this.changed = !this.changed;
+
     const _data = await getData(db_, table_);
     this.model.setData(_data.rows);
     console.log(this.model.data);
@@ -180,7 +185,6 @@ class Controller {
     };
 
     const colore = d3.scaleOrdinal(d3.schemeCategory10);
-    colore.domain(['NEAR BAY', 'INLAND', 'ISLAND', 'NEAR OCEAN', '<1H OCEAN']);
 
     const verydata = this.model.getSelectedData();
 

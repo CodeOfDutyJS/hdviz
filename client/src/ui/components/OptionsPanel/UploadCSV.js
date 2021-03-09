@@ -17,7 +17,8 @@ const UploadCSV = () => {
     onSuccess, onError, file, onProgress,
   }) => {
     console.log(file);
-    if (!(file.type === 'application/vnd.ms-excel')) {
+    // if (!(file.type === 'application/vnd.ms-excel')) {
+    if (false) {
       onError(file);
     } else {
       await store.uploadCSV(file);
