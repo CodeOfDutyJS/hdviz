@@ -29,28 +29,23 @@ class DataModel {
 
   getTargetColumns() {
     return this.dataset.map(
-      (value) => (
-        Object
-          .keys(value) // stream delle chiavi contenute in value (riga del dataset)
-          .filter((key) => this.target.indexOf(key) !== -1)
-          .reduce((obj, key) => ({ // riduce l'array di chiavi in un object literal
-            ...obj,
-            [key]: value[key],
-          }), {})
+      (value) => this.target.reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: value[key],
+        }), {},
       ),
     );
   }
 
   getFeatureColumns() {
     return this.dataset.map(
-      (value) => Object
-        .keys(value) // stream delle chiavi contenute in value (riga del dataset)
-        .filter((key) => this.feature.indexOf(key) !== -1)
-        .reduce((obj, key) => ({ // riduce l'array di chiavi in un object literal
-          ...obj,
+      (value) => this.feature.reduce(
+        (acc, key) => ({
+          ...acc,
           [key]: value[key],
-        }), {})
-      ,
+        }), {},
+      ),
     );
   }
 
