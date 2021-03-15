@@ -13,12 +13,12 @@
     "antd": "4.12.3",
     "babel-eslint": "^10.1.0",
     "d3": "^6.5.0",
+    "eslint-plugin-jest": "^24.3.1",
     "less": "^4.1.1",
     "ml-distance": "^3.0.0",
     "ml-distance-matrix": "^2.0.1",
     "mobx": "^6.1.7",
     "mobx-react-lite": "^3.2.0",
-    "mocha": "^8.3.2",
     "papaparse": "^5.3.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -28,7 +28,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "test": "mocha --recursive",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src/",
     "style": "lessc ./src/styles/main.less ./src/styles/css/antd.css --js"

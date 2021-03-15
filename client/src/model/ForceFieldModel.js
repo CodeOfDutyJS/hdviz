@@ -48,4 +48,4 @@ class ForceFieldModel {
   }
 }
 
-module.exports = ForceFieldModel;
+export default ForceFieldModel;

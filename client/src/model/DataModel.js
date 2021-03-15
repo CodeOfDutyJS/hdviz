@@ -28,17 +28,16 @@ class DataModel {
   }
 
   getTargetColumns() {
-    const targetCol = [];
     return this.dataset.map(
-      (value) => {
+      (value) => (
         Object
           .keys(value) // stream delle chiavi contenute in value (riga del dataset)
           .filter((key) => this.target.indexOf(key) !== -1)
           .reduce((obj, key) => ({ // riduce l'array di chiavi in un object literal
             ...obj,
             [key]: value[key],
-          }), {});
-      },
+          }), {})
+      ),
     );
   }
 
@@ -70,4 +69,4 @@ class DataModel {
   }
 }
 
-module.exports = DataModel;
+export default DataModel;
