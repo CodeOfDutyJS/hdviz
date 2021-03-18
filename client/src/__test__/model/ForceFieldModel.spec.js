@@ -22,13 +22,15 @@ describe('#ForceFieldModel', () => {
     },
   ];
 
-  const dataModel = new DataModel(mockDataset);
-  dataModel.feature = ['a'];
-  dataModel.target = ['b', 'd'];
+  const dataModel = new DataModel();
+  dataModel.dataset = mockDataset;
+  dataModel.feature = ['b', 'd'];
+  dataModel.target = ['a'];
   const forceFieldModel = new ForceFieldModel(dataModel);
 
   describe('#distanceFn', () => {
-    const distanceDataset = forceFieldModel.getPreparedDataset(euclidean);
+    expect(forceFieldModel.dataModel.getFeatureColumns()).not.toBeNull();
+    const distanceDataset = forceFieldModel.getPreparedDataset(distance.euclidean, 4, 6, false);
     it('should return a correctly formatted object', () => {
       expect(
         'nodes' in distanceDataset
@@ -36,7 +38,7 @@ describe('#ForceFieldModel', () => {
       ).toBeTruthy();
       expect(
         'id' in distanceDataset.nodes[0]
-        && 'features' in distanceDataset.nodes[0],
+        && 'colore' in distanceDataset.nodes[0],
       ).toBeTruthy();
       expect(
         'source' in distanceDataset.links[0]
@@ -47,10 +49,10 @@ describe('#ForceFieldModel', () => {
     it('should calculate euclidean between nodes correctly', () => {
       expect(distanceDataset).toEqual({
         nodes: [
-          { id: 0, features: 'a: first' },
-          { id: 1, features: 'a: second' },
-          { id: 2, features: 'a: third' },
-          { id: 3, features: 'a: fourth' },
+          { id: 0, colore: 'first', forma: undefined },
+          { id: 1, colore: 'second', forma: undefined },
+          { id: 2, colore: 'third', forma: undefined },
+          { id: 3, colore: 'fourth', forma: undefined },
         ],
         links: [
           { source: 0, target: 1, value: euclidean([0, 2], [3, 5]) },

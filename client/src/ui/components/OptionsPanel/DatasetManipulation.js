@@ -7,7 +7,7 @@ import {
 
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../controller/ControllerProvider';
-import VisualizationType, { DistanceType } from '../../../utils';
+import { VisualizationType, DistanceType } from '../../../utils';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -16,7 +16,7 @@ const DatasetManipulation = observer(() => {
   const store = useStore();
   const [columns, setColumns] = useState([]);
   const [normalized, setNormalized] = useState(false);
-  const [disanceMatrix, setDisanceMatrix] = useState(true);
+  const [distanceMatrix, setDistanceMatrix] = useState(true);
   const [features, setFeatures] = useState([]);
   const [maxFeatures, setMaxFeatures] = useState(false);
   const [targets, setTargets] = useState([]);
@@ -55,7 +55,7 @@ const DatasetManipulation = observer(() => {
   };
 
   const onMatrixCheckboxChanged = (e) => {
-    setDisanceMatrix(e.target.checked);
+    setDistanceMatrix(e.target.checked);
   };
 
   const onFeaturesChanged = (_features) => {
@@ -120,8 +120,8 @@ const DatasetManipulation = observer(() => {
       {store.visualizationSelected === VisualizationType.FORCE
         ? (
           // eslint-disable-next-line max-len
-          <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={disanceMatrix}>Calculate Distance Matrix</Checkbox>}>
-            {disanceMatrix ? (
+          <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={distanceMatrix}>Calculate Distance Matrix</Checkbox>}>
+            {distanceMatrix ? (
               <Select placeholder="Select distance" onChange={onDistanceChanged}>
                 <Option key={DistanceType.EUCLIDEAN}>Euclidea</Option>
                 <Option key={DistanceType.MANHATTAN} disabled>Manthattan</Option>

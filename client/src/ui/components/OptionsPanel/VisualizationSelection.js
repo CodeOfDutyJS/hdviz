@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Select, Form, Button } from 'antd';
 
 import { useStore } from '../../../controller/ControllerProvider';
-import VisualizationType from '../../../utils';
+import { VisualizationType } from '../../../utils';
 
 const { Option } = Select;
 const { Item } = Form;

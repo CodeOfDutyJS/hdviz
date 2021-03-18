@@ -1,4 +1,4 @@
-export default class Dataset {
+class Dataset {
   data = {
     nodes: [],
     links: [],
@@ -16,9 +16,8 @@ export default class Dataset {
   }
 
   static columnSelect(d, a, next) {
-    const row = {};
-    let i;
-    for (i = 0; i < a.length; i++) {
+    const row = [];
+    for (let i = 0; i < a.length; i++) {
       row[a[i]] = d[a[i]];
     }
     if (next) {
@@ -26,10 +25,14 @@ export default class Dataset {
     }
   }
 
-  getData() { return (this.data); }
+  getData() {
+    return (this.data);
+  }
 
   dataFlush() {
     this.data.nodes.length = 0;
     this.data.links.length = 0;
   }
 }
+
+export default Dataset;

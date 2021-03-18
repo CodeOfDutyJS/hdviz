@@ -1,6 +1,8 @@
 class DataModel {
-  constructor(dataset) {
-    this._dataset = dataset;
+  constructor() {
+    this._dataset = [];
+    this._target = [];
+    this._feature = [];
   }
 
   get dataset() {
@@ -54,12 +56,11 @@ class DataModel {
       (value) => Object
         .keys(value) // stream delle chiavi contenute in value (riga del dataset)
         .filter((key) => this.feature.indexOf(key) !== -1
-          || this.target.indexOf(key) !== -1)
+          || this.target?.indexOf(key) !== -1)
         .reduce((obj, key) => ({ // riduce l'array di chiavi in un object literal
           ...obj,
           [key]: value[key],
-        }), {})
-      ,
+        }), {}),
     );
   }
 }

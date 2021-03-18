@@ -7,9 +7,9 @@ const VisualizationType = {
   PARALLEL: 'parallel',
 };
 
-export default VisualizationType;
-
-export const DistanceType = {
+const DistanceType = {
   EUCLIDEAN: 'euclidean',
   MANHATTAN: 'manhattan',
 };
+
+export { VisualizationType, DistanceType };
