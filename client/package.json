@@ -28,7 +28,7 @@
     "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
-    "coverage": "react-scripts test --watchAll=false --coverage && codecov",
+    "coverage": "react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "lint": "eslint src/",
     "style": "lessc ./src/styles/main.less ./src/styles/css/antd.css --js"
@@ -52,7 +52,6 @@
     ]
   },
   "devDependencies": {
-    "codecov": "^3.8.1",
     "eslint": "^7.20.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
