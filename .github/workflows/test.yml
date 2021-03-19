@@ -4,9 +4,9 @@ name: CI - Testing
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ breggion/tests ]
+    branches: [ damiano/test ]
   pull_request:
-    branches: [ breggion/tests ]
+    branches: [ damiano/test ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -26,7 +26,9 @@ jobs:
         run: |
           cd client/
           yarn
-      - name: Run Mocha
+      - name: Run Jest
         run: |
           cd client/
           yarn test
+      - name: Upload Code Coverage in Codecov
+        uses: codecov/codecov-action@v1
