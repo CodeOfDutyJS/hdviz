@@ -29,4 +29,4 @@ jobs:
       - name: Build client
         run: |
           cd client/
-          yarn build
+          CI='false' yarn build
