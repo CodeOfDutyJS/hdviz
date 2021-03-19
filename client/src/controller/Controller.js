@@ -9,6 +9,7 @@ import { distance } from 'ml-distance';
 import forceField from '../model/d3/ForceField';
 import DataModel from '../model/DataModel';
 import ForceFieldModel from '../model/ForceFieldModel';
+import LinearProjectionModel from '../model/LinearProjectionModel';
 
 import { getDatabases, getTables, getData } from './API';
 
