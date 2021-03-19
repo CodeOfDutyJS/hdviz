@@ -1,12 +1,14 @@
-/* eslint-disable no-use-before-define */
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-use-before-define */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable max-classes-per-file */
 import { makeAutoObservable } from 'mobx';
 import Papa from 'papaparse';
 import * as d3 from 'd3';
-import Model from '../model/model';
-import { DistanceType } from '../utils';
+import { distance } from 'ml-distance';
+import forceField from '../model/d3/ForceField';
+import DataModel from '../model/DataModel';
+import ForceFieldModel from '../model/ForceFieldModel';
 
 import { getDatabases, getTables, getData } from './API';
 
@@ -37,17 +39,17 @@ class Controller {
 
   constructor() {
     makeAutoObservable(this);
-    this.model = new Model();
+    this.model = new DataModel();
   }
 
   setFeatures(_features) {
     this.featuresSelected = _features;
+    this.model.feature = this.featuresSelected;
   }
 
   setTarget(_target) {
     this.targetSelected = _target;
-
-    this.model.setTarget(this.targetSelected);
+    this.model.target = this.targetSelected;
   }
 
   setDistance(_distance) {
@@ -60,7 +62,6 @@ class Controller {
 
   setVisualization(_visualization) {
     this.visualizationSelected = _visualization;
-    console.log(this.loadingData);
   }
 
   async setDatabases() {
@@ -88,11 +89,10 @@ class Controller {
     this.changed = !this.changed;
 
     const _data = await getData(db_, table_);
-    this.model.setData(_data.rows);
-    console.log(this.model.data);
+    this.model.dataset = _data;
     this.columns = Object.keys(_data.rows[0]);
 
-    this.loadingCompleted = await this.model.data != null;
+    this.loadingCompleted = await this.model.dataset != null;
   }
 
   async uploadCSV(file) {
@@ -115,13 +115,11 @@ class Controller {
 
     // Set data al modello
     const _data = await parseFile(file);
-    this.model.reset();
-    this.model.setData(_data);
+    // this.model.reset();
+    this.model.dataset = _data;
 
     // Set columns
     this.columns = Object.keys(_data[0]);
-
-    console.log(this.columns);
 
     // eslint-disable-next-line max-len
     // this.model.setSelectedColumns(['housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income', 'median_house_value']);
@@ -133,112 +131,26 @@ class Controller {
     // console.log(await this.model.getSelectedData());
 
     // Set loadingCompleted
-    this.loadingCompleted = await this.model.data != null;
+    this.loadingCompleted = await this.model.dataset != null;
   }
 
   // eslint-disable-next-line class-methods-use-this
   removeGraph() {
     const svg = d3.select('#area');
-    const node = svg.selectAll('circle').remove();
+    svg.selectAll('circle').remove();
     svg.selectAll('line').remove();
   }
 
   async start() {
     this.removeGraph();
-    this.model.resetSelected();
-    this.model.setSelectedColumns([...this.featuresSelected, ...this.targetSelected]);
+    this.model.feature = this.featuresSelected;
+    this.model.target = this.targetSelected;
     // this.model.setFeatures(this.featuresSelected);
 
-    if (this.distanceSelected === DistanceType.EUCLIDEAN) {
-      this.model.calculateDistance();
-      // this.model.setEuclideanDistance(400);
-      this.model.setId('progressive');
-      console.log(await this.model.getSelectedData());
-    }
+    const forceFieldModel = new ForceFieldModel(this.model);
 
-    this.forceField();
-  }
-
-  forceField() {
-    const drag = (simulation) => {
-      function dragstarted(event) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        event.subject.fx = event.subject.x;
-        event.subject.fy = event.subject.y;
-      }
-
-      function dragged(event) {
-        event.subject.fx = event.x;
-        event.subject.fy = event.y;
-      }
-
-      function dragended(event) {
-        if (!event.active) simulation.alphaTarget(0);
-        event.subject.fx = null;
-        event.subject.fy = null;
-      }
-
-      return d3.drag()
-        .on('start', dragstarted)
-        .on('drag', dragged)
-        .on('end', dragended);
-    };
-
-    const colore = d3.scaleOrdinal(d3.schemeCategory10);
-
-    const verydata = this.model.getSelectedData();
-
-    const links = verydata.links.map((d) => Object.create(d));
-    const nodes = verydata.nodes.map((d) => Object.create(d));
-
-    console.log(links);
-    console.log(nodes);
-
-    const svg = d3.select('#area');
-
-    const width = 600 || svg.node().getBoundingClientRect().width;
-    const height = 600 || svg.node().getBoundingClientRect().height;
-
-    console.log(width);
-    console.log(height);
-
-    const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).distance((d) => d.value * 1).strength((d) => (1 / (d.value * 1))).id((d) => d.id))
-      .force('charge', d3.forceManyBody())
-      .force('center', d3.forceCenter(width / 2, height / 2));
-
-    // const link = svg.append('g')
-    //   .attr('stroke', '#999')
-    //   .attr('stroke-opacity', 0.1)
-    //   .selectAll('line')
-    //   .data(links)
-    //   .join('line')
-    //   .attr('stroke-width', (d) => Math.sqrt(d.value / 100));
-
-    const node = svg.append('g')
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 1.5)
-      .selectAll('circle')
-      .data(nodes)
-      .join('circle')
-      .attr('r', 5)
-      .attr('fill', (d) => colore(d.colore))
-      .call(drag(simulation));
-
-    node.append('title')
-      .text((d) => d.id);
-
-    simulation.on('tick', () => {
-      // link
-      //   .attr('x1', (d) => d.source.x)
-      //   .attr('y1', (d) => d.source.y)
-      //   .attr('x2', (d) => d.target.x)
-      //   .attr('y2', (d) => d.target.y);
-
-      node
-        .attr('cx', (d) => d.x)
-        .attr('cy', (d) => d.y);
-    });
+    forceField(forceFieldModel
+      .getPreparedDataset(distance[this.distanceSelected], 150, 150, true));
   }
 }
 
