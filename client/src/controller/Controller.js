@@ -113,7 +113,7 @@ class Controller {
       });
     });
 
-    // Set data al modello
+    // Set data to model
     const _data = await parseFile(file);
     // this.model.reset();
     this.model.dataset = _data;
