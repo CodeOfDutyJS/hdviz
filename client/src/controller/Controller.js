@@ -151,7 +151,7 @@ class Controller {
     const forceFieldModel = new ForceFieldModel(this.model);
 
     forceField(forceFieldModel
-      .getPreparedDataset(distance[this.distanceSelected], 150, 150, true));
+      .getPreparedDataset(distance[this.distanceSelected], 1000, 1000, true));
   }
 }
 

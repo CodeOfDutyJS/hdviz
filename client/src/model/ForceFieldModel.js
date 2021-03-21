@@ -12,11 +12,12 @@ class ForceFieldModel {
   }
 
   getNodes(maxNodes) {
-    return this.dataModel.getTargetColumns()
+    return this.dataModel.getSelectedDataset()
       .map((value, index) => ({
         id: index,
         colore: value?.[this.dataModel.target[0]],
         forma: value?.[this.dataModel.target[1]],
+        features: JSON.stringify(value),
       }))
       .slice(0, maxNodes);
   }
@@ -47,20 +48,21 @@ class ForceFieldModel {
     featureColumns
       .slice(0, maxNodes)
       .forEach(
-        (value, i) => {
-          for (let j = i + 1; j < (maxLinks > featureColumns.length
-            ? featureColumns.length : maxLinks); j++) {
-            links.push(
-              {
-                source: i,
-                target: j,
-                value: distanceFn(Object.values(value), Object.values(featureColumns[j])),
-              },
-            );
-          }
+        (distanceFrom, i) => {
+          featureColumns
+            .slice(i + 1, Math.min(maxLinks, featureColumns.length))
+            .forEach((distanceTo, j) => {
+              const dist = distanceFn(Object.values(distanceFrom), Object.values(distanceTo));
+              links.push(
+                {
+                  source: i,
+                  target: j + i + 1,
+                  value: dist,
+                },
+              );
+            });
         },
       );
-
     return wantToScale ? this.constructor.scale(links) : links;
   }
 

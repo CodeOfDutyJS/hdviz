@@ -32,8 +32,8 @@ function forceField(data) {
 
   const svg = d3.select('#area');
 
-  const width = 600 || svg.node().getBoundingClientRect().width;
-  const height = 600 || svg.node().getBoundingClientRect().height;
+  const width = 800 || svg.node().getBoundingClientRect().width;
+  const height = 800 || svg.node().getBoundingClientRect().height;
 
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links).distance((d) => d.value * 1).strength((d) => (1 / (d.value * 1))).id((d) => d.id))
@@ -51,15 +51,9 @@ function forceField(data) {
     .call(drag(simulation));
 
   node.append('title')
-    .text((d) => d.id);
+    .text((d) => d.features);
 
   simulation.on('tick', () => {
-    // link
-    //   .attr('x1', (d) => d.source.x)
-    //   .attr('y1', (d) => d.source.y)
-    //   .attr('x2', (d) => d.target.x)
-    //   .attr('y2', (d) => d.target.y);
-
     node
       .attr('cx', (d) => d.x)
       .attr('cy', (d) => d.y);

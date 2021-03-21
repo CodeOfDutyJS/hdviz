@@ -49,10 +49,18 @@ describe('#ForceFieldModel', () => {
     it('should calculate euclidean between nodes correctly', () => {
       expect(distanceDataset).toEqual({
         nodes: [
-          { id: 0, colore: 'first', forma: undefined },
-          { id: 1, colore: 'second', forma: undefined },
-          { id: 2, colore: 'third', forma: undefined },
-          { id: 3, colore: 'fourth', forma: undefined },
+          {
+            id: 0, colore: 'first', forma: undefined, features: JSON.stringify(mockDataset[0], ['a', 'b', 'd']),
+          },
+          {
+            id: 1, colore: 'second', forma: undefined, features: JSON.stringify(mockDataset[1], ['a', 'b', 'd']),
+          },
+          {
+            id: 2, colore: 'third', forma: undefined, features: JSON.stringify(mockDataset[2], ['a', 'b', 'd']),
+          },
+          {
+            id: 3, colore: 'fourth', forma: undefined, features: JSON.stringify(mockDataset[3], ['a', 'b', 'd']),
+          },
         ],
         links: [
           { source: 0, target: 1, value: euclidean([0, 2], [3, 5]) },
