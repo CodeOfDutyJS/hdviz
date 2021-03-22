@@ -31,7 +31,9 @@
     "coverage": "react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "lint": "eslint src/",
-    "style": "lessc ./src/styles/main.less ./src/styles/css/antd.css --js"
+    "style": "lessc ./src/styles/main.less ./src/styles/css/antd.css --js",
+    "prebuild": "yarn style",
+    "prestart": "yarn style"
   },
   "eslintConfig": {
     "extends": [
