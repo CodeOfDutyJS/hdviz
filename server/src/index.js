@@ -43,8 +43,8 @@ app.get('/api/getDatabases/', (req, res) => {
   }
   const output = { databases };
   res.setHeader('Access-Control-Allow-Origin', '*');
-  //res.json([output]);
-  res.send(output);
+  res.json([output]);
+  //res.send(output);
   console.log('api/getDatabases/ terminated successfully');
 
 });
