@@ -22,7 +22,7 @@ function getFiles(dir, files_) {
   return files_;
 }
 
-let config_files = getFiles('/home/damix/hdviz/server/src/config');
+let config_files = getFiles(__dirname+'/config');
 
 function selectConfig(dbname) {
   for (const i in config_files) {
@@ -36,14 +36,15 @@ function selectConfig(dbname) {
 app.get('/api/getDatabases/', (req, res) => {
   console.log('api/getDatabases/ called');
   // res.send(getFiles('config').sort((a,b) => a.length - b.length));
-  config_files = getFiles('/home/damix/hdviz/server/src/config');
+  config_files = getFiles(__dirname+'/config');
   let databases = [];
   for (const i in config_files) {
     databases = config_files[i].DB_Name;
   }
   const output = { databases };
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.json([output]);
+  //res.json([output]);
+  res.send(output);
   console.log('api/getDatabases/ terminated successfully');
 
 });
