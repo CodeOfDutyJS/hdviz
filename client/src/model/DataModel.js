@@ -1,3 +1,5 @@
+import { forEach } from 'mathjs';
+
 class DataModel {
   constructor() {
     this._dataset = [];
@@ -18,6 +20,7 @@ class DataModel {
   }
 
   set feature(value) {
+    // TODO: controllo se variabile feature contiene valori numerici o stringhe
     this._feature = value;
   }
 

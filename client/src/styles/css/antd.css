@@ -14823,6 +14823,7 @@ textarea.ant-input-number {
 }
 .ant-layout-content {
   flex: auto;
+  overflow: auto;
   /* fix firefox can't set height smaller than content on flex item */
   min-height: 0;
 }

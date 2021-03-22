@@ -7,8 +7,10 @@ import Papa from 'papaparse';
 import * as d3 from 'd3';
 import { distance } from 'ml-distance';
 import forceField from '../model/d3/ForceField';
+import scatterPlotMatrix from '../model/d3/ScatterPlotMatrix';
 import DataModel from '../model/DataModel';
 import ForceFieldModel from '../model/ForceFieldModel';
+import ScatterPlotMatrixModel from '../model/ScatterPlotMatrixModel';
 import LinearProjectionModel from '../model/LinearProjectionModel';
 
 import { getDatabases, getTables, getData } from './API';
@@ -149,9 +151,12 @@ class Controller {
     // this.model.setFeatures(this.featuresSelected);
 
     const forceFieldModel = new ForceFieldModel(this.model);
-
-    forceField(forceFieldModel
-      .getPreparedDataset(distance[this.distanceSelected], 1000, 1000, true));
+    const scatterPlotMatrixModel = new ScatterPlotMatrixModel(this.model);
+    scatterPlotMatrix(scatterPlotMatrixModel.getPreparedDataSet(),
+      this.model.feature,
+      this.model.target);
+    // forceField(forceFieldModel
+    //   .getPreparedDataset(distance[this.distanceSelected], 1000, 1000, true));
   }
 }
 

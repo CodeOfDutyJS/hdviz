@@ -10,7 +10,7 @@ const { Item } = Form;
 const VisualizationSelection = () => {
   const store = useStore();
   const [visualizations, setVisualizations] = useState([
-    { id: VisualizationType.MATRIX, label: 'Scatter plot matrix', enabled: false },
+    { id: VisualizationType.MATRIX, label: 'Scatter plot matrix', enabled: true },
     { id: VisualizationType.HEATMAP, label: 'Heatmap', enabled: false },
     { id: VisualizationType.CORRELATION, label: 'Correlation Heatmap', enabled: false },
     { id: VisualizationType.FORCE, label: 'Force fields', enabled: true },
