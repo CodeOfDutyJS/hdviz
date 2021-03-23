@@ -44,13 +44,12 @@ app.get('/api/getDatabases/', (req, res) => {
   const output = { databases };
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.json([output]);
-  //res.send(output);
+  //res.send([output]);
   console.log('api/getDatabases/ terminated successfully');
-
 });
 
 app.get('/api/getTables/', (req, res) => {
-  var dbname = req.param('dbname');
+  let dbname = req.params('dbname');
   console.log('api/getTables/ called');
   // const dbname = 'prova';
 
@@ -82,7 +81,7 @@ app.get('/api/getTables/', (req, res) => {
     // connection.end();
   });
   console.log('api/getDatabases/ terminated successfully');
-
+  connection.end();
 });
 
 const getMetaData = (connection, tableName, cb) => {
@@ -114,8 +113,8 @@ const getData = (connection, tableName, cb) => {
 
 app.get('/api/getData/', (req, res) => {
   console.log('api/getData/ called');
-  var dbname = req.param('dbname');
-  var dbtable = req.param('dbtable');
+  let dbname = req.params('dbname');
+  let dbtable = req.params('dbtable');
   // const dbname = 'prova';
   // const dbtable = 'Candidato';
 
@@ -155,7 +154,7 @@ app.get('/api/getData/', (req, res) => {
         }
       });
     }
-    // connection.end();
+    connection.end();
   });
 });
 
