@@ -40,7 +40,6 @@ const DatabaseSelection = () => {
 
   const onTableSelection = async (_table) => {
     await controller.setData(dbSelected, _table);
-    // console.log(controller.data);
   };
 
   return (
@@ -55,9 +54,6 @@ const DatabaseSelection = () => {
           {tableList.map((item, key) => <Option key={item.table_name}>{item.table_name}</Option>)}
         </Select>
       </Item>
-      {/* <Item>
-        <Button type="primary" htmlType="submit" disabled={controller.button}>Test</Button>
-      </Item> */}
     </Form>
   );
 };

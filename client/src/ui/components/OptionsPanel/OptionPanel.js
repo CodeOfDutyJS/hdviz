@@ -12,6 +12,7 @@ import DatabaseSelection from './DatabaseSelection';
 import VisualizationSelection from './VisualizationSelection';
 import DatasetManipulation from './DatasetManipulation';
 import { useStore } from '../../../controller/ControllerProvider';
+import DataSource from './DataSource';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
@@ -22,7 +23,6 @@ const { TabPane } = Tabs;
 const OptionPanel = observer(() => {
   const store = useStore();
   const [success, setSuccess] = useState(false);
-  const [loadingData, setLoadingData] = useState(!store.loadingData);
 
   const showResult = () => {
     // logica con controller
@@ -45,31 +45,7 @@ const OptionPanel = observer(() => {
       />
       <Collapse defaultActiveKey={['1', '2']}>
         <Panel header="Data source" key="1">
-          <Tabs>
-            <TabPane
-              tab={(
-                <span>
-                  <FileTextOutlined />
-                  File CSV
-                </span>
-              )}
-              key="csv"
-            >
-              <UploadCSV />
-            </TabPane>
-
-            <TabPane
-              tab={(
-                <span>
-                  <DatabaseOutlined />
-                  Database
-                </span>
-              )}
-              key="database"
-            >
-              <DatabaseSelection />
-            </TabPane>
-          </Tabs>
+          <DataSource />
         </Panel>
         <Panel header="Visualization" key="2">
           <VisualizationSelection />
