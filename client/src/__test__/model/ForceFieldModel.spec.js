@@ -23,8 +23,8 @@ describe('#ForceFieldModel', () => {
   ];
 
   const dataModel = new DataModel(mockDataset);
-  dataModel.feature = ['a'];
-  dataModel.target = ['b', 'd'];
+  dataModel.target = ['a'];
+  dataModel.feature = ['b', 'd'];
   const forceFieldModel = new ForceFieldModel(dataModel);
 
   describe('#distanceFn', () => {

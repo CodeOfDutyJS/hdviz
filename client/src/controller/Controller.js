@@ -5,8 +5,9 @@
 import { makeAutoObservable } from 'mobx';
 import Papa from 'papaparse';
 import * as d3 from 'd3';
-import Model from '../model/model';
-import { DistanceType } from '../utils';
+import DataModel from '../model/DataModel';
+import HeatMapModel from '../model/HeatMapModel';
+import { DistanceType, ClusteringType } from '../utils';
 
 import { getDatabases, getTables, getData } from './API';
 
@@ -31,13 +32,15 @@ class Controller {
 
   data;
 
+  da;
+
   loadingCompleted = false;
 
   // parti = false;
 
   constructor() {
     makeAutoObservable(this);
-    this.model = new Model();
+    this.model = new DataModel();
   }
 
   setFeatures(_features) {
@@ -47,7 +50,7 @@ class Controller {
   setTarget(_target) {
     this.targetSelected = _target;
 
-    this.model.setTarget(this.targetSelected);
+    this.model.target = this.targetSelected;
   }
 
   setDistance(_distance) {
@@ -115,8 +118,7 @@ class Controller {
 
     // Set data al modello
     const _data = await parseFile(file);
-    this.model.reset();
-    this.model.setData(_data);
+    this.model.dataset = _data;
 
     // Set columns
     this.columns = Object.keys(_data[0]);
@@ -133,7 +135,7 @@ class Controller {
     // console.log(await this.model.getSelectedData());
 
     // Set loadingCompleted
-    this.loadingCompleted = await this.model.data != null;
+    this.loadingCompleted = true;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -145,18 +147,51 @@ class Controller {
 
   async start() {
     this.removeGraph();
-    this.model.resetSelected();
-    this.model.setSelectedColumns([...this.featuresSelected, ...this.targetSelected]);
+    this.model.feature = [...this.featuresSelected];
+    this.model.target = [...this.targetSelected];
     // this.model.setFeatures(this.featuresSelected);
 
     if (this.distanceSelected === DistanceType.EUCLIDEAN) {
-      this.model.calculateDistance();
+      const heatmap = new HeatMapModel(this.model);
+      console.log(this.model.feature);
+      console.log(this.model.target);
+      console.log(heatmap.getMatrix(DistanceType.EUCLIDEAN));
+      console.log(heatmap.getClustering(ClusteringType.SIMPLE, DistanceType.EUCLIDEAN));
       // this.model.setEuclideanDistance(400);
-      this.model.setId('progressive');
-      console.log(await this.model.getSelectedData());
     }
 
-    this.forceField();
+    this.dendogram();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  dendogram() {
+    const svg = d3.select('#area');
+    const cluster = d3.cluster()
+      .size([600, 400]);
+    const root = d3.hierarchy(this.da, (d) => d.children);
+    cluster(root);
+    svg.selectAll('path')
+      .data(root.descendants().slice(1))
+      .enter()
+      .append('path')
+      // eslint-disable-next-line prefer-template
+      .attr('d', (d) => 'M' + d.y + ',' + d.x
+                  + 'C' + (d.parent.y + 50) + ',' + d.x
+                  + ' ' + (d.parent.y + 150) + ',' + d.parent.x // 50 and 150 are coordinates of inflexion, play with it to change links shape
+                  + ' ' + d.parent.y + ',' + d.parent.x)
+      .style('fill', 'none')
+      .attr('stroke', '#ccc');
+    svg.selectAll('g')
+      .data(root.descendants())
+      .enter()
+      .append('g')
+      // eslint-disable-next-line prefer-template
+      .attr('transform', (d) => 'translate(' + d.y + ',' + d.x + ')')
+      .append('circle')
+      .attr('r', 7)
+      .style('fill', '#69b3a2')
+      .attr('stroke', 'black')
+      .style('stroke-width', 2);
   }
 
   forceField() {

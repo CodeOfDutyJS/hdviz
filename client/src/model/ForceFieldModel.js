@@ -1,5 +1,3 @@
-const DataModel = require('./DataModel');
-
 class ForceFieldModel {
   constructor(dataModel) {
     this._dataModel = dataModel;
@@ -14,7 +12,7 @@ class ForceFieldModel {
   }
 
   getNodes() {
-    return this.dataModel.getFeatureColumns()
+    return this.dataModel.getTargetColumns()
       .map((value, index) => ({
         id: index,
         features: Object.keys(value)
@@ -25,7 +23,7 @@ class ForceFieldModel {
 
   getLinks(distanceFn) {
     const links = [];
-    const targetColumns = this.dataModel.getTargetColumns();
+    const targetColumns = this.dataModel.getFeatureColumns();
     targetColumns.forEach((value, index) => {
       for (let i = index + 1; i < targetColumns.length; i++) {
         links.push(

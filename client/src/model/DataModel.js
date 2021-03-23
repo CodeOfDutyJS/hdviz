@@ -62,6 +62,80 @@ class DataModel {
       ,
     );
   }
+
+  getMean(feat) {
+    let total = 0.0;
+    this.dataset.forEach((value) => {
+      total += value[feat];
+    });
+    return total / this.dataset.length;
+  }
+
+  getPopulationVariance(feat) {
+    const mean = this.getMean(feat);
+    let variance = 0.0;
+    this.dataset.forEach((value) => {
+      variance += ((value[feat] - mean) ** 2);
+    });
+    return variance / this.dataset.length;
+  }
+
+  getSampleVariance(feat) {
+    const mean = this.getMean(feat);
+    let variance = 0.0;
+    this.dataset.forEach((value) => {
+      variance += ((value[feat] - mean) ** 2);
+    });
+    return variance / (this.dataset.length - 1);
+  }
+
+  getSampleDeviation(feat) {
+    return Math.sqrt(this.getSampleVariance(feat));
+  }
+
+  getPopulationDeviation(feat) {
+    return Math.sqrt(this.getPopulationVariance(feat));
+  }
+
+  getQuartiles(feat) {
+    const data = this.getFeatureColumns();
+    data.sort((a, b) => a[feat] - b[feat]);
+    const l = data.length;
+    let secondQuartile;
+    let firstHalf = [];
+    let secondHalf = [];
+    if ((l % 2) !== 0) {
+      firstHalf = data.slice(0, Math.floor(l / 2));
+      secondHalf = data.slice(Math.floor(l / 2) + 1, l);
+      secondQuartile = data[Math.floor(l / 2)][feat];
+    } else {
+      firstHalf = data.slice(0, Math.floor(l / 2));
+      secondHalf = data.slice(Math.floor(l / 2), l);
+      secondQuartile = (data[(l / 2) - 1][feat] + data[(l / 2)][feat]) / 2;
+    }
+    let firstQuartile;
+    if ((firstHalf.length % 2) !== 0) {
+      firstQuartile = firstHalf[Math.floor(firstHalf.length / 2)][feat];
+    } else {
+      // eslint-disable-next-line max-len
+      firstQuartile = (firstHalf[(firstHalf.length / 2) - 1][feat] + firstHalf[(firstHalf.length / 2)][feat]) / 2;
+    }
+    let thirdQuartile;
+    if ((secondHalf.length % 2) !== 0) {
+      thirdQuartile = secondHalf[Math.floor(secondHalf.length / 2)][feat];
+    } else {
+      // eslint-disable-next-line max-len
+      thirdQuartile = (secondHalf[(secondHalf.length / 2) - 1][feat] + secondHalf[(secondHalf.length / 2)][feat]) / 2;
+    }
+    const r = {
+      Q1: firstQuartile,
+      Q2: secondQuartile,
+      Q3: thirdQuartile,
+      Iqr: thirdQuartile - firstQuartile,
+    };
+
+    return r;
+  }
 }
 
 export default DataModel;
