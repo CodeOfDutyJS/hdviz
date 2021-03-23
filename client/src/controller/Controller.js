@@ -14,28 +14,14 @@ import { getDatabases, getTables, getData } from './API';
 
 class Controller {
   model = null;
-
   visualizationSelected = null;
-
   columns = [];
-
   featuresSelected = [];
-
   targetSelected = [];
-
   distanceSelected = null;
-
-  visualization = null;
-
   databases = [];
-
   tables = [];
-
-  data;
-
   loadingCompleted = false;
-
-  // parti = false;
 
   constructor() {
     makeAutoObservable(this);
