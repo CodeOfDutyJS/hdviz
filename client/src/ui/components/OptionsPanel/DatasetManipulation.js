@@ -16,8 +16,13 @@ const { Item } = Form;
 
 const DatasetManipulation = observer(() => {
   const store = useStore();
+  const [visualizationSelected, setVisualizationSelected] = useState();
   const [normalized, setNormalized] = useState(false);
   const [distanceMatrix, setDistanceMatrix] = useState(true);
+
+  useEffect(() => {
+    setVisualizationSelected(store.visualizationSelected);
+  }, [store.visualizationSelected]);
 
   const onNormalizeCheckboxChanged = (e) => {
     setNormalized(e.target.checked);
@@ -45,7 +50,7 @@ const DatasetManipulation = observer(() => {
         ) : null}
       </Item> */}
 
-      {store.visualizationSelected === VisualizationType.FORCE
+      {visualizationSelected === VisualizationType.FORCE
         ? (
           // eslint-disable-next-line max-len
           <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={distanceMatrix}>Calculate Distance Matrix</Checkbox>}>
