@@ -1,4 +1,4 @@
-name: CI - Testing
+name: CI - Build
 
 # Controls when the action will run.
 on:
@@ -17,8 +17,8 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  test-client:
-    name: Test client
+  build-client:
+    name: Build client
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -29,7 +29,7 @@ jobs:
         run: |
           cd client/
           yarn
-      - name: Run Jest
+      - name: Build client
         run: |
           cd client/
-          yarn test
+          CI='false' yarn build

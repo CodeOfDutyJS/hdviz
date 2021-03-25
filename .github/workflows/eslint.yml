@@ -1,12 +1,15 @@
 name: CI - Linting
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [main]
+    paths:
+    - "client/src/**"
+    - "server/src/**"
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -30,7 +33,7 @@ jobs:
         run: |
           cd server/
           yarn lint
-  
+
   eslint-client:
     name: ESLint client
     # The type of runner that the job will run on
