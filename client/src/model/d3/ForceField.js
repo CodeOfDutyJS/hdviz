@@ -32,8 +32,8 @@ function forceField(data) {
 
   const svg = d3.select('#area');
 
-  const width = 800 || svg.node().getBoundingClientRect().width;
-  const height = 800 || svg.node().getBoundingClientRect().height;
+  const { width } = svg.node().getBoundingClientRect();
+  const { height } = svg.node().getBoundingClientRect();
 
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links).distance((d) => d.value * 1).strength((d) => (1 / (d.value * 1))).id((d) => d.id))

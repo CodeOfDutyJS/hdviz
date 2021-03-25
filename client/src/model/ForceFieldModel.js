@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 class ForceFieldModel {
   constructor(dataModel) {
     this._dataModel = dataModel;
@@ -23,26 +25,18 @@ class ForceFieldModel {
   }
 
   static scale(data) {
-    const max = data
-      .reduce((prev, current) => (
-        (prev.value > current.value) ? prev : current)).value;
-    const min = data
-      .reduce((prev, current) => (
-        (prev.value < current.value) ? prev : current)).value;
-
-    const scale = (num, inMin, inMax, outMin, outMax) => (
-      (num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+    const scaleLin = d3.scaleLinear()
+      .domain(d3.extent(data, (d) => (d.value)))
+      .range([1, 600]);
 
     for (let i = 0; i < data.length; i++) {
       // eslint-disable-next-line no-param-reassign
-      data[i]
-        .value = scale(data[i].value, min, max, 1, 200);
+      data[i].value = scaleLin(data[i].value);
     }
-
     return data;
   }
 
-  getLinks(distanceFn, maxNodes, maxLinks, wantToScale) {
+  getLinks(distanceFn, maxNodes, maxLinks) {
     const links = [];
     const featureColumns = this.dataModel.getFeatureColumns();
     featureColumns
@@ -50,7 +44,7 @@ class ForceFieldModel {
       .forEach(
         (distanceFrom, i) => {
           featureColumns
-            .slice(i + 1, Math.min(maxLinks, featureColumns.length))
+            .slice(i + 1, d3.min([maxLinks, featureColumns.length]))
             .forEach((distanceTo, j) => {
               const dist = distanceFn(Object.values(distanceFrom), Object.values(distanceTo));
               links.push(
@@ -63,13 +57,13 @@ class ForceFieldModel {
             });
         },
       );
-    return wantToScale ? this.constructor.scale(links) : links;
+    return this.constructor.scale(links);
   }
 
-  getPreparedDataset(distanceFn, maxNodes, maxLinks, wantToScale) {
+  getPreparedDataset(distanceFn, maxNodes, maxLinks) {
     return {
       nodes: this.getNodes(maxNodes),
-      links: this.getLinks(distanceFn, maxNodes, maxLinks, wantToScale),
+      links: this.getLinks(distanceFn, maxNodes, maxLinks),
     };
   }
 }

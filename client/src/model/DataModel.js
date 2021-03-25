@@ -1,5 +1,3 @@
-import { forEach } from 'mathjs';
-
 class DataModel {
   constructor() {
     this._dataset = [];
@@ -32,6 +30,10 @@ class DataModel {
     this._target = value;
   }
 
+  cleanDataset() {
+    return this;
+  }
+
   getTargetColumns() {
     return this.dataset.map(
       (value) => this.target.reduce(
@@ -55,16 +57,13 @@ class DataModel {
   }
 
   getSelectedDataset() {
-    return this.dataset.map(
-      (value) => Object
-        .keys(value) // stream delle chiavi contenute in value (riga del dataset)
-        .filter((key) => this.feature.indexOf(key) !== -1
-          || this.target?.indexOf(key) !== -1)
-        .reduce((obj, key) => ({ // riduce l'array di chiavi in un object literal
-          ...obj,
-          [key]: value[key],
-        }), {}),
-    );
+    const targetCols = this.getTargetColumns();
+    const featureCols = this.getFeatureColumns();
+    return featureCols
+      .map((value, index) => ({
+        ...value,
+        ...targetCols[index],
+      }));
   }
 }
 

@@ -30,7 +30,7 @@ describe('#ForceFieldModel', () => {
 
   describe('#distanceFn', () => {
     expect(forceFieldModel.dataModel.getFeatureColumns()).not.toBeNull();
-    const distanceDataset = forceFieldModel.getPreparedDataset(distance.euclidean, 4, 6, false);
+    const distanceDataset = forceFieldModel.getPreparedDataset(distance.euclidean, 4, 6);
     it('should return a correctly formatted object', () => {
       expect(
         'nodes' in distanceDataset
@@ -50,16 +50,16 @@ describe('#ForceFieldModel', () => {
       expect(distanceDataset).toEqual({
         nodes: [
           {
-            id: 0, colore: 'first', forma: undefined, features: JSON.stringify(mockDataset[0], ['a', 'b', 'd']),
+            id: 0, colore: 'first', forma: undefined, features: JSON.stringify(mockDataset[0], ['b', 'd', 'a']),
           },
           {
-            id: 1, colore: 'second', forma: undefined, features: JSON.stringify(mockDataset[1], ['a', 'b', 'd']),
+            id: 1, colore: 'second', forma: undefined, features: JSON.stringify(mockDataset[1], ['b', 'd', 'a']),
           },
           {
-            id: 2, colore: 'third', forma: undefined, features: JSON.stringify(mockDataset[2], ['a', 'b', 'd']),
+            id: 2, colore: 'third', forma: undefined, features: JSON.stringify(mockDataset[2], ['b', 'd', 'a']),
           },
           {
-            id: 3, colore: 'fourth', forma: undefined, features: JSON.stringify(mockDataset[3], ['a', 'b', 'd']),
+            id: 3, colore: 'fourth', forma: undefined, features: JSON.stringify(mockDataset[3], ['b', 'd', 'a']),
           },
         ],
         links: [
