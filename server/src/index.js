@@ -1,11 +1,27 @@
 /* eslint-disable */
+//import {createConnection, Connection} from "typeorm";
+//import "reflect-metadata";
+
 
 const express = require('express');
+//var bodyParser = require('body-parser');
 const fs = require('fs');
 const mysql = require('mysql');
 
+
 const app = express();
+app.use(express.json())
+app.use(express.json({
+  type: ['application/json', 'text/plain']
+}));
+
+
 const port = 1337;
+
+
+
+
+
 
 function getFiles(dir, files_) {
   files_ = files_ || [];
@@ -22,7 +38,7 @@ function getFiles(dir, files_) {
   return files_;
 }
 
-let config_files = getFiles('/home/damix/hdviz/server/src/config');
+let config_files = getFiles('C:/Users/Matteo/Documents/HD VIZ/hdviz/hdviz/server/src/config');
 
 function selectConfig(dbname) {
   for (const i in config_files) {
@@ -33,10 +49,10 @@ function selectConfig(dbname) {
   return 0;
 }
 
-app.get('/api/getDatabases/', (req, res) => {
+app.get('/api/getDatabases', (req, res) => {
   console.log('api/getDatabases/ called');
   // res.send(getFiles('config').sort((a,b) => a.length - b.length));
-  config_files = getFiles('/home/damix/hdviz/server/src/config');
+  config_files = getFiles('C:/Users/Matteo/Documents/HD VIZ/hdviz/hdviz/server/src/config');
   let databases = [];
   for (const i in config_files) {
     databases = config_files[i].DB_Name;
@@ -48,21 +64,30 @@ app.get('/api/getDatabases/', (req, res) => {
 
 });
 
-app.get('/api/getTables/', (req, res) => {
-  var dbname = req.param('dbname');
+
+app.get('/api/getTable', (req, res) => {
+  
+  var dbname = req.body.name;
   console.log('api/getTables/ called');
+  console.log(dbname);
   // const dbname = 'prova';
 
+
   const configurazione = selectConfig(dbname);
+
+  
+  /*
   if (configurazione == 0) {
     res.send(0); // Si Può?
   }
+  */
   const connection = mysql.createConnection({
     host: configurazione.DB_Address,
     user: configurazione.DB_Username,
     password: configurazione.DB_Password,
     database: configurazione.DB_Name,
   });
+
   connection.connect((err) => {
     if (err) {
       console.log(err);
@@ -70,7 +95,8 @@ app.get('/api/getTables/', (req, res) => {
       console.log('Connected to the DB');
     }
   });
-  const showtables = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${dbname}'`;
+  const showtables = `SELECT table_name FROM information_schema.tables WHERE table_schema ='iris'`;
+  
   connection.query(showtables, (error, columns, fields) => {
     if (error) {
       console.log('error in the query');
@@ -80,7 +106,7 @@ app.get('/api/getTables/', (req, res) => {
     }
     // connection.end();
   });
-  console.log('api/getDatabases/ terminated successfully');
+  console.log('api/getTables/ terminated successfully');
 
 });
 
@@ -113,8 +139,9 @@ const getData = (connection, tableName, cb) => {
 
 app.get('/api/getData/', (req, res) => {
   console.log('api/getData/ called');
-  var dbname = req.param('dbname');
-  var dbtable = req.param('dbtable');
+  var dbname = req.body.name;
+  var dbtable = req.body.table;
+
   // const dbname = 'prova';
   // const dbtable = 'Candidato';
 

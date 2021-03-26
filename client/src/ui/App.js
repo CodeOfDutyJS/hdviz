@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+node --trace-warningsimport React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Layout, PageHeader } from 'antd';
