@@ -20,7 +20,7 @@ const DataSource = () => {
             <FileTextOutlined />
             File CSV
           </span>
-              )}
+        )}
         key="csv"
       >
         <UploadCSV />
@@ -32,7 +32,7 @@ const DataSource = () => {
             <DatabaseOutlined />
             Database
           </span>
-              )}
+        )}
         key="database"
       >
         <DatabaseSelection />

@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-  Layout, Collapse, Tabs, PageHeader, Button, Alert,
+  Layout, Collapse, PageHeader, Button, Alert,
 } from 'antd';
 
-import { FileTextOutlined, DatabaseOutlined } from '@ant-design/icons';
-
 import { observer } from 'mobx-react-lite';
-import UploadCSV from './UploadCSV';
-import DatabaseSelection from './DatabaseSelection';
 import VisualizationSelection from './VisualizationSelection';
 import DatasetManipulation from './DatasetManipulation';
 import { useStore } from '../../../controller/ControllerProvider';
@@ -17,25 +13,8 @@ import DataSource from './DataSource';
 const { Sider } = Layout;
 const { Panel } = Collapse;
 
-const { TabPane } = Tabs;
-
-// eslint-disable-next-line arrow-body-style
 const OptionPanel = observer(() => {
   const store = useStore();
-  const [success, setSuccess] = useState(false);
-
-  const showResult = () => {
-    // logica con controller
-    // setSuccess(true);
-
-    store.start();
-
-    store.parti = true;
-  };
-
-  useEffect(() => {
-    console.log('ciao');
-  }, [store.data]);
 
   return (
     <Sider id="settingPanel" width="none">
@@ -58,10 +37,10 @@ const OptionPanel = observer(() => {
         </Panel>
       </Collapse>
       <Layout id="start-button">
-        <Button type="primary" shape="round" onClick={showResult}>Start</Button>
+        <Button type="primary" shape="round" onClick={() => { store.start(); }}>Start</Button>
       </Layout>
 
-      {success ? <Alert type="success" message="Success Text" closable onClose={() => { setSuccess(false); }} /> : null}
+      {store.success ? <Alert type="success" message="Success Text" closable onClose={() => { store.success = false; }} /> : null}
     </Sider>
   );
 });

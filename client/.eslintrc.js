@@ -29,5 +29,6 @@ module.exports = {
       'always',
       { exceptAfterSingleLine: true },
     ],
+    'max-len': [1, 160, 2],
   },
 };

@@ -9,49 +9,42 @@ const { Option } = Select;
 const { Item } = Form;
 
 const DatabaseSelection = () => {
-  const controller = useStore();
-  const [databaseList, setDatabaseList] = useState([]);
-  const [tableList, setTableList] = useState([]);
+  const store = useStore();
+
+  // State per gestione UI
   const [isDatabaseSelected, setIsDatabaseSelected] = useState(false);
   const [isDatabaseListLoading, setIsDatabaseListLoading] = useState(true);
   const [isTableListLoading, setIsTableListLoading] = useState(false);
-  const [dbSelected, setDbSelected] = useState();
 
   useEffect(() => {
     // Call API to get list of database connection available
     (async () => {
-      setDatabaseList(await controller.getDatabases());
+      await store.setDatabases();
       setIsDatabaseListLoading(false);
     })();
   }, []);
 
-  const testConnection = (values) => {
-    console.log(values);
-  };
-
   const onDatabaseSelection = async (_db) => {
-    // Call API to get list of table available
     setIsTableListLoading(true);
-    setDbSelected(_db);
-    setTableList(await controller.getTables(_db));
+    await store.setTables(_db);
     setIsDatabaseSelected(true);
     setIsTableListLoading(false);
   };
 
   const onTableSelection = async (_table) => {
-    await controller.setData(dbSelected, _table);
+    await store.setData(_table);
   };
 
   return (
-    <Form onFinish={testConnection}>
+    <Form>
       <Item label="Database connection" name="db" rules={[{ required: true, message: 'Please select a Database' }]}>
         <Select placeholder="Database connection" disabled={isDatabaseListLoading} loading={isDatabaseListLoading} onSelect={onDatabaseSelection}>
-          {databaseList.map((item, key) => <Option key={item.databases}>{item.databases}</Option>)}
+          {store.databases.map((item, key) => <Option key={item.databases}>{item.databases}</Option>)}
         </Select>
       </Item>
       <Item label="Data Table" name="table" rules={[{ required: true, message: 'Please select a Database' }]}>
         <Select placeholder="Table" disabled={!isDatabaseSelected} loading={isTableListLoading} onSelect={onTableSelection}>
-          {tableList.map((item, key) => <Option key={item.table_name}>{item.table_name}</Option>)}
+          {store.tables.map((item, key) => <Option key={item.table_name}>{item.table_name}</Option>)}
         </Select>
       </Item>
     </Form>

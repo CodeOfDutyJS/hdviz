@@ -15,24 +15,7 @@ const { Item } = Form;
 
 const TargetSelection = observer(() => {
   const store = useStore();
-  const [columns, setColumns] = useState([]);
-  const [targets, setTargets] = useState([]);
   const [maxTarget, setMaxTarget] = useState(false);
-
-  // Called when columns in controller changed
-  // when the data are loaded and the columns are extracted from dataset
-  useEffect(() => {
-    try {
-      setColumns(store.columns);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [store.columns]);
-
-  // Called when targetSelected in controller changed
-  useEffect(() => {
-    setTargets(store.targetSelected);
-  }, [store.targetSelected]);
 
   const onTargetChanged = (_target) => {
     if (_target.length > 2) {
@@ -54,8 +37,8 @@ const TargetSelection = observer(() => {
       hasFeedback
       help={maxTarget ? 'Max 2 target variables' : null}
     >
-      <Select placeholder="Select target" mode="multiple" onChange={onTargetChanged} value={targets}>
-        {columns.map((item, key) => <Option key={item}>{item}</Option>)}
+      <Select placeholder="Select target" mode="multiple" onChange={onTargetChanged} value={store.targetSelected}>
+        {store.columns.map((item, key) => <Option key={item}>{item}</Option>)}
       </Select>
     </Item>
   );

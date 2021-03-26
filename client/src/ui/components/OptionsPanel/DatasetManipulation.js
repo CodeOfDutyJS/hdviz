@@ -16,20 +16,15 @@ const { Item } = Form;
 
 const DatasetManipulation = observer(() => {
   const store = useStore();
-  const [visualizationSelected, setVisualizationSelected] = useState();
   const [normalized, setNormalized] = useState(false);
-  const [distanceMatrix, setDistanceMatrix] = useState(true);
-
-  useEffect(() => {
-    setVisualizationSelected(store.visualizationSelected);
-  }, [store.visualizationSelected]);
+  const [isDistanceMatrix, setIsDistanceMatrix] = useState(true);
 
   const onNormalizeCheckboxChanged = (e) => {
     setNormalized(e.target.checked);
   };
 
   const onMatrixCheckboxChanged = (e) => {
-    setDistanceMatrix(e.target.checked);
+    setIsDistanceMatrix(e.target.checked);
   };
 
   const onDistanceChanged = (_distance) => {
@@ -40,6 +35,7 @@ const DatasetManipulation = observer(() => {
     <Form>
       <FeatureSelection />
       <TargetSelection />
+
       {/* <Item className="no-point" label={<Checkbox onChange={onNormalizeCheckboxChanged}>Normalize data</Checkbox>}>
         {normalized ? (
           <Select placeholder="Select what normalize">
@@ -50,11 +46,11 @@ const DatasetManipulation = observer(() => {
         ) : null}
       </Item> */}
 
-      {visualizationSelected === VisualizationType.FORCE
+      {store.visualizationSelected === VisualizationType.FORCE
         ? (
           // eslint-disable-next-line max-len
-          <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={distanceMatrix}>Calculate Distance Matrix</Checkbox>}>
-            {distanceMatrix ? (
+          <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={isDistanceMatrix}>Calculate Distance Matrix</Checkbox>}>
+            {isDistanceMatrix ? (
               <Select placeholder="Select distance" onChange={onDistanceChanged}>
                 <Option key={DistanceType.EUCLIDEAN}>Euclidea</Option>
                 <Option key={DistanceType.MANHATTAN} disabled>Manthattan</Option>

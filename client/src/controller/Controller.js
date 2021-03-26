@@ -19,9 +19,15 @@ class Controller {
   featuresSelected = [];
   targetSelected = [];
   distanceSelected = null;
+
+  // Database stuff
   databases = [];
+  databaseSelected = null;
   tables = [];
+  tableSelected = null;
+
   loadingCompleted = false;
+  success = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -40,10 +46,6 @@ class Controller {
 
   setDistance(_distance) {
     this.distanceSelected = _distance;
-
-    // if (this.distanceSelected === DistanceType.EUCLIDEAN) {
-    //   this.model.setEuclideanDistance(12);
-    // }
   }
 
   setVisualization(_visualization) {
@@ -54,27 +56,20 @@ class Controller {
     this.databases = await getDatabases();
   }
 
-  async getDatabases() {
-    await this.setDatabases();
-    return this.databases;
-  }
-
   async setTables(db_) {
-    this.tables = await getTables(db_);
+    this.databaseSelected = db_;
+    this.tables = await getTables(this.databaseSelected);
   }
 
-  async getTables(db_) {
-    await this.setTables(db_);
-    return this.tables;
-  }
+  async setData(table_) {
+    this.tableSelected = table_;
 
-  async setData(db_, table_) {
     this.featureSelected = null;
     this.targetSelected = null;
 
     this.changed = !this.changed;
 
-    const _data = await getData(db_, table_);
+    const _data = await getData(this.databaseSelected, this.tableSelected);
     this.model.dataset = _data;
     this.columns = Object.keys(_data.rows[0]);
 
@@ -82,8 +77,10 @@ class Controller {
   }
 
   async uploadCSV(file) {
-    this.featureSelected = [];
+    this.featuresSelected = [];
     this.targetSelected = [];
+
+    console.log(this.featureSelected);
 
     this.loadingCompleted = false;
 
@@ -92,6 +89,7 @@ class Controller {
       Papa.parse(rawFile, {
         header: true,
         dynamicTyping: true,
+        skipEmptyLines: true,
         worker: true,
         complete: (results) => {
           resolve(results.data);
@@ -103,6 +101,8 @@ class Controller {
     const _data = await parseFile(file);
     // this.model.reset();
     this.model.dataset = _data;
+
+    console.log(_data);
 
     // Set columns
     this.columns = Object.keys(_data[0]);
@@ -128,7 +128,7 @@ class Controller {
   }
 
   async start() {
-    this.removeGraph();
+    // this.removeGraph();
     this.model.feature = this.featuresSelected;
     this.model.target = this.targetSelected;
     // this.model.setFeatures(this.featuresSelected);

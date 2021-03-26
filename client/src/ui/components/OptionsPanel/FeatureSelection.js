@@ -14,41 +14,23 @@ const { Item } = Form;
 
 const FeatureSelection = observer(() => {
   const store = useStore();
-  const [columns, setColumns] = useState([]);
-  const [features, setFeatures] = useState([]);
   const [maxFeatures, setMaxFeatures] = useState(false);
 
-  // eslint-disable-next-line max-len
-  const isMATRIX = (_f) => store.visualizationSelected === VisualizationType.MATRIX && _f.length > 5;
-
-  // Called when columns in controller changed
-  // when the data are loaded and the columns are extracted from dataset
-  useEffect(() => {
-    try {
-      setColumns(store.columns);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [store.columns]);
+  const isMATRIX = () => store.visualizationSelected === VisualizationType.MATRIX && store.featuresSelected.length > 5;
 
   // Called when visualizationSelected in controller changed
   // when scatter plot matrix is selected setMaxFeatures
   useEffect(() => {
-    if (isMATRIX(features)) {
-      store.setFeatures(features.slice(0, 5));
+    if (isMATRIX()) {
+      store.setFeatures(store.featuresSelected.slice(0, 5));
       setMaxFeatures(true);
     } else {
       setMaxFeatures(false);
     }
   }, [store.visualizationSelected]);
 
-  // Called when featuresSelected in controller changed
-  useEffect(() => {
-    setFeatures(store.featuresSelected);
-  }, [store.featuresSelected]);
-
   const onFeaturesChanged = (_features) => {
-    if (isMATRIX(_features)) {
+    if (isMATRIX()) {
       _features.pop();
       setMaxFeatures(true);
     } else {
@@ -67,8 +49,8 @@ const FeatureSelection = observer(() => {
       hasFeedback
       help={maxFeatures ? 'Max 5 feature variables' : null}
     >
-      <Select placeholder="Select features" mode="multiple" onChange={onFeaturesChanged} value={features} allowClear>
-        {columns.map((item, key) => <Option key={item}>{item}</Option>)}
+      <Select placeholder="Select features" mode="multiple" onChange={onFeaturesChanged} value={store.featuresSelected} allowClear>
+        {store.columns.map((item, key) => <Option key={item}>{item}</Option>)}
       </Select>
       <></>
     </Item>
