@@ -1,8 +1,9 @@
-import DataModel from './DataModel';
-
 class ScatterPlotMatrixModel {
   constructor(dataModel) {
     this._dataModel = dataModel;
+    if (dataModel.feature.length > 5) {
+      throw new Error('Lo Scatter Plot Matrix non può avere più di 5 features, ridurre il numero di features.');
+    }
   }
 
   get dataModel() {
