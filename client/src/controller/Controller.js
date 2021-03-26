@@ -128,7 +128,7 @@ class Controller {
   }
 
   async start() {
-    // this.removeGraph();
+    this.removeGraph();
     this.model.feature = this.featuresSelected;
     this.model.target = this.targetSelected;
     // this.model.setFeatures(this.featuresSelected);
