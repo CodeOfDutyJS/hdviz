@@ -1,13 +1,13 @@
 /* eslint-disable */
 //import {createConnection, Connection} from "typeorm";
 //import "reflect-metadata";
-
+//import * from './modules/ServerModule.js';
+//node --experimental-modules ServerModule.js
 
 const express = require('express');
-//var bodyParser = require('body-parser');
 const fs = require('fs');
 const mysql = require('mysql');
-
+const modulo = require ('./modules/ServerModule');
 
 const app = express();
 app.use(express.json())
@@ -17,10 +17,6 @@ app.use(express.json({
 
 
 const port = 1337;
-
-
-
-
 
 
 function getFiles(dir, files_) {
@@ -66,8 +62,8 @@ app.get('/api/getDatabases', (req, res) => {
 
 
 app.get('/api/getTable', (req, res) => {
-  
-  var dbname = req.body.name;
+  var dbname = req.param('dbname');
+  //var dbname = req.body.name;                     //verificare se il modo in cui si fa fetch va bene da parte client
   console.log('api/getTables/ called');
   console.log(dbname);
   // const dbname = 'prova';
@@ -81,12 +77,9 @@ app.get('/api/getTable', (req, res) => {
     res.send(0); // Si Può?
   }
   */
-  const connection = mysql.createConnection({
-    host: configurazione.DB_Address,
-    user: configurazione.DB_Username,
-    password: configurazione.DB_Password,
-    database: configurazione.DB_Name,
-  });
+ console.log(configurazione);
+  const connection = modulo.connessione(configurazione);  
+
 
   connection.connect((err) => {
     if (err) {
