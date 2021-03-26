@@ -15,25 +15,12 @@ class ForceFieldModel {
 
   getNodes(maxNodes) {
     return this.dataModel.getSelectedDataset()
-      .map((value, index) => ({
-        id: index,
-        colore: value?.[this.dataModel.target[0]],
-        forma: value?.[this.dataModel.target[1]],
+      .map((value) => ({
+        color: value?.[this.dataModel.target[0]],
+        size: value?.[this.dataModel.target[1]],
         features: JSON.stringify(value),
       }))
       .slice(0, maxNodes);
-  }
-
-  static scale(data) {
-    const scaleLin = d3.scaleLinear()
-      .domain(d3.extent(data, (d) => (d.value)))
-      .range([1, 600]);
-
-    for (let i = 0; i < data.length; i++) {
-      // eslint-disable-next-line no-param-reassign
-      data[i].value = scaleLin(data[i].value);
-    }
-    return data;
   }
 
   getLinks(distanceFn, maxNodes, maxLinks) {
@@ -57,7 +44,7 @@ class ForceFieldModel {
             });
         },
       );
-    return this.constructor.scale(links);
+    return links;
   }
 
   getPreparedDataset(distanceFn, maxNodes, maxLinks) {

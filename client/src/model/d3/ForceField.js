@@ -26,9 +26,19 @@ function forceField(data) {
       .on('end', dragended);
   };
 
-  const colore = d3.scaleOrdinal(d3.schemeCategory10);
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
 
   const { links, nodes } = data;
+
+  const scaleLinks = d3.scaleLinear()
+    .domain(d3.extent(links, (d) => (d.value)))
+    .range([1, 600]);
+
+  links.forEach(
+    (d) => {
+      d.value = scaleLinks(d.value);
+    },
+  );
 
   const svg = d3.select('#area');
 
@@ -36,7 +46,9 @@ function forceField(data) {
   const { height } = svg.node().getBoundingClientRect();
 
   const simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).distance((d) => d.value * 1).strength((d) => (1 / (d.value * 1))).id((d) => d.id))
+    .force('link', d3.forceLink(links)
+      .distance((d) => d.value)
+      .strength((d) => 1 / d.value))
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter(width / 2, height / 2));
 
@@ -47,7 +59,7 @@ function forceField(data) {
     .data(nodes)
     .join('circle')
     .attr('r', 5)
-    .attr('fill', (d) => colore(d.colore))
+    .attr('fill', (d) => color(d.color))
     .call(drag(simulation));
 
   node.append('title')
