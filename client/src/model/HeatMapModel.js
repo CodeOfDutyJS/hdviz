@@ -31,20 +31,18 @@ class HeatMapModel {
     const data = this.dataModel.getSelectedDataset();
     const cols = this.dataModel.feature;
     const corr = jeezy.arr.correlationMatrix(data, cols);
-    console.log(corr);
     const matrix = [];
     for (let z = 0; z < cols.length; z++) {
       const entry = {
         ref: {
           id: 'a',
-          children: [],
         },
         distances: [],
       };
       for (let i = 0; i < cols.length; i++) {
         entry.ref.id = corr[z * cols.length + i].column_x;
-        entry.ref.children.push(corr[z * cols.length + i]);
-        entry.distances.push(corr[z * cols.length + i].correlation);
+        entry.ref[corr[z * cols.length + i].column_y] = corr[z * cols.length + i].correlation;
+        entry.distances.push(Math.sqrt(2 * (1 - corr[z * cols.length + i].correlation)));
       }
       matrix.push(entry);
     }
@@ -52,11 +50,13 @@ class HeatMapModel {
   }
 
   getDistanceMatrix(distanceFn) {
-    const data = this.dataModel.getSelectedDataset();
+    const data = this.dataModel.getStandardScore();
     const matrix = [];
     data.forEach((row) => {
+      if (Object.entries(row).length === 0) return;
       const rowDistance = [];
       data.forEach((column) => {
+        if (Object.entries(row).length === 0) return;
         // eslint-disable-next-line eqeqeq
         if (row != column) {
           rowDistance.push(this.distance(row, column, distanceFn));
@@ -69,14 +69,12 @@ class HeatMapModel {
         distances: [...rowDistance],
       });
     });
-    console.log(matrix);
     return matrix;
   }
 
   getSimpleLinkage(distanceFn) {
     const matrix = this.getMatrix(distanceFn);
     let n = 0;
-    console.log(matrix);
     while (matrix.length !== 1) {
       let min = Infinity;
       const indexes = [];
@@ -92,9 +90,11 @@ class HeatMapModel {
         }
       });
       // now that you have the minimum build the cluster
+      const r = matrix[indexes[1]];
+      const l = 'branchLength' in r ? r.branchLength : 0;
       const cluster = {
         id: `cluster${n}`,
-        branchLength: min / 2,
+        branchLength: (min / 2) - l,
         children: [],
       };
       indexes.forEach((index) => {
@@ -194,7 +194,6 @@ class HeatMapModel {
   getMatrix(distanceType) {
     switch (distanceType) {
       case DistanceType.EUCLIDEAN:
-        console.log('b');
         return this.getDistanceMatrix(distance.euclidean);
         // eslint-disable-next-line no-unreachable
         break;
@@ -212,14 +211,58 @@ class HeatMapModel {
       case ClusteringType.COMPLETE:
         return this.getCompleteLinkage(d);
       case ClusteringType.SIMPLE:
-        console.log('a');
         return this.getSimpleLinkage(d);
       default:
         return this.getSimpleLinkage(d);
     }
   }
 
-  getLeaves(cluster) {
+  static correlationMap(cluster) {
+    const leaves = HeatMapModel.getLeaves(cluster);
+    const colnames = [];
+    leaves.forEach((leaf) => colnames.push(leaf.id));
+    const toGrid = [];
+    let row = 1;
+    leaves.forEach((leaf) => {
+      let col = 1;
+      colnames.forEach((name) => {
+        const obj = {};
+        obj.row = row;
+        obj.col = col;
+        obj.column_x = leaf.id;
+        obj.column_y = name;
+        obj.correlation = leaf[name];
+        toGrid.push(obj);
+        col += 1;
+      });
+      row += 1;
+    });
+    return toGrid;
+  }
+
+  static dataGrid(cluster, cols) {
+    const leaves = HeatMapModel.getLeaves(cluster);
+    const colnames = cols;
+    const toGrid = [];
+    let row = 1;
+    leaves.forEach((leaf) => {
+      let col = 1;
+      colnames.forEach((name) => {
+        const obj = {};
+        obj.row = row;
+        obj.col = col;
+        // obj.column_x = leaf.id; optional ? on larger datasets cant even read row names
+        obj.column_y = name;
+        obj.value = leaf[name];
+        toGrid.push(obj);
+        col += 1;
+      });
+      row += 1;
+    });
+    return toGrid;
+  }
+
+  static getLeaves(cluster) {
     let leaves = [];
     if (!cluster.children) {
       leaves.push(cluster);

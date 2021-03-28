@@ -48,8 +48,8 @@ describe('#DataModel', () => {
   });
   describe('#Statistical Analysis', () => {
     const dataset = new DataModel(mockData);
-    dataset.feature = mockFeature;
-    dataset.target = mockTarget;
+    dataset.feature = mockTarget;
+    dataset.target = mockFeature;
 
     it('should return the mean', () => {
       expect(dataset.getMean('height')).toEqual(3.5);

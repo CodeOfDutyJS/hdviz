@@ -66,7 +66,7 @@ describe('#HeatMapModel', () => {
     ]);
   }); */
   it('test', () => {
-    const dataTest = new DataModel(dataArray);
+    const dataTest = new DataModel(mockData);
     /* dataTest.feature = ['SpeseSanitarie',
       'RedditiDominicali',
       'RedditiAgrari',
@@ -95,11 +95,10 @@ describe('#HeatMapModel', () => {
       'numeroFigliACarico',
     ];
     dataTest.target = ['codiceCatastaleNascita']; */
-    dataTest.feature = ['housing_median_age', 'total_rooms'];
-    dataTest.target = ['ocean_proximity'];
+    dataTest.feature = ['height', 'width', 'weight'];
+    dataTest.target = ['name'];
     const heatMapModel = new HeatMapModel(dataTest);
     // eslint-disable-next-line max-len
-    console.log(JSON.stringify(heatMapModel.getClustering(ClusteringType.COMPLETE, DistanceType.EUCLIDEAN)));
     expect(1).toEqual(1);
   });
 });

@@ -63,6 +63,46 @@ class DataModel {
     );
   }
 
+  getStandardScore() {
+    const means = {};
+    const deviations = {};
+    this.feature.forEach((feat) => {
+      means[feat] = this.getMean(feat);
+      deviations[feat] = this.getSampleDeviation(feat);
+    });
+    const d = this.getSelectedDataset();
+    d.forEach((value) => {
+      this.feature.forEach((feat) => {
+        // eslint-disable-next-line no-param-reassign
+        value[feat] = (value[feat] - means[feat]) / deviations[feat];
+      });
+    });
+    return d;
+  }
+
+  getDataNormalizedByLength(normFn) {
+    const d = this.getSelectedDataset();
+    d.map((value) => {
+      const length = normFn(value);
+      const obj = {};
+      this.target.forEach((t) => {
+        obj[t] = value[t];
+      });
+      this.feature.forEach((feat) => {
+        obj[feat] = value[feat] / length;
+      });
+      return obj;
+    });
+  }
+
+  euclideanNorm(obj) {
+    let length;
+    this.feature.forEach((feat) => {
+      length += obj[feat] ** 2;
+    });
+    return Math.sqrt(length);
+  }
+
   getMean(feat) {
     let total = 0.0;
     this.dataset.forEach((value) => {
