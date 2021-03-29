@@ -150,13 +150,13 @@ class Controller {
     this.model.target = this.targetSelected;
     // this.model.setFeatures(this.featuresSelected);
 
-    const forceFieldModel = new ForceFieldModel(this.model);
-    // const scatterPlotMatrixModel = new ScatterPlotMatrixModel(this.model);
-    // scatterPlotMatrix(scatterPlotMatrixModel.getPreparedDataSet(),
-    //  this.model.feature,
-    //  this.model.target);
-    forceField(forceFieldModel
-      .getPreparedDataset(distance[this.distanceSelected], 150, 150));
+    // const forceFieldModel = new ForceFieldModel(this.model);
+    const scatterPlotMatrixModel = new ScatterPlotMatrixModel(this.model);
+    scatterPlotMatrix(scatterPlotMatrixModel.getPreparedDataSet(),
+      this.model.feature,
+      this.model.target);
+    // forceField(forceFieldModel
+    //  .getPreparedDataset(distance[this.distanceSelected], 150, 150));
   }
 }
 

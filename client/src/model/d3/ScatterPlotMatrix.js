@@ -2,7 +2,8 @@ import * as d3 from 'd3';
 
 function scatterPlotMatrix(data, features, targets) {
   const columns = Object.keys(data[0]).filter((value) => features.includes(value));
-  const width = 954;
+  const svg = d3.select('#area');
+  const { width } = svg.node().getBoundingClientRect();
   const padding = 30;
   const size = (width - (columns.length + 1) * padding) / columns.length + padding;
 
@@ -12,52 +13,43 @@ function scatterPlotMatrix(data, features, targets) {
 
   const y = x.map((value) => value.copy().range([size - padding / 2, padding / 2]));
 
-  const startBrush = (cell, circle, svg) => {
-    const brush = d3.brush()
-      .extent([[padding / 2, padding / 2], [size - padding / 2, size - padding / 2]])
-      // eslint-disable-next-line no-use-before-define
-      .on('start', brushstarted)
-      // eslint-disable-next-line no-use-before-define
-      .on('brush', brushed)
-      // eslint-disable-next-line no-use-before-define
-      .on('end', brushended);
-
-    cell.call(brush);
-
+  const startBrush = (cell, circle, svgGraph) => {
     let brushCell;
 
-    // Clear the previously-active brush, if any.
-    function brushstarted() {
-      if (brushCell !== this) {
-        d3.select(brushCell).call(brush.move, null);
-        brushCell = this;
-      }
-    }
+    const brush = d3.brush()
+      .extent([[padding / 2, padding / 2], [size - padding / 2, size - padding / 2]]);
+    brush
+      .on('start', function brushstarted() {
+        if (brushCell !== this) {
+          d3.select(brushCell).call(brush.move, null);
+          brushCell = this;
+        }
+      })
+      .on('brush', ({ selection }, [i, j]) => {
+        let selected = [];
+        if (selection) {
+          const [[x0, y0], [x1, y1]] = selection;
+          circle.classed('hidden',
+            (d) => x0 > x[i](d[columns[i]])
+              || x1 < x[i](d[columns[i]])
+              || y0 > y[j](d[columns[j]])
+              || y1 < y[j](d[columns[j]]));
+          selected = data.filter(
+            (d) => x0 < x[i](d[columns[i]])
+              && x1 > x[i](d[columns[i]])
+              && y0 < y[j](d[columns[j]])
+              && y1 > y[j](d[columns[j]]),
+          );
+        }
+        svgGraph.property('value', selected).dispatch('input');
+      })
+      .on('end', ({ selection }) => {
+        if (selection) return;
+        svgGraph.property('value', []).dispatch('input');
+        circle.classed('hidden', false);
+      });
 
-    function brushed({ selection }, [i, j]) {
-      let selected = [];
-      if (selection) {
-        const [[x0, y0], [x1, y1]] = selection;
-        circle.classed('hidden',
-          (d) => x0 > x[i](d[columns[i]])
-            || x1 < x[i](d[columns[i]])
-            || y0 > y[j](d[columns[j]])
-            || y1 < y[j](d[columns[j]]));
-        selected = data.filter(
-          (d) => x0 < x[i](d[columns[i]])
-            && x1 > x[i](d[columns[i]])
-            && y0 < y[j](d[columns[j]])
-            && y1 > y[j](d[columns[j]]),
-        );
-      }
-      svg.property('value', selected).dispatch('input');
-    }
-
-    function brushended({ selection }) {
-      if (selection) return;
-      svg.property('value', []).dispatch('input');
-      circle.classed('hidden', false);
-    }
+    cell.call(brush);
   };
 
   const color = d3.scaleOrdinal()
@@ -90,7 +82,7 @@ function scatterPlotMatrix(data, features, targets) {
       .call((g) => g.selectAll('.tick line').attr('stroke', '#ddd'));
   })();
 
-  const svg = d3.select('#area')
+  svg
     .attr('viewBox', `${-padding} 0 ${width} ${width}`)
     .style('max-width', '100%')
     .style('height', 'auto');
