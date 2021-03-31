@@ -16,7 +16,7 @@ const DistanceType = {
 export const ClusteringType = {
   FEATURE: 'feature',
   COMPLETE: 'complete',
-  SIMPLE: 'simple',
+  SINGLE: 'single',
   UPGMA: 'upgma',
 };
 

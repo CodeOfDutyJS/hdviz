@@ -125,6 +125,7 @@ class Controller {
 
     // Set data to model
     const _data = await parseFile(file);
+    _data.lenght -= 1;
     this.model.dataset = _data;
 
     // Set columns
@@ -154,12 +155,13 @@ class Controller {
     this.removeGraph();
     this.model.feature = this.featuresSelected;
     this.model.target = this.targetSelected;
-    // this.model.setFeatures(this.featuresSelected);
 
     if (this.distanceSelected === DistanceType.EUCLIDEAN) {
       const heatmap = new HeatMapModel(this.model);
-      this.da = heatmap.getClustering(ClusteringType.SIMPLE, DistanceType.PEARSONS);
-      const c = heatmap.getClustering(ClusteringType.SIMPLE, DistanceType.PEARSONS);
+      this.da = heatmap.setDistance(DistanceType.PEARSONS)
+        .getLinkage(ClusteringType.SIMPLE);
+      const c = heatmap.setDistance(DistanceType.PEARSONS)
+        .getLinkage(ClusteringType.SIMPLE);
       HeatMapModel.getLeaves(c).forEach((leaf) => {
         console.log(leaf);
         this.clusterCol.push(leaf.id);
