@@ -10,6 +10,14 @@ const VisualizationType = {
 const DistanceType = {
   EUCLIDEAN: 'euclidean',
   MANHATTAN: 'manhattan',
+  PEARSONS: 'pearsons',
+};
+
+export const ClusteringType = {
+  FEATURE: 'feature',
+  COMPLETE: 'complete',
+  SIMPLE: 'simple',
+  UPGMA: 'upgma',
 };
 
 export { VisualizationType, DistanceType };

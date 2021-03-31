@@ -13,6 +13,8 @@
     "antd": "4.12.3",
     "babel-eslint": "^10.1.0",
     "d3": "^6.5.0",
+    "data2grid": "^1.0.2",
+    "eslint-plugin-jest": "^24.3.1",
     "jeezy": "^1.13.1",
     "less": "^4.1.1",
     "mathjs": "^9.3.0",
