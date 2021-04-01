@@ -9,12 +9,13 @@ import * as d3 from 'd3';
 import { distance } from 'ml-distance';
 import forceField from '../model/d3/ForceField';
 import scatterPlotMatrix from '../model/d3/ScatterPlotMatrix';
+import linearProjection from '../model/d3/LinearProjection';
 import DataModel from '../model/DataModel';
 import ForceFieldModel from '../model/ForceFieldModel';
 import ScatterPlotMatrixModel from '../model/ScatterPlotMatrixModel';
 import LinearProjectionModel from '../model/LinearProjectionModel';
 import HeatMapModel from '../model/HeatMapModel';
-import { DistanceType, ClusteringType } from '../utils';
+import { DistanceType, ClusteringType, VisualizationType } from '../utils';
 
 import { getDatabases, getTables, getData } from './API';
 
@@ -36,10 +37,6 @@ class Controller {
   databases = [];
 
   tables = [];
-
-  data;
-
-  da;
 
   clusterCol = [];
 
@@ -153,25 +150,29 @@ class Controller {
 
   async start() {
     this.removeGraph();
+    // distruzione model
     this.model.feature = this.featuresSelected;
     this.model.target = this.targetSelected;
 
-    if (this.distanceSelected === DistanceType.EUCLIDEAN) {
-      console.log('ehi');
-      const heatmap = new HeatMapModel(this.model);
-      heatmap.setDistance(DistanceType.PEARSONS);
-      this.da = heatmap.getLinkage(ClusteringType.SINGLE);
-      heatmap.setDistance(DistanceType.PEARSONS);
-      const c = heatmap.getLinkage(ClusteringType.SINGLE);
-      HeatMapModel.getLeaves(c).forEach((leaf) => {
-        console.log(leaf);
-        this.clusterCol.push(leaf.id);
-      });
-      // this.model.setEuclideanDistance(400);
+    switch (this.visualizationSelected) {
+      // max links e max nodes vanno parametrizzati con apposito campo nella view
+      case VisualizationType.FORCEFIELD: {
+        const ffm = new ForceFieldModel(this.model);
+        forceField(ffm.getPreparedDataset(distance[this.distanceSelected], 150, 150));
+        break;
+      }
+      case VisualizationType.LINEAR_PROJECTION: {
+        const lpm = new LinearProjectionModel(this.model);
+        linearProjection(lpm.getPreparedDataset());
+        break;
+      }
+      case VisualizationType.SCATTER_PLOT_MATRIX: {
+        const spm = new ScatterPlotMatrixModel(this.model);
+        scatterPlotMatrix(spm.getPreparedDataset());
+        break;
+      }
+      default: break; // da implementare eccezione
     }
-    // this.dendogram();
-    this.correlationHeatmap();
-    // this.drawTargetRows();
   }
 }
 

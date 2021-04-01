@@ -4,8 +4,8 @@ import * as d3 from 'd3';
 function linearProjection(data) {
   const svg = d3.select('#area');
 
-  const width = 600 || svg.node().getBoundingClientRect().width;
-  const height = 600 || svg.node().getBoundingClientRect().height;
+  const { width } = svg.node().getBoundingClientRect();
+  const { height } = svg.node().getBoundingClientRect();
 
   const minX = data.rangeX.min * 2;
   const maxX = data.rangeX.max * 2;

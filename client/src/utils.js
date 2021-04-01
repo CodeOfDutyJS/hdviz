@@ -1,10 +1,10 @@
 const VisualizationType = {
-  MATRIX: 'matrix',
+  SCATTER_PLOT_MATRIX: 'matrix',
   HEATMAP: 'heatmap',
-  CORRELATION: 'correlation',
-  FORCE: 'force',
-  PROJECTION: 'projection',
-  PARALLEL: 'parallel',
+  CORRELATION_HEATMAP: 'correlation',
+  FORCEFIELD: 'force',
+  LINEAR_PROJECTION: 'projection',
+  PARALLEL_COORDINATES: 'parallel',
 };
 
 const DistanceType = {
