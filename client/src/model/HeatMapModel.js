@@ -3,9 +3,9 @@ import * as jeezy from 'jeezy';
 import { DistanceType, ClusteringType } from '../utils';
 
 class HeatMapModel {
-  constructor(dataModel, distanceFn) {
+  constructor(dataModel, distanceFn = distance.euclidean) {
     this._dataModel = dataModel;
-    this._distanceFn = distance.euclidean;
+    this._distanceFn = distanceFn;
   }
 
   get dataModel() {
@@ -29,7 +29,8 @@ class HeatMapModel {
       aValues.push(a[value]);
       bValues.push(b[value]);
     });
-    return this._distanceFn(aValues, bValues);
+
+    return distance.euclidean(aValues, bValues);
   }
 
   getCorrelationMatrix() {
@@ -55,6 +56,7 @@ class HeatMapModel {
   }
 
   getDistanceMatrix() {
+    console.log('dista');
     const data = this.dataModel.getStandardScore();
     const matrix = [];
     data.forEach((row) => {
