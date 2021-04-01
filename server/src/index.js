@@ -10,10 +10,6 @@ const mysql = require('mysql');
 const serverModule = require ('./modules/ServerModule');
 
 const app = express();
-app.use(express.json())
-app.use(express.json({
-  type: ['application/json', 'text/plain']
-}));
 
 
 const port = 1337;
@@ -66,7 +62,7 @@ app.get('/api/getDatabases', (req, res) => {
 
 
 app.get('/api/getTable', (req, res) => {
-  var dbname = req.params('dbname');
+  var dbname = req.param('dbname');
   //var dbname = req.body.name;                     //verificare se il modo in cui si fa fetch va bene da parte client
   console.log('api/getTables/ called');
   // const dbname = 'prova';
@@ -83,18 +79,13 @@ app.get('/api/getTable', (req, res) => {
 
   const connection = serverModule.connectTo(configurazione);
 
-  const showtables = serverModule.showTables(configurazione);
-  
-  connection.query(showtables, (error, columns, fields) => {
-    if (error) {
-      console.log('error in the query');
-    } else {
+  const colonne = serverModule.showTables(connection,configurazione);
+
       res.setHeader('Access-Control-Allow-Origin', '*');
-      res.json(columns);
-      console.log(columns);
-    }
-    // connection.end();
-  });
+      res.json(colonne);
+ 
+connection.end();
+
   console.log('api/getTables/ terminated successfully');
 
 });

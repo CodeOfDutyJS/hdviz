@@ -22,13 +22,25 @@ function connectTo(config) {
   }
 }
 
-function showTables(config) {
+function showTables(conn, config) {
+
   switch (config.DB_Type) {
     case 'mysql':
-      return `SELECT table_name FROM information_schema.tables WHERE table_schema ='${config.DB_Name}'`;
+
+      const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${config.DB_Name}'`;
+      conn.query(table, (error, columns, fields) => {
+        if (error){
+          console.log('error in the query');
+        } else{
+          return columns;
+        }
+      });
+      break;
+      
+      
 
     default:
-      console.log('ERRORE query shoeTable');
+      console.log('ERRORE query showTable');
   }
 }
 
