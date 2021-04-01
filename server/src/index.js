@@ -7,7 +7,7 @@
 const express = require('express');
 const fs = require('fs');
 const mysql = require('mysql');
-const modulo = require ('./modules/ServerModule');
+const serverModule = require ('./modules/ServerModule');
 
 const app = express();
 app.use(express.json())
@@ -77,8 +77,7 @@ app.get('/api/getTable', (req, res) => {
     res.send(0); // Si Può?
   }
   */
- console.log(configurazione);
-  const connection = modulo.connessione(configurazione);  
+  const connection = serverModule.connessione(configurazione);  
 
 
   connection.connect((err) => {
@@ -88,7 +87,8 @@ app.get('/api/getTable', (req, res) => {
       console.log('Connected to the DB');
     }
   });
-  const showtables = `SELECT table_name FROM information_schema.tables WHERE table_schema ='iris'`;
+  const showtables = serverModule.showTables(configurazione);
+  console.log(showtables);
   
   connection.query(showtables, (error, columns, fields) => {
     if (error) {

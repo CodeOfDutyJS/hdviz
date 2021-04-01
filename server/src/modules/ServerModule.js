@@ -1,20 +1,29 @@
 /* eslint-disable default-case */
-const mysql = require ('mysql');
+//const mysql = require ('mysql');
+const MysqlDatabase = require ('./ModelloServer');
 
 function connessione (config) {
-   switch (config.DB_Type) {
-     case 'mysql':
-       
-      return mysql.createConnection({
-        host: config.DB_Address,
-        user: config.DB_Username,
-        password: config.DB_Password,
-        database: config.DB_Name,
-      });
+  switch (config.DB_Type) {
+    case 'mysql':
+      let database = new MysqlDatabase(config);
+      return database.connessione();
+
 
       default:
         console.log ("ERROR CONNESSIONE TYPE");
   }
 };
+
+function showTables (config) {
+  switch (config.DB_Type) {
+    case 'mysql':
+      return `SELECT table_name FROM information_schema.tables WHERE table_schema ='${config.DB_Name}'`;
+
+    default:
+      console.log("ERRORE query shoeTable");
+  }
+};
     
-module.exports.connessione = connessione;
+module.exports = {
+  connessione: connessione
+};
