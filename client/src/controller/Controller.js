@@ -10,13 +10,13 @@ import { distance } from 'ml-distance';
 import forceField from '../model/d3/ForceField';
 import scatterPlotMatrix from '../model/d3/ScatterPlotMatrix';
 import linearProjection from '../model/d3/LinearProjection';
+import correlationHeatmap from '../model/d3/CorrelationHeatmap';
 import DataModel from '../model/DataModel';
 import ForceFieldModel from '../model/ForceFieldModel';
 import ScatterPlotMatrixModel from '../model/ScatterPlotMatrixModel';
 import LinearProjectionModel from '../model/LinearProjectionModel';
 import HeatMapModel from '../model/HeatMapModel';
 import { DistanceType, ClusteringType, VisualizationType } from '../utils';
-
 import { getDatabases, getTables, getData } from './API';
 
 class Controller {
@@ -169,6 +169,28 @@ class Controller {
       case VisualizationType.SCATTER_PLOT_MATRIX: {
         const spm = new ScatterPlotMatrixModel(this.model);
         scatterPlotMatrix(spm.getPreparedDataset());
+        break;
+      }
+      case VisualizationType.CORRELATION_HEATMAP: {
+        correlationHeatmap(new HeatMapModel(this.model)
+          .setDistance(DistanceType.PEARSONS)
+          .getLinkage(ClusteringType.SINGLE));
+        break;
+      }
+      case VisualizationType.HEATMAP: {
+        const cluster = new HeatMapModel(this.model)
+          .setDistance(DistanceType.PEARSONS)
+          .getLinkage(ClusteringType.SINGLE);
+        const columns = [];
+        HeatMapModel.getLeaves(cluster).forEach(
+          (leaf) => columns.push(leaf.id),
+        );
+        correlationHeatmap(
+          new HeatMapModel(this.model)
+            .getLinkage(ClusteringType.SINGLE),
+          columns,
+        );
+
         break;
       }
       default: break; // da implementare eccezione

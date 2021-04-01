@@ -6,7 +6,6 @@ function correlationHeatmap(cluster) {
   HeatMapModel.getLeaves(cluster)
     .forEach((leaf) => cols.push(leaf.id));
   const grid = HeatMapModel.correlationMap(cluster);
-  this.da = grid;
   const rows = d3.max(grid, (d) => d.row);
   const width = 600;
   const height = 600;
