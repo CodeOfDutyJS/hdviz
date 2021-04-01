@@ -46,14 +46,14 @@ const DatasetManipulation = observer(() => {
         ) : null}
       </Item> */}
 
-      {store.visualizationSelected === VisualizationType.FORCE
+      {store.visualizationSelected === VisualizationType.FORCEFIELD
         ? (
           // eslint-disable-next-line max-len
           <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={isDistanceMatrix}>Calculate Distance Matrix</Checkbox>}>
             {isDistanceMatrix ? (
               <Select placeholder="Select distance" onChange={onDistanceChanged}>
                 <Option key={DistanceType.EUCLIDEAN}>Euclidea</Option>
-                <Option key={DistanceType.MANHATTAN} disabled>Manthattan</Option>
+                <Option key={DistanceType.MANHATTAN}>Manthattan</Option>
               </Select>
             ) : null}
           </Item>

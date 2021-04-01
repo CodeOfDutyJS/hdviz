@@ -26,17 +26,29 @@ function forceField(data) {
       .on('end', dragended);
   };
 
-  const colore = d3.scaleOrdinal(d3.schemeCategory10);
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
 
   const { links, nodes } = data;
 
+  const scaleLinks = d3.scaleLinear()
+    .domain(d3.extent(links, (d) => (d.value)))
+    .range([1, 600]);
+
+  links.forEach(
+    (d) => {
+      d.value = scaleLinks(d.value);
+    },
+  );
+
   const svg = d3.select('#area');
 
-  const width = 600 || svg.node().getBoundingClientRect().width;
-  const height = 600 || svg.node().getBoundingClientRect().height;
+  const { width } = svg.node().getBoundingClientRect();
+  const { height } = svg.node().getBoundingClientRect();
 
   const simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).distance((d) => d.value * 1).strength((d) => (1 / (d.value * 1))).id((d) => d.id))
+    .force('link', d3.forceLink(links)
+      .distance((d) => d.value)
+      .strength((d) => 1 / d.value))
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter(width / 2, height / 2));
 
@@ -47,19 +59,13 @@ function forceField(data) {
     .data(nodes)
     .join('circle')
     .attr('r', 5)
-    .attr('fill', (d) => colore(d.colore))
+    .attr('fill', (d) => color(d.color))
     .call(drag(simulation));
 
   node.append('title')
-    .text((d) => d.id);
+    .text((d) => d.features);
 
   simulation.on('tick', () => {
-    // link
-    //   .attr('x1', (d) => d.source.x)
-    //   .attr('y1', (d) => d.source.y)
-    //   .attr('x2', (d) => d.target.x)
-    //   .attr('y2', (d) => d.target.y);
-
     node
       .attr('cx', (d) => d.x)
       .attr('cy', (d) => d.y);

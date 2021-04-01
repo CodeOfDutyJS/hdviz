@@ -30,7 +30,7 @@ describe('#ForceFieldModel', () => {
 
   describe('#distanceFn', () => {
     expect(forceFieldModel.dataModel.getFeatureColumns()).not.toBeNull();
-    const distanceDataset = forceFieldModel.getPreparedDataset(distance.euclidean, 4, 6, false);
+    const distanceDataset = forceFieldModel.getPreparedDataset(distance.euclidean, 4, 6);
     it('should return a correctly formatted object', () => {
       expect(
         'nodes' in distanceDataset
@@ -49,10 +49,18 @@ describe('#ForceFieldModel', () => {
     it('should calculate euclidean between nodes correctly', () => {
       expect(distanceDataset).toEqual({
         nodes: [
-          { id: 0, colore: 'first', forma: undefined },
-          { id: 1, colore: 'second', forma: undefined },
-          { id: 2, colore: 'third', forma: undefined },
-          { id: 3, colore: 'fourth', forma: undefined },
+          {
+            id: 0, colore: 'first', forma: undefined, features: JSON.stringify(mockDataset[0], ['b', 'd', 'a']),
+          },
+          {
+            id: 1, colore: 'second', forma: undefined, features: JSON.stringify(mockDataset[1], ['b', 'd', 'a']),
+          },
+          {
+            id: 2, colore: 'third', forma: undefined, features: JSON.stringify(mockDataset[2], ['b', 'd', 'a']),
+          },
+          {
+            id: 3, colore: 'fourth', forma: undefined, features: JSON.stringify(mockDataset[3], ['b', 'd', 'a']),
+          },
         ],
         links: [
           { source: 0, target: 1, value: euclidean([0, 2], [3, 5]) },

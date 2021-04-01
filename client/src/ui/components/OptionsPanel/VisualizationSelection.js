@@ -9,13 +9,13 @@ const { Item } = Form;
 
 const VisualizationSelection = () => {
   const store = useStore();
-  const [visualizations] = useState([
-    { id: VisualizationType.MATRIX, label: 'Scatter plot matrix', enabled: true },
-    { id: VisualizationType.HEATMAP, label: 'Heatmap', enabled: false },
-    { id: VisualizationType.CORRELATION, label: 'Correlation Heatmap', enabled: false },
-    { id: VisualizationType.FORCE, label: 'Force fields', enabled: true },
-    { id: VisualizationType.PROJECTION, label: 'Linear Projection', enabled: false },
-    { id: VisualizationType.PARALLEL, label: 'Parallel Coordination', enabled: false },
+  const [visualizations, setVisualizations] = useState([
+    { id: VisualizationType.SCATTER_PLOT_MATRIX, label: 'Scatter plot matrix', enabled: true },
+    { id: VisualizationType.HEATMAP, label: 'Heatmap', enabled: true },
+    { id: VisualizationType.CORRELATION_HEATMAP, label: 'Correlation Heatmap', enabled: true },
+    { id: VisualizationType.FORCEFIELD, label: 'Force fields', enabled: true },
+    { id: VisualizationType.LINEAR_PROJECTION, label: 'Linear Projection', enabled: true },
+    { id: VisualizationType.PARALLEL_COORDINATES, label: 'Parallel Coordinates', enabled: false },
   ]);
 
   const onVisualizationSelected = (_visualization) => {

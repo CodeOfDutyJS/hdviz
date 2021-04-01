@@ -1,3 +1,6 @@
+import * as d3 from 'd3';
+import forceField from './d3/ForceField';
+
 class ForceFieldModel {
   constructor(dataModel) {
     this._dataModel = dataModel;
@@ -12,62 +15,43 @@ class ForceFieldModel {
   }
 
   getNodes(maxNodes) {
-    return this.dataModel.getTargetColumns()
-      .map((value, index) => ({
-        id: index,
-        colore: value?.[this.dataModel.target[0]],
-        forma: value?.[this.dataModel.target[1]],
+    return this.dataModel.getSelectedDataset()
+      .map((value) => ({
+        color: value?.[this.dataModel.target[0]],
+        size: value?.[this.dataModel.target[1]],
+        features: JSON.stringify(value),
       }))
       .slice(0, maxNodes);
   }
 
-  static scale(data) {
-    const max = data
-      .reduce((prev, current) => (
-        (prev.value > current.value) ? prev : current)).value;
-    const min = data
-      .reduce((prev, current) => (
-        (prev.value < current.value) ? prev : current)).value;
-
-    const scale = (num, inMin, inMax, outMin, outMax) => (
-      (num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
-
-    for (let i = 0; i < data.length; i++) {
-      // eslint-disable-next-line no-param-reassign
-      data[i]
-        .value = scale(data[i].value, min, max, 1, 200);
-    }
-
-    return data;
-  }
-
-  getLinks(distanceFn, maxNodes, maxLinks, wantToScale) {
+  getLinks(distanceFn, maxNodes, maxLinks) {
     const links = [];
     const featureColumns = this.dataModel.getFeatureColumns();
     featureColumns
       .slice(0, maxNodes)
       .forEach(
-        (value, i) => {
-          for (let j = i + 1; j < (maxLinks > featureColumns.length
-            ? featureColumns.length : maxLinks); j++) {
-            links.push(
-              {
-                source: i,
-                target: j,
-                value: distanceFn(Object.values(value), Object.values(featureColumns[j])),
-              },
-            );
-          }
+        (distanceFrom, i) => {
+          featureColumns
+            .slice(i + 1, d3.min([maxLinks, featureColumns.length]))
+            .forEach((distanceTo, j) => {
+              const dist = distanceFn(Object.values(distanceFrom), Object.values(distanceTo));
+              links.push(
+                {
+                  source: i,
+                  target: j + i + 1,
+                  value: dist,
+                },
+              );
+            });
         },
       );
-
-    return wantToScale ? this.constructor.scale(links) : links;
+    return links;
   }
 
-  getPreparedDataset(distanceFn, maxNodes, maxLinks, wantToScale) {
+  getPreparedDataset(distanceFn, maxNodes, maxLinks) {
     return {
       nodes: this.getNodes(maxNodes),
-      links: this.getLinks(distanceFn, maxNodes, maxLinks, wantToScale),
+      links: this.getLinks(distanceFn, maxNodes, maxLinks),
     };
   }
 }
