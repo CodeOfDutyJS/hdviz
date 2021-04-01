@@ -77,6 +77,7 @@ app.get('/api/getTable', (req, res) => {
     res.send(0); // Si Può?
   }
   */
+
   const connection = serverModule.connessione(configurazione);  
 
 
