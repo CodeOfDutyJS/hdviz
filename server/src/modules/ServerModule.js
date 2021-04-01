@@ -1,12 +1,21 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable default-case */
 // const mysql = require ('mysql');
 const MysqlDatabase = require('./ModelloServer');
 
-function connessione(config) {
+function connectTo(config) {
   switch (config.DB_Type) {
     case 'mysql':
       const database = new MysqlDatabase(config);
-      return database.connessione();
+      const connection = database.connessione();
+      connection.connect((err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('Connected to the DB');
+        }
+      });
+      return connection;
 
     default:
       console.log('ERROR CONNESSIONE TYPE');
@@ -24,5 +33,5 @@ function showTables(config) {
 }
 
 module.exports = {
-  connessione, showTables,
+  connectTo, showTables,
 };

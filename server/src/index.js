@@ -45,6 +45,10 @@ function selectConfig(dbname) {
   return 0;
 }
 
+app.listen(port, () => {
+  console.log('App is running');
+});
+
 app.get('/api/getDatabases', (req, res) => {
   console.log('api/getDatabases/ called');
   // res.send(getFiles('config').sort((a,b) => a.length - b.length));
@@ -62,34 +66,24 @@ app.get('/api/getDatabases', (req, res) => {
 
 
 app.get('/api/getTable', (req, res) => {
-  var dbname = req.param('dbname');
+  var dbname = req.params('dbname');
   //var dbname = req.body.name;                     //verificare se il modo in cui si fa fetch va bene da parte client
   console.log('api/getTables/ called');
-  console.log(dbname);
   // const dbname = 'prova';
 
 
   const configurazione = selectConfig(dbname);
 
   
-  /*
+  
   if (configurazione == 0) {
     res.send(0); // Si Può?
   }
-  */
+  
 
-  const connection = serverModule.connessione(configurazione);  
+  const connection = serverModule.connectTo(configurazione);
 
-
-  connection.connect((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Connected to the DB');
-    }
-  });
   const showtables = serverModule.showTables(configurazione);
-  console.log(showtables);
   
   connection.query(showtables, (error, columns, fields) => {
     if (error) {
@@ -97,6 +91,7 @@ app.get('/api/getTable', (req, res) => {
     } else {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.json(columns);
+      console.log(columns);
     }
     // connection.end();
   });
@@ -144,18 +139,7 @@ app.get('/api/getData/', (req, res) => {
     res.send(0); // Si Può?
   }
 
-  const connection = mysql.createConnection({
-    host: configurazione.DB_Address,
-    user: configurazione.DB_Username,
-    password: configurazione.DB_Password,
-    database: configurazione.DB_Name,
-  });
-  
-  connection.connect((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Connected to the DB');
+  const connection = serverModule.connectTo(configurazione);
 
       getMetaData(connection, dbtable, (err, columns) => {
         if (err) {
@@ -174,13 +158,10 @@ app.get('/api/getData/', (req, res) => {
           });
         }
       });
-    }
+    
     // connection.end();
-  });
-});
 
-app.listen(port, () => {
-  console.log('App is running');
-});
+    });
+
 
 // Nome DB, nome collonne, descrizione query

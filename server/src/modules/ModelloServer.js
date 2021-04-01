@@ -16,7 +16,6 @@ class MysqlDatabase {
   }
 
   connessione() {
-    console.log(this.config);
     return mysql.createConnection({
       host: this.config.DB_Address,
       user: this.config.DB_Username,
