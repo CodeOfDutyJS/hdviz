@@ -23,7 +23,7 @@ const DatasetManipulation = observer(() => {
   const [maxTarget, setMaxTarget] = useState(false);
 
   // eslint-disable-next-line max-len
-  const isMATRIX = (_f) => store.visualizationSelected === VisualizationType.MATRIX && _f.length > 5;
+  const isMATRIX = (_f) => store.visualizationSelected === VisualizationType.SCATTER_PLOT_MATRIX && _f.length > 5;
 
   useEffect(() => {
     try {
@@ -117,14 +117,14 @@ const DatasetManipulation = observer(() => {
         ) : null}
       </Item> */}
 
-      {store.visualizationSelected === VisualizationType.FORCE
+      {store.visualizationSelected === VisualizationType.FORCEFIELD
         ? (
           // eslint-disable-next-line max-len
           <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={distanceMatrix}>Calculate Distance Matrix</Checkbox>}>
             {distanceMatrix ? (
               <Select placeholder="Select distance" onChange={onDistanceChanged}>
                 <Option key={DistanceType.EUCLIDEAN}>Euclidea</Option>
-                <Option key={DistanceType.MANHATTAN} disabled>Manthattan</Option>
+                <Option key={DistanceType.MANHATTAN}>Manthattan</Option>
               </Select>
             ) : null}
           </Item>

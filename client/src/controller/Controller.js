@@ -9,13 +9,14 @@ import * as d3 from 'd3';
 import { distance } from 'ml-distance';
 import forceField from '../model/d3/ForceField';
 import scatterPlotMatrix from '../model/d3/ScatterPlotMatrix';
+import linearProjection from '../model/d3/LinearProjection';
+import correlationHeatmap from '../model/d3/CorrelationHeatmap';
 import DataModel from '../model/DataModel';
 import ForceFieldModel from '../model/ForceFieldModel';
 import ScatterPlotMatrixModel from '../model/ScatterPlotMatrixModel';
 import LinearProjectionModel from '../model/LinearProjectionModel';
 import HeatMapModel from '../model/HeatMapModel';
-import { DistanceType, ClusteringType } from '../utils';
-
+import { DistanceType, ClusteringType, VisualizationType } from '../utils';
 import { getDatabases, getTables, getData } from './API';
 
 class Controller {
@@ -36,10 +37,6 @@ class Controller {
   databases = [];
 
   tables = [];
-
-  data;
-
-  da;
 
   clusterCol = [];
 
@@ -153,9 +150,11 @@ class Controller {
 
   async start() {
     this.removeGraph();
+    // distruzione model
     this.model.feature = this.featuresSelected;
     this.model.target = this.targetSelected;
 
+<<<<<<< HEAD
     if (this.distanceSelected === DistanceType.EUCLIDEAN) {
       console.log('ehi');
       const heatmap = new HeatMapModel(this.model);
@@ -172,6 +171,49 @@ class Controller {
     // this.dendogram();
     this.correlationHeatmap();
     // this.drawTargetRows();
+=======
+    switch (this.visualizationSelected) {
+      // max links e max nodes vanno parametrizzati con apposito campo nella view
+      case VisualizationType.FORCEFIELD: {
+        const ffm = new ForceFieldModel(this.model);
+        forceField(ffm.getPreparedDataset(distance[this.distanceSelected], 150, 150));
+        break;
+      }
+      case VisualizationType.LINEAR_PROJECTION: {
+        const lpm = new LinearProjectionModel(this.model);
+        linearProjection(lpm.getPreparedDataset());
+        break;
+      }
+      case VisualizationType.SCATTER_PLOT_MATRIX: {
+        const spm = new ScatterPlotMatrixModel(this.model);
+        scatterPlotMatrix(spm.getPreparedDataset());
+        break;
+      }
+      case VisualizationType.CORRELATION_HEATMAP: {
+        correlationHeatmap(new HeatMapModel(this.model)
+          .setDistance(DistanceType.PEARSONS)
+          .getLinkage(ClusteringType.SINGLE));
+        break;
+      }
+      case VisualizationType.HEATMAP: {
+        const cluster = new HeatMapModel(this.model)
+          .setDistance(DistanceType.PEARSONS)
+          .getLinkage(ClusteringType.SINGLE);
+        const columns = [];
+        HeatMapModel.getLeaves(cluster).forEach(
+          (leaf) => columns.push(leaf.id),
+        );
+        correlationHeatmap(
+          new HeatMapModel(this.model)
+            .getLinkage(ClusteringType.SINGLE),
+          columns,
+        );
+
+        break;
+      }
+      default: break; // da implementare eccezione
+    }
+>>>>>>> 5ae243c849b998126f689bda962fd54e69f73072
   }
 }
 
