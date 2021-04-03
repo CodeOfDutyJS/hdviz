@@ -11,6 +11,8 @@ import forceField from '../model/d3/ForceField';
 import scatterPlotMatrix from '../model/d3/ScatterPlotMatrix';
 import linearProjection from '../model/d3/LinearProjection';
 import correlationHeatmap from '../model/d3/CorrelationHeatmap';
+import drawTargetRows from '../model/d3/DrawTargetRows';
+import heatmap from '../model/d3/Heatmap';
 import DataModel from '../model/DataModel';
 import ForceFieldModel from '../model/ForceFieldModel';
 import ScatterPlotMatrixModel from '../model/ScatterPlotMatrixModel';
@@ -154,24 +156,6 @@ class Controller {
     this.model.feature = this.featuresSelected;
     this.model.target = this.targetSelected;
 
-<<<<<<< HEAD
-    if (this.distanceSelected === DistanceType.EUCLIDEAN) {
-      console.log('ehi');
-      const heatmap = new HeatMapModel(this.model);
-      heatmap.setDistance(DistanceType.PEARSONS);
-      this.da = heatmap.getLinkage(ClusteringType.SINGLE);
-      heatmap.setDistance(DistanceType.PEARSONS);
-      const c = heatmap.getLinkage(ClusteringType.SINGLE);
-      HeatMapModel.getLeaves(c).forEach((leaf) => {
-        console.log(leaf);
-        this.clusterCol.push(leaf.id);
-      });
-      // this.model.setEuclideanDistance(400);
-    }
-    // this.dendogram();
-    this.correlationHeatmap();
-    // this.drawTargetRows();
-=======
     switch (this.visualizationSelected) {
       // max links e max nodes vanno parametrizzati con apposito campo nella view
       case VisualizationType.FORCEFIELD: {
@@ -203,17 +187,18 @@ class Controller {
         HeatMapModel.getLeaves(cluster).forEach(
           (leaf) => columns.push(leaf.id),
         );
-        correlationHeatmap(
-          new HeatMapModel(this.model)
-            .getLinkage(ClusteringType.SINGLE),
+        const c = new HeatMapModel(this.model, distance.euclidean)
+          .getLinkage(ClusteringType.SINGLE);
+        heatmap(
+          c,
           columns,
         );
+        drawTargetRows(c, this.model.target);
 
         break;
       }
       default: break; // da implementare eccezione
     }
->>>>>>> 5ae243c849b998126f689bda962fd54e69f73072
   }
 }
 

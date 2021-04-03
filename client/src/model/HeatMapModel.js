@@ -56,7 +56,6 @@ class HeatMapModel {
   }
 
   getDistanceMatrix() {
-    console.log('dista');
     const data = this.dataModel.getStandardScore();
     const matrix = [];
     data.forEach((row) => {

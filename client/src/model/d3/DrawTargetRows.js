@@ -5,7 +5,7 @@ function drawTargetRows(cluster, cols) {
   const grid = HeatMapModel.dataGrid(cluster, cols);
   const rows = d3.max(grid, (d) => d.row);
   const svg = d3.select('#area');
-
+  console.log(grid);
   const color = d3.scaleOrdinal()
     .range(d3.schemeCategory10);
 
@@ -16,7 +16,7 @@ function drawTargetRows(cluster, cols) {
     right: 20,
   };
 
-  const width = 25 * this.model.target.length || svg.node().getBoundingClientRect().width;
+  const width = 25 * cols.length || svg.node().getBoundingClientRect().width;
   const height = 600 || svg.node().getBoundingClientRect().height;
 
   const y = d3.scaleBand()
@@ -25,12 +25,12 @@ function drawTargetRows(cluster, cols) {
     .domain(d3.range(1, rows + 1));
 
   const x = d3.scaleBand()
-    .range([725, 725 + 25 * this.model.target.length])
+    .range([700, 700 + 25 * cols.length])
     .paddingInner(0)
-    .domain(d3.range(1));
+    .domain(d3.range(1, cols.length + 1));
 
   const yAxis = d3.axisRight(y).tickFormat([]).tickSize(0);
-  const xAxis = d3.axisBottom(x).tickFormat(['col']).tickSize(0);
+  const xAxis = d3.axisBottom(x).tickFormat((d, i) => cols[i]).tickSize(10);
 
   svg.append('g')
     .attr('class', 'y axis2')
@@ -39,13 +39,15 @@ function drawTargetRows(cluster, cols) {
 
   svg.append('g')
     .attr('class', 'x axis2')
-    .attr('transform', `translate(725, ${height + margin.top})`)
+    .attr('transform', `translate(750, ${height + margin.top})`)
     .call(xAxis);
 
-  svg.selectAll('y axis2')
-    .data(grid, (d) => d.column_a + d.column_b)
-    .enter().append('rect')
-    .attr('x', (d) => 700)
+  svg.append('g')
+    .selectAll('rect')
+    .data(grid)
+    .enter()
+    .append('rect')
+    .attr('x', (d) => x(d.col))
     .attr('y', (d) => y(d.row))
     .attr('width', 25)
     .attr('height', y.bandwidth())

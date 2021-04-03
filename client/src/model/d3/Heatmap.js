@@ -34,7 +34,12 @@ function heatmap(cluster, clusterCols) {
   svg.append('g')
     .attr('class', 'x axis')
     .attr('transform', `translate(0, ${height + margin.top})`)
-    .call(xAxis);
+    .call(xAxis)
+    .selectAll('text')
+    .style('text-anchor', 'end')
+    .attr('dx', '-.8em')
+    .attr('dy', '.15em')
+    .attr('transform', 'rotate(-65)');
 
   svg.append('g')
     .attr('class', 'y axis')
@@ -53,3 +58,5 @@ function heatmap(cluster, clusterCols) {
     .transition()
     .style('opacity', 1);
 }
+
+export default heatmap;

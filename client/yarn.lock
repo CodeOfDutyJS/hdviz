@@ -4303,11 +4303,7 @@ decamelize@^1.2.0:
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
 
-<<<<<<< HEAD
-decimal.js@^10.2.0, decimal.js@^10.2.1:
-=======
 decimal.js@^10.2.1:
->>>>>>> 5ae243c849b998126f689bda962fd54e69f73072
   version "10.2.1"
   resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.2.1.tgz#238ae7b0f0c793d3e3cea410108b35a2c01426a3"
   integrity sha512-KaL7+6Fw6i5A2XSnsbhm/6B+NuEA7TZ4vqxnd5tXz9sbKtrN9Srj8ab4vKVdK8YAqZO9P1kg45Y6YLoduPf+kw==
@@ -7848,17 +7844,10 @@ ml-array-rescale@^1.3.2:
     ml-array-max "^1.2.3"
     ml-array-min "^1.2.2"
 
-<<<<<<< HEAD
-ml-array-sum@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/ml-array-sum/-/ml-array-sum-1.1.4.tgz#c56d9375db89eebe205e03e6a63bd4dae365968d"
-  integrity sha512-e8nve4dwfRWXXRY+/Qt+R3agTLoOwhJxZM51CGyLI2dy+EAOuJy28ed3UePyE4lqkkNBzpormQOShA5pYYhFxg==
-=======
 ml-array-sum@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ml-array-sum/-/ml-array-sum-1.1.5.tgz#c0cf01b1d8a72757ad04fad02eb8251bc996a194"
   integrity sha512-Q+2SmsgkuW1HOdds0mv8Df6NXLruDOqOJfdA314X3lBaU2Wt1TFdJ35j5/StcAC13hkGuDcpz62jNPytBSEqpA==
->>>>>>> 5ae243c849b998126f689bda962fd54e69f73072
   dependencies:
     is-any-array "^1.0.0"
 
