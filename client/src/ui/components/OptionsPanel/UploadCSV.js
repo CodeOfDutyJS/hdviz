@@ -3,8 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useStore } from '../../../controller/ControllerProvider';
+import { useStore2 } from '../../../store/RootStore';
 
 const UploadCSV = () => {
+  const { modelStore } = useStore2();
   const [fileList, setFileList] = useState([]);
   const store = useStore();
 
@@ -22,6 +24,7 @@ const UploadCSV = () => {
       onError(file);
     } else {
       await store.uploadCSV(file);
+      await modelStore.uploadCSV(file);
       if (await store.loadingCompleted) {
         onSuccess(file);
       } else {

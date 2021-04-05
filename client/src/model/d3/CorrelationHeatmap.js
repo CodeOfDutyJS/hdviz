@@ -7,15 +7,19 @@ function correlationHeatmap(cluster) {
     .forEach((leaf) => cols.push(leaf.id));
   const grid = HeatMapModel.correlationMap(cluster);
   const rows = d3.max(grid, (d) => d.row);
-  const width = 600;
-  const height = 600;
   const margin = {
-    top: 20,
-    bottom: 20,
-    left: 100,
-    right: 20,
+    top: 0,
+    bottom: 100,
+    left: 20,
+    right: 100,
   };
   const svg = d3.select('#area');
+  const { width, height } = svg.node().getBoundingClientRect();
+  // const { width, height } = { width: 600, height: 600 };
+  // svg.attr('viewBox', '0 0 600 600').attr('preserveAspectRatio', 'xMinYMin');
+  // const { height } = svg.node().getBoundingClientRect();
+
+  console.log(width, height);
   const padding = 0.1;
   const x = d3.scaleBand()
     .range([margin.left, width + margin.left])
@@ -27,8 +31,8 @@ function correlationHeatmap(cluster) {
     .domain(d3.range(1, rows + 1));
 
   const c = d3.scaleLinear()
-    .range(['white', '#ff1a00'])
-    .domain([-1, 1]);
+    .range(['#b50e0e', 'white', '#053061'])
+    .domain([-1, 0, 1]);
 
   const xAxis = d3.axisBottom(x).tickFormat((d, i) => cols[i]);
   const yAxis = d3.axisRight(y).tickFormat((d, i) => cols[i]);
@@ -59,6 +63,14 @@ function correlationHeatmap(cluster) {
     .style('opacity', 1e-5)
     .transition()
     .style('opacity', 1);
+
+  const aspect = width / height;
+  const chart = d3.select('#area');
+  d3.select(window)
+    .on('resize', () => {
+      d3.select('#area').selectAll('*').remove();
+      correlationHeatmap(cluster);
+    });
 }
 
 export default correlationHeatmap;

@@ -9,11 +9,13 @@ import VisualizationSelection from './VisualizationSelection';
 import DatasetManipulation from './DatasetManipulation';
 import { useStore } from '../../../controller/ControllerProvider';
 import DataSource from './DataSource';
+import { useStore2 } from '../../../store/RootStore';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
 
 const OptionPanel = observer(() => {
+  const { visualizationStore } = useStore2();
   const store = useStore();
 
   return (
@@ -37,7 +39,7 @@ const OptionPanel = observer(() => {
         </Panel>
       </Collapse>
       <Layout id="start-button">
-        <Button type="primary" shape="round" onClick={() => { store.start(); }}>Start</Button>
+        <Button type="primary" shape="round" onClick={visualizationStore.start}>Start</Button>
       </Layout>
 
       {store.success ? <Alert type="success" message="Success Text" closable onClose={() => { store.success = false; }} /> : null}

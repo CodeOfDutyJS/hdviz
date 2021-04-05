@@ -1,58 +1,34 @@
-/* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import {
-  Form, Select, Checkbox, Button,
-} from 'antd';
+import { Form, Select } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { useStore } from '../../../controller/ControllerProvider';
-import { VisualizationType, DistanceType } from '../../../utils';
+import { useStore2 } from '../../../store/RootStore';
 
 const { Option } = Select;
 const { Item } = Form;
 
 const FeatureSelection = observer(() => {
-  const store = useStore();
-  const [maxFeatures, setMaxFeatures] = useState(false);
-
-  const isMATRIX = () => store.visualizationSelected === VisualizationType.MATRIX && store.featuresSelected.length > 5;
-
-  // Called when visualizationSelected in controller changed
-  // when scatter plot matrix is selected setMaxFeatures
-  useEffect(() => {
-    if (isMATRIX()) {
-      store.setFeatures(store.featuresSelected.slice(0, 5));
-      setMaxFeatures(true);
-    } else {
-      setMaxFeatures(false);
-    }
-  }, [store.visualizationSelected]);
-
-  const onFeaturesChanged = (_features) => {
-    if (isMATRIX()) {
-      _features.pop();
-      setMaxFeatures(true);
-    } else {
-      setMaxFeatures(false);
-    }
-
-    // Set features in Controller
-    store.setFeatures(_features);
-  };
+  const { modelStore, uiStore } = useStore2();
 
   return (
     <Item
       label="Features"
-      name="features"
-      validateStatus={maxFeatures ? 'warning' : null}
       hasFeedback
-      help={maxFeatures ? 'Max 5 feature variables' : null}
+      validateStatus={uiStore.maxFeatures ? 'warning' : null}
+      help={uiStore.maxFeatures ? 'Max 5 feature variables' : null}
     >
-      <Select placeholder="Select features" mode="multiple" onChange={onFeaturesChanged} value={store.featuresSelected} allowClear>
-        {store.columns.map((item, key) => <Option key={item}>{item}</Option>)}
+      <Select
+        placeholder="Select features"
+        mode="multiple"
+        onChange={modelStore.setFeatures}
+        value={modelStore.features}
+        allowClear
+      >
+        {modelStore.columns.map((item) => (
+          <Option key={item.value} disabled={!item.isNumber}>{item.value}</Option>
+        ))}
       </Select>
-      <></>
     </Item>
   );
 });

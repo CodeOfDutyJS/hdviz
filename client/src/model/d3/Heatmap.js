@@ -53,3 +53,5 @@ function heatmap(cluster, clusterCols) {
     .transition()
     .style('opacity', 1);
 }
+
+export default heatmap;

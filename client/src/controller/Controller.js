@@ -11,12 +11,13 @@ import forceField from '../model/d3/ForceField';
 import scatterPlotMatrix from '../model/d3/ScatterPlotMatrix';
 import linearProjection from '../model/d3/LinearProjection';
 import correlationHeatmap from '../model/d3/CorrelationHeatmap';
+import heatmap from '../model/d3/Heatmap';
 import DataModel from '../model/DataModel';
 import ForceFieldModel from '../model/ForceFieldModel';
 import ScatterPlotMatrixModel from '../model/ScatterPlotMatrixModel';
 import LinearProjectionModel from '../model/LinearProjectionModel';
 import HeatMapModel from '../model/HeatMapModel';
-import { DistanceType, ClusteringType, VisualizationType } from '../utils';
+import { DistanceType, ClusteringType, VisualizationType } from '../utils/constant';
 import { getDatabases, getTables, getData } from './API';
 
 class Controller {
@@ -113,7 +114,8 @@ class Controller {
     console.log(_data);
 
     // Set columns
-    this.columns = Object.keys(_data[0]);
+    // eslint-disable-next-line no-restricted-globals
+    this.columns = Object.keys(_data[0]).map((col) => ({ value: col, number: !isNaN(_data[0][col]) }));
 
     // eslint-disable-next-line max-len
     // this.model.setSelectedColumns(['housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income', 'median_house_value']);
@@ -172,7 +174,7 @@ class Controller {
         HeatMapModel.getLeaves(cluster).forEach(
           (leaf) => columns.push(leaf.id),
         );
-        correlationHeatmap(
+        heatmap(
           new HeatMapModel(this.model)
             .getLinkage(ClusteringType.SINGLE),
           columns,

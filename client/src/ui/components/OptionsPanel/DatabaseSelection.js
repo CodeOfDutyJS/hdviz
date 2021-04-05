@@ -1,54 +1,49 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 
-import { Button, Select, Form } from 'antd';
+import { Select, Form } from 'antd';
 
-import { useStore } from '../../../controller/ControllerProvider';
+import { observer } from 'mobx-react-lite';
+import { useStore2 } from '../../../store/RootStore';
 
 const { Option } = Select;
 const { Item } = Form;
 
-const DatabaseSelection = () => {
-  const store = useStore();
-
-  // State per gestione UI
-  const [isDatabaseSelected, setIsDatabaseSelected] = useState(false);
-  const [isDatabaseListLoading, setIsDatabaseListLoading] = useState(true);
-  const [isTableListLoading, setIsTableListLoading] = useState(false);
+const DatabaseSelection = observer(() => {
+  const { databaseStore } = useStore2();
 
   useEffect(() => {
     // Call API to get list of database connection available
-    (async () => {
-      await store.setDatabases();
-      setIsDatabaseListLoading(false);
-    })();
+    databaseStore.setDatabases();
   }, []);
-
-  const onDatabaseSelection = async (_db) => {
-    setIsTableListLoading(true);
-    await store.setTables(_db);
-    setIsDatabaseSelected(true);
-    setIsTableListLoading(false);
-  };
-
-  const onTableSelection = async (_table) => {
-    await store.setData(_table);
-  };
 
   return (
     <Form>
-      <Item label="Database connection" name="db" rules={[{ required: true, message: 'Please select a Database' }]}>
-        <Select placeholder="Database connection" disabled={isDatabaseListLoading} loading={isDatabaseListLoading} onSelect={onDatabaseSelection}>
-          {store.databases.map((item, key) => <Option key={item.databases}>{item.databases}</Option>)}
+      <Item label="Database connection" name="db" rules={[{ required: true, message: 'Please select a database' }]}>
+        <Select
+          placeholder="Database connection"
+          disabled={databaseStore.databasesLoading}
+          loading={databaseStore.databasesLoading}
+          onSelect={databaseStore.setDatabaseSelected}
+          value={databaseStore.databaseSelected}
+        >
+          {databaseStore.databases.map((item) => <Option key={item.databases}>{item.databases}</Option>)}
         </Select>
       </Item>
-      <Item label="Data Table" name="table" rules={[{ required: true, message: 'Please select a Database' }]}>
-        <Select placeholder="Table" disabled={!isDatabaseSelected} loading={isTableListLoading} onSelect={onTableSelection}>
-          {store.tables.map((item, key) => <Option key={item.table_name}>{item.table_name}</Option>)}
+
+      <Item label="Data Table" name="table" rules={[{ required: true, message: 'Please select a table' }]}>
+        <Select
+          placeholder="Table"
+          disabled={!databaseStore.databaseSelected || databaseStore.tablesLoading}
+          loading={databaseStore.tablesLoading}
+          onSelect={databaseStore.setTableSelected}
+          value={databaseStore.tableSelected}
+        >
+          {databaseStore.tables.map((item) => <Option key={item.table_name}>{item.table_name}</Option>)}
         </Select>
       </Item>
     </Form>
   );
-};
+});
 
 export default DatabaseSelection;
