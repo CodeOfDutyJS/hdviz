@@ -10,8 +10,6 @@ const mysql = require('mysql');
 const serverModule = require ('./modules/ServerModule');
 
 const app = express();
-
-
 const port = 1337;
 
 
@@ -30,10 +28,10 @@ function getFiles(dir, files_) {
   return files_;
 }
 
-let config_files = getFiles('C:/Users/Matteo/Documents/HD VIZ/hdviz/hdviz/server/src/config');
+const config_files = getFiles('C:/Users/Matteo/Documents/HD VIZ/hdviz/hdviz/server/src/config');
 
 function selectConfig(dbname) {
-  for (const i in config_files) {
+  for ( i in config_files) {
     if (dbname == config_files[i].DB_Name) {
       return config_files[i];
     }
@@ -45,13 +43,14 @@ app.listen(port, () => {
   console.log('App is running');
 });
 
-app.get('/api/getDatabases', (req, res) => {
+app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
   console.log('api/getDatabases/ called');
   // res.send(getFiles('config').sort((a,b) => a.length - b.length));
-  config_files = getFiles('C:/Users/Matteo/Documents/HD VIZ/hdviz/hdviz/server/src/config');
+  //config_files = getFiles('C:/Users/Matteo/Documents/HD VIZ/hdviz/hdviz/server/src/config');
   let databases = [];
-  for (const i in config_files) {
-    databases = config_files[i].DB_Name;
+  console.log(config_files);
+  for (i in config_files) {
+    databases[i] = config_files[i].DB_Name;
   }
   const output = { databases };
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -61,96 +60,63 @@ app.get('/api/getDatabases', (req, res) => {
 });
 
 
-app.get('/api/getTable', (req, res) => {
+app.get('/api/getTable', async (req, res) => {
   var dbname = req.param('dbname');
   //var dbname = req.body.name;                     //verificare se il modo in cui si fa fetch va bene da parte client
   console.log('api/getTables/ called');
-  // const dbname = 'prova';
+
 
 
   const configurazione = selectConfig(dbname);
-
-  
   
   if (configurazione == 0) {
     res.send(0); // Si Può?
   }
-  
 
-  const connection = serverModule.connectTo(configurazione);
+/*
+serverModule.connectTo(configurazione).then(conn => serverModule.showTables(conn,configurazione).then(col => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+   res.json(col);
+   
+}
+).then(conn.end() )); */  //volendo usare await per codice più leggibile
 
-  const colonne = serverModule.showTables(connection,configurazione);
-
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.json(colonne);
- 
+const connection = await serverModule.connectTo(configurazione);
+let colonne = await serverModule.showTables(connection,configurazione);
+res.setHeader('Access-Control-Allow-Origin', '*');
+res.json(colonne);
 connection.end();
+
 
   console.log('api/getTables/ terminated successfully');
 
 });
 
-const getMetaData = (connection, tableName, cb) => {
-  connection.query(`SHOW Columns FROM ${tableName}`, (err, columns, fields) => {
-    if (err) {
-      console.log('error in the query');
-      cb(err);
-    } else {
-      const output = {};
-      console.log(columns);
-      for (const column of columns) {
-        output[column.Field] = column.Type;
-      }
-      cb(null, output);
-    }
-  });
-};
 
-const getData = (connection, tableName, cb) => {
-  connection.query(`SELECT * FROM ${tableName}`, (err, rows, fields) => {
-    if (err) {
-      console.log('error in the query');
-      cb(err);
-    } else {
-      cb(null, rows);
-    }
-  });
-};
-
-app.get('/api/getData/', (req, res) => {
+app.get('/api/getData/',async (req, res) => {
   console.log('api/getData/ called');
-  var dbname = req.body.name;
-  var dbtable = req.body.table;
-
-  // const dbname = 'prova';
-  // const dbtable = 'Candidato';
+  var dbname = req.param('dbname');
+  var dbtable = req.param('dbtable')
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
     res.send(0); // Si Può?
   }
+/*
+  serverModule.connectTo(configurazione).then(conn => serverModule.getMetaData( conn,dbtable,configurazione).then( data => {
+    res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
+  res.json(data);
+  }) );*/
 
-  const connection = serverModule.connectTo(configurazione);
+  const connection = await serverModule.connectTo(configurazione);
+  let data = await serverModule.getMetaData(connection, dbtable, configurazione);
+  res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
+  res.json(data);
+  connection.end();
 
-      getMetaData(connection, dbtable, (err, columns) => {
-        if (err) {
-          console.log(err);
-        } else {
-          getData(connection, dbtable, (err2, rows) => {
-            if (err2) {
-              console.log(err2);
-            } else {
-              const output = { cols: columns, rows };
-              res.setHeader('Access-Control-Allow-Origin', '*');
 
-              res.json(output);
-              console.log('api/getDatabases/ terminated successfully');
-            }
-          });
-        }
-      });
-    
-    // connection.end();
+console.log('api/getDatabases/ terminated successfully');
+
 
     });
 

@@ -24,6 +24,33 @@ class MysqlDatabase {
     });
   }
 
+  getMetaData = (connection, tableName, cb) => {
+    connection.query(`SHOW Columns FROM ${tableName}`, (err, columns, fields) => {
+      if (err) {
+        console.log('error in the query');
+        cb(err);
+      } else {
+        const output = {};
+        //console.log(columns);
+        for (const column of columns) {
+          output[column.Field] = column.Type;
+        }
+        cb(null, output);
+      }
+    });
+  };
+
+  getData = (connection, tableName, cb) => {
+    connection.query(`SELECT * FROM ${tableName}`, (err, rows, fields) => {
+      if (err) {
+        console.log('error in the query');
+        cb(err);
+      } else {
+        cb(null, rows);
+      }
+    });
+  };
+
   showTable() {
     return `SELECT table_name FROM information_schema.tables WHERE table_schema ='${config.DB_Name}'`;
   }
