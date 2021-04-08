@@ -1,99 +1,43 @@
+/* eslint-disable no-console */
+/* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable no-case-declarations */
 /* eslint-disable default-case */
 const mysql = require('mysql');
-//const { resolve } = require('node:path');
-const MysqlDatabase = require('./ModelloServer');
+// const { resolve } = require('node:path');
+const MysqlDB = require('./ModelloServer');
 
 function connectTo(config) {
-  switch (config.DB_Type) {
-    case 'mysql':
+  return new Promise((resolve, reject) => {
+    switch (config.DB_Type) {
+      case 'mysql': resolve(MysqlDB.connect(config)); // .cath( throw error)
 
-      return new Promise((resolve, reject) => {
-        const connection = mysql.createConnection({
-          host: config.DB_Address,
-          user: config.DB_Username,
-          password: config.DB_Password,
-          database: config.DB_Name,
-        });
-
-        connection.connect((err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(connection);
-          }
-        });
-      });
-      break;
-
-    default:
-      console.log('ERROR CONNESSIONE TYPE');
-  }
+      default:
+        reject('database type not implemented');
+    }
+  });
 }
 
 function showTables(conn, config) {
-  switch (config.DB_Type) {
-    case 'mysql':
-      return new Promise((resolve, reject) => {
-        const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${config.DB_Name}'`;
-        conn.query(table, (error, columns, fields) => {
-          if (error) {
-            reject('ORRORE in the query');
-          } else {
-            resolve(columns);
-          }
-        });
-      });
-      // break;
-
-    default:
-      console.log('ERRORE query showTable');
-  }
-}
-
-
-
-function columnData(conn, table) {
   return new Promise((resolve, reject) => {
-    conn.query(`SHOW Columns FROM ${table}`, (err, columns, fields) => {
-      if (err) {
-        reject(err);
-      } else {
-        const output = {};
-        // console.log(columns);
-        for (const column of columns) {
-          output[column.Field] = column.Type;
-        }
-        resolve(output);
-      }
-    });
+    switch (config.DB_Type) {
+      case 'mysql': resolve(MysqlDB.showTable(conn, config));
+
+      default:
+        reject('database type not implemented');
+    }
   });
 }
 
-function rowData(conn, table) {
+// l'if della funzione non ha senso perché l'errore deve essere meneggiato nella cath delle 2 promesse
+async function getMetaData(conn, table, config) {
   return new Promise((resolve, reject) => {
-    conn.query(`SELECT * FROM ${table}`, (err, rows, fields) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
-    });
+    switch (config.DB_Type) {
+      case 'mysql': resolve(MysqlDB.getMetaData(conn, table));
+      default:
+        reject('database type not implemented');
+    }
   });
 }
-
-function getMetaData(conn, table, config) {
-  switch (config.DB_Type) {
-    case 'mysql':
-      return new Promise((resolve, reject) => {
-        const promise1 = columnData(conn, table);
-        const promise2 = rowData(conn, table);
-
-        Promise.all([promise1, promise2]).then(values => resolve(values) );
-        });
-  }
-}
-
 
 module.exports = {
   connectTo,

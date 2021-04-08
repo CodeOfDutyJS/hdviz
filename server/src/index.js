@@ -1,7 +1,4 @@
 /* eslint-disable */
-//import {createConnection, Connection} from "typeorm";
-//import "reflect-metadata";
-//import * from './modules/ServerModule.js';
 //node --experimental-modules ServerModule.js
 
 const express = require('express');
@@ -68,7 +65,6 @@ app.get('/api/getTable', async (req, res) => {
 
 
   const configurazione = selectConfig(dbname);
-  
   if (configurazione == 0) {
     res.send(0); // Si Può?
   }
@@ -81,8 +77,8 @@ serverModule.connectTo(configurazione).then(conn => serverModule.showTables(conn
 }
 ).then(conn.end() )); */  //volendo usare await per codice più leggibile
 
-const connection = await serverModule.connectTo(configurazione);
-let colonne = await serverModule.showTables(connection,configurazione);
+const connection = await serverModule.connectTo(configurazione).catch(e => console.log(e));
+let colonne = await serverModule.showTables(connection,configurazione).catch(e => console.log(e));;
 res.setHeader('Access-Control-Allow-Origin', '*');
 res.json(colonne);
 connection.end();
@@ -108,8 +104,8 @@ app.get('/api/getData/',async (req, res) => {
   res.json(data);
   }) );*/
 
-  const connection = await serverModule.connectTo(configurazione);
-  let data = await serverModule.getMetaData(connection, dbtable, configurazione);
+  const connection = await serverModule.connectTo(configurazione).catch(e => console.log(e));;
+  let data = await serverModule.getMetaData(connection, dbtable, configurazione).catch(e => console.log(e));;
   res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
   res.json(data);
   connection.end();
