@@ -1,28 +1,22 @@
-import { makeAutoObservable, observable } from 'mobx';
-
 class VisualizationModel {
-  _visualizationSelected = null;
-  _options;
+  _dataModel = [];
 
-  constructor() {
-    makeAutoObservable(this, { _visualizationSelected: observable.ref, _options: observable.ref }, { autoBind: true });
+  get dataModel() {
+    return this._dataModel;
   }
 
-  addOption(option) {
-    this._options = { ...this._options, ...option };
+  set dataModel(value) {
+    this._dataModel = value;
   }
 
-  start(data) {
-    this._visualizationSelected.visualization(this._visualizationSelected.model.addData(data).getPreparedDataset(this._options));
+  addData(data) {
+    this._dataModel = data;
+    return this;
   }
 
-  // GETTER / SETTER
-  get visualizationSelected() {
-    return this._visualizationSelected;
-  }
-
-  set visualizationSelected(value) {
-    this._visualizationSelected = value;
+  // eslint-disable-next-line class-methods-use-this
+  getPreparedDataset() {
+    throw new Error('You have to implement this method');
   }
 }
 

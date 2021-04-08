@@ -1,9 +1,9 @@
 import forceField from '../model/d3/ForceField';
 import linearProjection from '../model/d3/LinearProjection';
 import scatterPlotMatrix from '../model/d3/ScatterPlotMatrix';
-import ForceFieldModel from '../model/ForceFieldModel';
-import LinearProjectionModel from '../model/LinearProjectionModel';
-import ScatterPlotMatrixModel from '../model/ScatterPlotMatrixModel';
+import ForceFieldModel from '../model/VisualizationModels/ForceFieldModel';
+import LinearProjectionModel from '../model/VisualizationModels/LinearProjectionModel';
+import ScatterPlotMatrixModel from '../model/VisualizationModels/ScatterPlotMatrixModel';
 
 const VisualizationType = {
   SCATTER_PLOT_MATRIX: {

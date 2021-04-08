@@ -1,6 +1,6 @@
 import { distance } from 'ml-distance';
 import { makeAutoObservable, observable } from 'mobx';
-import VisualizationModel from '../model/VisualizationModel';
+import VisualizationManager from '../model/VisualizationManager';
 
 import { VisualizationType } from '../utils/constant';
 
@@ -11,7 +11,7 @@ class VisualizationStore {
 
   constructor(rootStore) {
     this.rootStore = rootStore;
-    this._visualization = new VisualizationModel();
+    this._visualization = new VisualizationManager();
 
     makeAutoObservable(this, { rootStore: false }, { autoBind: true });
   }

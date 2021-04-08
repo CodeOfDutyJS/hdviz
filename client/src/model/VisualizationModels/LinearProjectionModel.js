@@ -1,21 +1,8 @@
 import * as mat from 'mathjs';
 import { PCA } from 'ml-pca';
+import VisualizationModel from '../VisualizationModel';
 
-class LinearProjectionModel {
-  get dataModel() {
-    return this._dataModel;
-  }
-
-  set dataModel(value) {
-    this._dataModel = value;
-  }
-
-  addData(data) {
-    console.log(data);
-    this._dataModel = data;
-    return this;
-  }
-
+class LinearProjectionModel extends VisualizationModel {
   // calcola la trasposta di una matrice, ritorna solo le prime due colonne (i due componenti pca)
   // eslint-disable-next-line class-methods-use-this
   transpose(w) {

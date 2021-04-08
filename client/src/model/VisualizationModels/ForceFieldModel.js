@@ -1,21 +1,7 @@
 import * as d3 from 'd3';
-import forceField from './d3/ForceField';
+import VisualizationModel from '../VisualizationModel';
 
-class ForceFieldModel {
-  get dataModel() {
-    return this._dataModel;
-  }
-
-  set dataModel(value) {
-    this._dataModel = value;
-  }
-
-  addData(data) {
-    console.log(data);
-    this._dataModel = data;
-    return this;
-  }
-
+class ForceFieldModel extends VisualizationModel {
   getNodes(maxNodes) {
     console.log(this.dataModel.targets[1]);
     return this.dataModel.getSelectedDataset()

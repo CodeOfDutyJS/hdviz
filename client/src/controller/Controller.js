@@ -13,10 +13,10 @@ import linearProjection from '../model/d3/LinearProjection';
 import correlationHeatmap from '../model/d3/CorrelationHeatmap';
 import heatmap from '../model/d3/Heatmap';
 import DataModel from '../model/DataModel';
-import ForceFieldModel from '../model/ForceFieldModel';
-import ScatterPlotMatrixModel from '../model/ScatterPlotMatrixModel';
-import LinearProjectionModel from '../model/LinearProjectionModel';
-import HeatMapModel from '../model/HeatMapModel';
+import ForceFieldModel from '../model/VisualizationModels/ForceFieldModel';
+import ScatterPlotMatrixModel from '../model/VisualizationModels/ScatterPlotMatrixModel';
+import LinearProjectionModel from '../model/VisualizationModels/LinearProjectionModel';
+import HeatMapModel from '../model/VisualizationModels/HeatMapModel';
 import { DistanceType, ClusteringType, VisualizationType } from '../utils/constant';
 import { getDatabases, getTables, getData } from './API';
 
