@@ -3,9 +3,10 @@
 const express = require('express');
 const fs = require('fs');
 const mysql = require('mysql');
-
+const controller = require ('./modules/controller');
 const app = express();
 const port = 1337;
+let config_files = getFiles(__dirname+'/config');
 
 function getFiles(dir, files_) {
   files_ = files_ || [];
@@ -22,8 +23,6 @@ function getFiles(dir, files_) {
   return files_;
 }
 
-let config_files = getFiles(__dirname+'/config');
-
 function selectConfig(dbname) {
   for (const i in config_files) {
     if (dbname == config_files[i].DB_Name) {
@@ -35,7 +34,7 @@ function selectConfig(dbname) {
 
 app.get('/api/getDatabases/', (req, res) => {
   console.log('api/getDatabases/ called');
-  // res.send(getFiles('config').sort((a,b) => a.length - b.length));
+
   config_files = getFiles(__dirname+'/config');
   let databases = [];
   for (const i in config_files) {
@@ -44,45 +43,21 @@ app.get('/api/getDatabases/', (req, res) => {
   const output = { databases };
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.json([output]);
-  //res.send(output);
-  console.log('api/getDatabases/ terminated successfully');
 
+  console.log('api/getDatabases/ terminated successfully');
 });
 
-app.get('/api/getTables/', (req, res) => {
-  var dbname = req.param('dbname');
+app.get('/api/getTables/',async (req, res) => {
+  //var dbname = req.params('dbname');
   console.log('api/getTables/ called');
-  // const dbname = 'prova';
+  const dbname = 'testhdviz';
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
-    res.send(0); // Si Può?
+    res.send({});
   }
-  const connection = mysql.createConnection({
-    host: configurazione.DB_Address,
-    user: configurazione.DB_Username,
-    password: configurazione.DB_Password,
-    database: configurazione.DB_Name,
-  });
-  connection.connect((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Connected to the DB');
-    }
-  });
-  const showtables = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${dbname}'`;
-  connection.query(showtables, (error, columns, fields) => {
-    if (error) {
-      console.log('error in the query');
-    } else {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.json(columns);
-    }
-    // connection.end();
-  });
-  console.log('api/getDatabases/ terminated successfully');
-
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.json(await controller.getTables(dbname,configurazione));
 });
 
 const getMetaData = (connection, tableName, cb) => {
@@ -130,7 +105,7 @@ app.get('/api/getData/', (req, res) => {
     password: configurazione.DB_Password,
     database: configurazione.DB_Name,
   });
-  
+
   connection.connect((err) => {
     if (err) {
       console.log(err);
