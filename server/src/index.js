@@ -35,7 +35,6 @@ function selectConfig(dbname) {
 
 app.get('/api/getDatabases/', (req, res) => {
   console.log('api/getDatabases/ called');
-  // res.send(getFiles('config').sort((a,b) => a.length - b.length));
   config_files = getFiles(__dirname+'/config');
   let databases = [];
   for (const i in config_files) {
@@ -44,19 +43,19 @@ app.get('/api/getDatabases/', (req, res) => {
   const output = { databases };
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.json([output]);
-  //res.send(output);
+  //res.send([output]);
   console.log('api/getDatabases/ terminated successfully');
-
 });
 
 app.get('/api/getTables/', (req, res) => {
-  var dbname = req.param('dbname');
+  let dbname = req.params('dbname');
   console.log('api/getTables/ called');
   // const dbname = 'prova';
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
-    res.send(0); // Si Può?
+    res.json({});
+    return;
   }
   const connection = mysql.createConnection({
     host: configurazione.DB_Address,
@@ -71,8 +70,7 @@ app.get('/api/getTables/', (req, res) => {
       console.log('Connected to the DB');
     }
   });
-  const showtables = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${dbname}'`;
-  connection.query(showtables, (error, columns, fields) => {
+  connection.query('SELECT table_name FROM information_schema.tables WHERE table_schema = ?', [dbname] , (error, columns, fields) => {
     if (error) {
       console.log('error in the query');
     } else {
@@ -82,11 +80,11 @@ app.get('/api/getTables/', (req, res) => {
     // connection.end();
   });
   console.log('api/getDatabases/ terminated successfully');
-
+  connection.end();
 });
 
 const getMetaData = (connection, tableName, cb) => {
-  connection.query(`SHOW Columns FROM ${tableName}`, (err, columns, fields) => {
+  connection.query(`SHOW Columns FROM ?`, [tableName], (err, columns, fields) => {
     if (err) {
       console.log('error in the query');
       cb(err);
@@ -102,7 +100,7 @@ const getMetaData = (connection, tableName, cb) => {
 };
 
 const getData = (connection, tableName, cb) => {
-  connection.query(`SELECT * FROM ${tableName}`, (err, rows, fields) => {
+  connection.query(`SELECT * FROM ?`, [tableName] , (err, rows, fields) => {
     if (err) {
       console.log('error in the query');
       cb(err);
@@ -114,14 +112,15 @@ const getData = (connection, tableName, cb) => {
 
 app.get('/api/getData/', (req, res) => {
   console.log('api/getData/ called');
-  var dbname = req.param('dbname');
-  var dbtable = req.param('dbtable');
-  // const dbname = 'prova';
-  // const dbtable = 'Candidato';
+  let dbname = req.params('dbname');
+  let dbtable = req.params('dbtable');
+  //const dbname = 'prova';
+  //const dbtable = 'Candidato';
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
-    res.send(0); // Si Può?
+    res.json({});
+    return;
   }
 
   const connection = mysql.createConnection({
@@ -155,7 +154,7 @@ app.get('/api/getData/', (req, res) => {
         }
       });
     }
-    // connection.end();
+    connection.end();
   });
 });
 
