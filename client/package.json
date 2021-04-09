@@ -10,7 +10,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "antd": "4.12.3",
+    "antd": "^4.15.0",
     "babel-eslint": "^10.1.0",
     "d3": "^6.5.0",
     "data2grid": "^1.0.2",
@@ -36,7 +36,9 @@
     "coverage": "react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "lint": "eslint src/",
-    "style": "lessc ./src/styles/main.less ./src/styles/css/antd.css --js"
+    "style": "lessc ./src/styles/main.less ./src/styles/css/antd.css --js",
+    "prebuild": "yarn style",
+    "prestart": "yarn style"
   },
   "eslintConfig": {
     "extends": [

@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import HeatMapModel from '../HeatMapModel';
+import HeatMapModel from '../VisualizationModels/HeatMapModel';
 
 function heatmap(cluster, clusterCols) {
   const cols = clusterCols;
@@ -53,3 +53,5 @@ function heatmap(cluster, clusterCols) {
     .transition()
     .style('opacity', 1);
 }
+
+export default heatmap;

@@ -1,8 +1,13 @@
+import { makeAutoObservable } from 'mobx';
+
 class DataModel {
+  _dataset = [];
+  _columns = [];
+  _targets = [];
+  _features = [];
+
   constructor() {
-    this._dataset = [];
-    this._target = [];
-    this._feature = [];
+    makeAutoObservable(this, { _dataset: false });
   }
 
   get dataset() {
@@ -11,23 +16,33 @@ class DataModel {
 
   set dataset(value) {
     this._dataset = value;
+    this.columns = Object.keys(this.dataset[0]);
   }
 
-  get feature() {
-    return this._feature;
+  get columns() {
+    return this._columns;
   }
 
-  set feature(value) {
+  set columns(value) {
+    // eslint-disable-next-line no-restricted-globals
+    this._columns = value.map((col) => ({ value: col, isNumber: !isNaN(this.dataset[0][col]) }));
+  }
+
+  get features() {
+    return this._features;
+  }
+
+  set features(value) {
     // TODO: controllo se variabile feature contiene valori numerici o stringhe
-    this._feature = value;
+    this._features = value.filter((f) => this.columns.find((c) => c.value === f).isNumber);
   }
 
-  get target() {
-    return this._target;
+  get targets() {
+    return this._targets;
   }
 
-  set target(value) {
-    this._target = value;
+  set targets(value) {
+    this._targets = value;
   }
 
   cleanDataset() {
@@ -36,7 +51,7 @@ class DataModel {
 
   getTargetColumns() {
     return this.dataset.map(
-      (value) => this.target.reduce(
+      (value) => this.targets.reduce(
         (acc, key) => ({
           ...acc,
           [key]: value[key],
@@ -47,7 +62,7 @@ class DataModel {
 
   getFeatureColumns() {
     return this.dataset.map(
-      (value) => this.feature.reduce(
+      (value) => this.features.reduce(
         (acc, key) => ({
           ...acc,
           [key]: value[key],
@@ -69,13 +84,13 @@ class DataModel {
   getStandardScore() {
     const means = {};
     const deviations = {};
-    this.feature.forEach((feat) => {
+    this.features.forEach((feat) => {
       means[feat] = this.getMean(feat);
       deviations[feat] = this.getSampleDeviation(feat);
     });
     const d = this.getSelectedDataset();
     d.forEach((value) => {
-      this.feature.forEach((feat) => {
+      this.features.forEach((feat) => {
         // eslint-disable-next-line no-param-reassign
         value[feat] = (value[feat] - means[feat]) / deviations[feat];
       });
@@ -88,10 +103,10 @@ class DataModel {
     d.map((value) => {
       const length = normFn(value);
       const obj = {};
-      this.target.forEach((t) => {
+      this.targets.forEach((t) => {
         obj[t] = value[t];
       });
-      this.feature.forEach((feat) => {
+      this.features.forEach((feat) => {
         obj[feat] = value[feat] / length;
       });
       return obj;
@@ -100,7 +115,7 @@ class DataModel {
 
   euclideanNorm(obj) {
     let length;
-    this.feature.forEach((feat) => {
+    this.features.forEach((feat) => {
       length += obj[feat] ** 2;
     });
     return Math.sqrt(length);

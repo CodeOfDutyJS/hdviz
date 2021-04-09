@@ -1,6 +1,6 @@
 import { distance } from 'ml-distance';
 import * as jeezy from 'jeezy';
-import { DistanceType, ClusteringType } from '../utils';
+import { DistanceType, ClusteringType } from '../../utils/constant';
 
 class HeatMapModel {
   constructor(dataModel, distanceFn = distance.euclidean) {

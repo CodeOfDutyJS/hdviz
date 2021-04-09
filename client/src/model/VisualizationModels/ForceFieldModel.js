@@ -1,24 +1,14 @@
 import * as d3 from 'd3';
-import forceField from './d3/ForceField';
+import VisualizationModel from '../VisualizationModel';
+import forceField from '../d3/ForceField';
 
-class ForceFieldModel {
-  constructor(dataModel) {
-    this._dataModel = dataModel;
-  }
-
-  get dataModel() {
-    return this._dataModel;
-  }
-
-  set dataModel(value) {
-    this._dataModel = value;
-  }
-
+class ForceFieldModel extends VisualizationModel {
   getNodes(maxNodes) {
+    console.log(this.dataModel.targets[1]);
     return this.dataModel.getSelectedDataset()
       .map((value) => ({
-        color: value?.[this.dataModel.target[0]],
-        size: value?.[this.dataModel.target[1]],
+        color: this.dataModel.targets.length > 0 ? value?.[this.dataModel.targets[0]] : null,
+        size: this.dataModel.targets.length > 1 ? value?.[this.dataModel.targets[1]] : null,
         features: JSON.stringify(value),
       }))
       .slice(0, maxNodes);
@@ -48,7 +38,7 @@ class ForceFieldModel {
     return links;
   }
 
-  getPreparedDataset(distanceFn, maxNodes, maxLinks) {
+  getPreparedDataset({ distanceFn, maxNodes, maxLinks }) {
     return {
       nodes: this.getNodes(maxNodes),
       links: this.getLinks(distanceFn, maxNodes, maxLinks),

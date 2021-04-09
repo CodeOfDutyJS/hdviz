@@ -1,41 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-  Layout, Collapse, Tabs, PageHeader, Button, Alert,
+  Layout, Collapse, PageHeader, Button, Alert,
 } from 'antd';
 
-import { FileTextOutlined, DatabaseOutlined } from '@ant-design/icons';
-
 import { observer } from 'mobx-react-lite';
-import UploadCSV from './UploadCSV';
-import DatabaseSelection from './DatabaseSelection';
 import VisualizationSelection from './VisualizationSelection';
 import DatasetManipulation from './DatasetManipulation';
 import { useStore } from '../../../controller/ControllerProvider';
+import DataSource from './DataSource';
+import { useStore2 } from '../../../store/RootStore';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
 
-const { TabPane } = Tabs;
-
-// eslint-disable-next-line arrow-body-style
 const OptionPanel = observer(() => {
+  const { visualizationStore } = useStore2();
   const store = useStore();
-  const [success, setSuccess] = useState(false);
-  const [loadingData, setLoadingData] = useState(!store.loadingData);
-
-  const showResult = () => {
-    // logica con controller
-    // setSuccess(true);
-
-    store.start();
-
-    store.parti = true;
-  };
-
-  useEffect(() => {
-    console.log('ciao');
-  }, [store.data]);
 
   return (
     <Sider id="settingPanel" width="none">
@@ -45,31 +26,7 @@ const OptionPanel = observer(() => {
       />
       <Collapse defaultActiveKey={['1', '2']}>
         <Panel header="Data source" key="1">
-          <Tabs>
-            <TabPane
-              tab={(
-                <span>
-                  <FileTextOutlined />
-                  File CSV
-                </span>
-              )}
-              key="csv"
-            >
-              <UploadCSV />
-            </TabPane>
-
-            <TabPane
-              tab={(
-                <span>
-                  <DatabaseOutlined />
-                  Database
-                </span>
-              )}
-              key="database"
-            >
-              <DatabaseSelection />
-            </TabPane>
-          </Tabs>
+          <DataSource />
         </Panel>
         <Panel header="Visualization" key="2">
           <VisualizationSelection />
@@ -82,10 +39,10 @@ const OptionPanel = observer(() => {
         </Panel>
       </Collapse>
       <Layout id="start-button">
-        <Button type="primary" shape="round" onClick={showResult}>Start</Button>
+        <Button type="primary" shape="round" onClick={visualizationStore.start}>Start</Button>
       </Layout>
 
-      {success ? <Alert type="success" message="Success Text" closable onClose={() => { setSuccess(false); }} /> : null}
+      {store.success ? <Alert type="success" message="Success Text" closable onClose={() => { store.success = false; }} /> : null}
     </Sider>
   );
 });
