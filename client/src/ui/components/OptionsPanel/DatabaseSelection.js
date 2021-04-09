@@ -1,65 +1,49 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 
-import { Button, Select, Form } from 'antd';
+import { Select, Form } from 'antd';
 
-import { useStore } from '../../../controller/ControllerProvider';
+import { observer } from 'mobx-react-lite';
+import { useStore2 } from '../../../store/RootStore';
 
 const { Option } = Select;
 const { Item } = Form;
 
-const DatabaseSelection = () => {
-  const controller = useStore();
-  const [databaseList, setDatabaseList] = useState([]);
-  const [tableList, setTableList] = useState([]);
-  const [isDatabaseSelected, setIsDatabaseSelected] = useState(false);
-  const [isDatabaseListLoading, setIsDatabaseListLoading] = useState(true);
-  const [isTableListLoading, setIsTableListLoading] = useState(false);
-  const [dbSelected, setDbSelected] = useState();
+const DatabaseSelection = observer(() => {
+  const { databaseStore } = useStore2();
 
   useEffect(() => {
     // Call API to get list of database connection available
-    (async () => {
-      setDatabaseList(await controller.getDatabases());
-      setIsDatabaseListLoading(false);
-    })();
+    databaseStore.setDatabases();
   }, []);
 
-  const testConnection = (values) => {
-    console.log(values);
-  };
-
-  const onDatabaseSelection = async (_db) => {
-    // Call API to get list of table available
-    setIsTableListLoading(true);
-    setDbSelected(_db);
-    setTableList(await controller.getTables(_db));
-    setIsDatabaseSelected(true);
-    setIsTableListLoading(false);
-  };
-
-  const onTableSelection = async (_table) => {
-    await controller.setData(dbSelected, _table);
-    // console.log(controller.data);
-  };
-
   return (
-    <Form onFinish={testConnection}>
-      <Item label="Database connection" name="db" rules={[{ required: true, message: 'Please select a Database' }]}>
-        <Select placeholder="Database connection" disabled={isDatabaseListLoading} loading={isDatabaseListLoading} onSelect={onDatabaseSelection}>
-          {databaseList.map((item, key) => <Option key={item.databases}>{item.databases}</Option>)}
+    <Form>
+      <Item label="Database connection" name="db" rules={[{ required: true, message: 'Please select a database' }]}>
+        <Select
+          placeholder="Database connection"
+          disabled={databaseStore.databasesLoading}
+          loading={databaseStore.databasesLoading}
+          onSelect={databaseStore.setDatabaseSelected}
+          value={databaseStore.databaseSelected}
+        >
+          {databaseStore.databases.map((item) => <Option key={item.databases}>{item.databases}</Option>)}
         </Select>
       </Item>
-      <Item label="Data Table" name="table" rules={[{ required: true, message: 'Please select a Database' }]}>
-        <Select placeholder="Table" disabled={!isDatabaseSelected} loading={isTableListLoading} onSelect={onTableSelection}>
-          {tableList.map((item, key) => <Option key={item.table_name}>{item.table_name}</Option>)}
+
+      <Item label="Data Table" name="table" rules={[{ required: true, message: 'Please select a table' }]}>
+        <Select
+          placeholder="Table"
+          disabled={!databaseStore.databaseSelected || databaseStore.tablesLoading}
+          loading={databaseStore.tablesLoading}
+          onSelect={databaseStore.setTableSelected}
+          value={databaseStore.tableSelected}
+        >
+          {databaseStore.tables.map((item) => <Option key={item.table_name}>{item.table_name}</Option>)}
         </Select>
       </Item>
-      {/* <Item>
-        <Button type="primary" htmlType="submit" disabled={controller.button}>Test</Button>
-      </Item> */}
     </Form>
   );
-};
+});
 
 export default DatabaseSelection;

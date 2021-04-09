@@ -12,6 +12,9 @@ describe('#DataModel', () => {
     {
       name: 'Jinx', color: 'red', height: 3, width: 6,
     },
+    {
+      name: 'Jinx', color: 'red', height: 8, width: 6,
+    },
   ];
   const mockFeature = ['height'];
   const mockTarget = ['name', 'color'];
@@ -33,6 +36,9 @@ describe('#DataModel', () => {
         },
         {
           name: 'Jinx', color: 'red', height: 3,
+        },
+        {
+          name: 'Jinx', color: 'red', height: 8,
         },
       ]);
     });
@@ -76,6 +82,31 @@ describe('#DataModel', () => {
             name: 'Jinx', color: 'red',
           },
         ]);
+    });
+  });
+  describe('#Statistical Analysis', () => {
+    const dataset = new DataModel(mockData);
+    dataset.feature = mockTarget;
+    dataset.target = mockFeature;
+
+    it('should return the mean', () => {
+      expect(dataset.getMean('height')).toEqual(3.5);
+    });
+
+    it('should return the Population Variance', () => {
+      expect(dataset.getPopulationVariance('height').toPrecision(3)).toEqual('7.25');
+    });
+
+    it('should return the Sample Variance', () => {
+      expect(dataset.getSampleVariance('height').toPrecision(3)).toEqual('9.67');
+    });
+
+    it('should return the Sample Deviation', () => {
+      expect(dataset.getSampleDeviation('height').toPrecision(3)).toEqual('3.11');
+    });
+
+    it('should return the Population Deviation', () => {
+      expect(dataset.getPopulationDeviation('height').toPrecision(3)).toEqual('2.69');
     });
   });
 });
