@@ -24,5 +24,11 @@ module.exports = {
     'no-unused-vars': 'warn',
     'no-underscore-dangle': 'off',
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+    'lines-between-class-members': [
+      'error',
+      'always',
+      { exceptAfterSingleLine: true },
+    ],
+    'max-len': [1, 160, 2],
   },
 };

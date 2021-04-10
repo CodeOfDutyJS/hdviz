@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 
 import { Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../controller/ControllerProvider';
+import { useStore2 } from '../../../store/RootStore';
 
 const UploadCSV = () => {
+  const { modelStore } = useStore2();
   const [fileList, setFileList] = useState([]);
   const store = useStore();
 
-  const onChange = ({ fileList: newFileList }) => {
+  const isCSV = (type) => type === 'application/vnd.ms-excel' || type === 'text/csv';
+
+  const onFileUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList.slice(-1));
   };
 
@@ -17,11 +20,11 @@ const UploadCSV = () => {
     onSuccess, onError, file, onProgress,
   }) => {
     console.log(file);
-    // if (!(file.type === 'application/vnd.ms-excel')) {
-    if (false) {
+    if (!isCSV(file.type)) {
       onError(file);
     } else {
       await store.uploadCSV(file);
+      await modelStore.uploadCSV(file);
       if (await store.loadingCompleted) {
         onSuccess(file);
       } else {
@@ -30,20 +33,15 @@ const UploadCSV = () => {
     }
   };
 
-  const props = {
-    onChange,
-    multiple: false,
-    accept: '.csv',
-    listType: 'picture',
-    // beforeUpload(file) {
-    //   console.log(fileList);
-    // },
-    customRequest: customUpload,
-  };
-
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <Upload {...props} fileList={fileList}>
+    <Upload
+      onChange={onFileUploadChange}
+      multiple={false}
+      accept=".csv"
+      listType="picture"
+      customRequest={customUpload}
+      fileList={fileList}
+    >
       <Button icon={<UploadOutlined />}>Upload</Button>
     </Upload>
   );

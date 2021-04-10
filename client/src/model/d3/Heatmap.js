@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import HeatMapModel from '../HeatMapModel';
+import HeatMapModel from '../VisualizationModels/HeatMapModel';
 
 function heatmap(cluster, clusterCols, colorRange = ['white', '#ff1a00']) {
   const cols = clusterCols;

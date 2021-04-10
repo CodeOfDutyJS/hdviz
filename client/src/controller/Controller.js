@@ -11,40 +11,36 @@ import forceField from '../model/d3/ForceField';
 import scatterPlotMatrix from '../model/d3/ScatterPlotMatrix';
 import linearProjection from '../model/d3/LinearProjection';
 import correlationHeatmap from '../model/d3/CorrelationHeatmap';
+<<<<<<< HEAD
 import drawTargetRows from '../model/d3/DrawTargetRows';
+=======
+>>>>>>> f903e0c5b23769371666a9496fe3b8dbdb423250
 import heatmap from '../model/d3/Heatmap';
 import DataModel from '../model/DataModel';
-import ForceFieldModel from '../model/ForceFieldModel';
-import ScatterPlotMatrixModel from '../model/ScatterPlotMatrixModel';
-import LinearProjectionModel from '../model/LinearProjectionModel';
-import HeatMapModel from '../model/HeatMapModel';
-import { DistanceType, ClusteringType, VisualizationType } from '../utils';
+import ForceFieldModel from '../model/VisualizationModels/ForceFieldModel';
+import ScatterPlotMatrixModel from '../model/VisualizationModels/ScatterPlotMatrixModel';
+import LinearProjectionModel from '../model/VisualizationModels/LinearProjectionModel';
+import HeatMapModel from '../model/VisualizationModels/HeatMapModel';
+import { DistanceType, ClusteringType, VisualizationType } from '../utils/constant';
 import { getDatabases, getTables, getData } from './API';
 
 class Controller {
   model = null;
-
   visualizationSelected = null;
-
   columns = [];
-
   featuresSelected = [];
-
   targetSelected = [];
-
   distanceSelected = null;
 
-  visualization = null;
-
+  // Database stuff
   databases = [];
-
+  databaseSelected = null;
   tables = [];
-
+  tableSelected = null;
   clusterCol = [];
 
   loadingCompleted = false;
-
-  // parti = false;
+  success = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -63,10 +59,6 @@ class Controller {
 
   setDistance(_distance) {
     this.distanceSelected = _distance;
-
-    // if (this.distanceSelected === DistanceType.EUCLIDEAN) {
-    //   this.model.setEuclideanDistance(12);
-    // }
   }
 
   setVisualization(_visualization) {
@@ -77,27 +69,20 @@ class Controller {
     this.databases = await getDatabases();
   }
 
-  async getDatabases() {
-    await this.setDatabases();
-    return this.databases;
-  }
-
   async setTables(db_) {
-    this.tables = await getTables(db_);
+    this.databaseSelected = db_;
+    this.tables = await getTables(this.databaseSelected);
   }
 
-  async getTables(db_) {
-    await this.setTables(db_);
-    return this.tables;
-  }
+  async setData(table_) {
+    this.tableSelected = table_;
 
-  async setData(db_, table_) {
     this.featureSelected = null;
     this.targetSelected = null;
 
     this.changed = !this.changed;
 
-    const _data = await getData(db_, table_);
+    const _data = await getData(this.databaseSelected, this.tableSelected);
     this.model.dataset = _data;
     this.columns = Object.keys(_data.rows[0]);
 
@@ -105,8 +90,10 @@ class Controller {
   }
 
   async uploadCSV(file) {
-    this.featureSelected = [];
+    this.featuresSelected = [];
     this.targetSelected = [];
+
+    console.log(this.featureSelected);
 
     this.loadingCompleted = false;
 
@@ -115,6 +102,7 @@ class Controller {
       Papa.parse(rawFile, {
         header: true,
         dynamicTyping: true,
+        skipEmptyLines: true,
         worker: true,
         complete: (results) => {
           resolve(results.data);
@@ -127,8 +115,11 @@ class Controller {
     _data.length -= 1;
     this.model.dataset = _data;
 
+    console.log(_data);
+
     // Set columns
-    this.columns = Object.keys(_data[0]);
+    // eslint-disable-next-line no-restricted-globals
+    this.columns = Object.keys(_data[0]).map((col) => ({ value: col, number: !isNaN(_data[0][col]) }));
 
     // eslint-disable-next-line max-len
     // this.model.setSelectedColumns(['housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income', 'median_house_value']);
@@ -187,10 +178,16 @@ class Controller {
         HeatMapModel.getLeaves(cluster).forEach(
           (leaf) => columns.push(leaf.id),
         );
+<<<<<<< HEAD
         const c = new HeatMapModel(this.model, distance.euclidean)
           .getLinkage(ClusteringType.SINGLE);
         heatmap(
           c,
+=======
+        heatmap(
+          new HeatMapModel(this.model)
+            .getLinkage(ClusteringType.SINGLE),
+>>>>>>> f903e0c5b23769371666a9496fe3b8dbdb423250
           columns,
         );
         drawTargetRows(c, this.model.target);
