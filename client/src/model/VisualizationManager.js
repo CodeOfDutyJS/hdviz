@@ -13,6 +13,7 @@ class VisualizationManager {
   }
 
   start(data) {
+    this._visualizationSelected.before();
     this._visualizationSelected.visualization(this._visualizationSelected.model.addData(data).getPreparedDataset(this._options));
   }
 

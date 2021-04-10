@@ -144,14 +144,6 @@ class HeatMapModel extends VisualizationModel {
   }
 
   getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.SINGLE }) {
-    console.log(distanceFn);
-    this.setDistance(distanceFn);
-    console.log(this._distanceFn);
-    if (this._distanceFn === DistanceType.PEARSONS) {
-      return {
-        cluster: this.getLinkage(clusteringType),
-      };
-    }
     this.setDistance(DistanceType.PEARSONS);
     const cols = this.getLinkage(clusteringType);
     this.setDistance(distanceFn);
