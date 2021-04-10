@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import HeatMapModel from '../HeatMapModel';
 
-function heatmap(cluster, clusterCols) {
+function heatmap(cluster, clusterCols, colorRange = ['white', '#ff1a00']) {
   const cols = clusterCols;
   const grid = HeatMapModel.dataGrid(cluster, cols);
   const rows = d3.max(grid, (d) => d.row);
@@ -25,7 +25,7 @@ function heatmap(cluster, clusterCols) {
     .domain(d3.range(1, rows + 1));
 
   const c = d3.scaleLinear()
-    .range(['white', '#ff1a00'])
+    .range(colorRange)
     .domain([-3, 3]);
 
   const xAxis = d3.axisBottom(x).tickFormat((d, i) => cols[i]);
