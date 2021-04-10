@@ -7,7 +7,8 @@ import {
 
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../controller/ControllerProvider';
-import { VisualizationType, DistanceType } from '../../../utils/constant';
+import { VisualizationType } from '../../../utils/visualizations';
+import { DistanceType } from '../../../utils/options';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
 import { useStore2 } from '../../../store/RootStore';
@@ -39,7 +40,7 @@ const DatasetManipulation = observer(() => {
       <FeatureSelection />
       <TargetSelection />
 
-      {visualizationStore.visualizationSelected === VisualizationType.FORCEFIELD
+      {(visualizationStore.visualizationSelected === VisualizationType.FORCEFIELD || visualizationStore.visualizationSelected === VisualizationType.HEATMAP)
         ? (
           // eslint-disable-next-line max-len
           <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={isDistanceMatrix}>Calculate Distance Matrix</Checkbox>}>

@@ -8,5 +8,4 @@ function DrawColorScale(colorRange, x, y, width, height) {
   const yScale = d3.scaleBand()
     .domain([0, 1])
     .range(0, height);
-
 }
