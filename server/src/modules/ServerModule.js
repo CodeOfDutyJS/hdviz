@@ -1,15 +1,23 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-console */
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable no-case-declarations */
 /* eslint-disable default-case */
 const mysql = require('mysql');
-// const { resolve } = require('node:path');
-const MysqlDB = require('./ModelloServer');
+const MysqlDB = require('./MYSQL_Model');
+
 
 function connectTo(config) {
   return new Promise((resolve, reject) => {
     switch (config.DB_Type) {
       case 'mysql': resolve(MysqlDB.connect(config)); // .cath( throw error)
+      break;
+
+      case 'PostgreSQL':break;
+
+      case 'MongoDB': break;
+
+      case: 'SQLite': break;
 
       default:
         reject('database type not implemented');
