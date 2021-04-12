@@ -5,6 +5,7 @@ const express = require('express');
 const fs = require('fs');
 const mysql = require('mysql');
 const serverModule = require ('./modules/ServerModule');
+const classe = require('./modules/mysqlClass');
 
 const app = express();
 const port = 1337;
@@ -42,8 +43,7 @@ app.listen(port, () => {
 
 app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
   console.log('api/getDatabases/ called');
-  // res.send(getFiles('config').sort((a,b) => a.length - b.length));
-  //config_files = getFiles('C:/Users/Matteo/Documents/HD VIZ/hdviz/hdviz/server/src/config');
+
   let databases = [];
   console.log(config_files);
   for (i in config_files) {
@@ -77,11 +77,16 @@ serverModule.connectTo(configurazione).then(conn => serverModule.showTables(conn
 }
 ).then(conn.end() )); */  //volendo usare await per codice più leggibile
 
-const connection = await serverModule.connectTo(configurazione).catch(e => console.log(e));
-let colonne = await serverModule.showTables(connection,configurazione).catch(e => console.log(e));;
+//const connection = await serverModule.connectTo(configurazione).catch(e => console.log(e));
+//let colonne = await serverModule.showTables(connection,configurazione).catch(e => console.log(e));
+
+
+const database = await serverModule.findDB(configurazione);
+const connection = await Promise.resolve( database.connectTo());
+let colonne = await Promise.resolve(database.showTable(connection));
 res.setHeader('Access-Control-Allow-Origin', '*');
 res.json(colonne);
-connection.end();
+database.endConnection(connection);
 
 
   console.log('api/getTables/ terminated successfully');

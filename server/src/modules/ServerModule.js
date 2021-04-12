@@ -5,8 +5,24 @@
 /* eslint-disable default-case */
 const mysql = require('mysql');
 const MysqlDB = require('./MYSQL_Model');
+const classe = require('./mysqlClass');
 
+const findDB = async function (config) {
+  const dbType = {
+    mysql: new classe.MySqlDatabase(config),
+    default: function(){
+      console.log('ERROREEEEEEEEEEEEE')}
+  };
+  return dbType[config.DB_Type];
+  // return new classe.MySqlDatabase(config);
+};
 
+async function showTables(dbobj) {
+  const conn = await Promise.resolve(dbobj.connectTo());
+  const tables = Promise.resolve(dbobj.showTable(conn));
+  return tables;
+}
+/*
 function connectTo(config) {
   return new Promise((resolve, reject) => {
     switch (config.DB_Type) {
@@ -24,7 +40,8 @@ function connectTo(config) {
     }
   });
 }
-
+*/
+/*
 function showTables(conn, config) {
   return new Promise((resolve, reject) => {
     switch (config.DB_Type) {
@@ -34,7 +51,8 @@ function showTables(conn, config) {
         reject('database type not implemented');
     }
   });
-}
+
+} */
 
 // l'if della funzione non ha senso perché l'errore deve essere meneggiato nella cath delle 2 promesse
 async function getMetaData(conn, table, config) {
@@ -48,7 +66,8 @@ async function getMetaData(conn, table, config) {
 }
 
 module.exports = {
-  connectTo,
+  // connectTo,
+  findDB,
   showTables,
   getMetaData,
 };

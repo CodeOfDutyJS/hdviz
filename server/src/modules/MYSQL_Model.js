@@ -11,6 +11,23 @@ class  DatabaseInterface {
   public  getData();
 } */
 
+const connect = (config) => new Promise((resolve, reject) => {
+  const connection = mysql.createConnection({
+    host: config.DB_Address,
+    user: config.DB_Username,
+    password: config.DB_Password,
+    database: config.DB_Name,
+  });
+
+  connection.connect((err) => {
+    if (err) {
+      reject('Error - unable to connect to the database');
+    } else {
+      resolve(connection);
+    }
+  });
+});
+/*
 function connect(config) {
   return new Promise((resolve, reject) => {
     const connection = mysql.createConnection({
@@ -29,7 +46,7 @@ function connect(config) {
     });
   });
 }
-
+*/
 function showTable(conn, config) {
   return new Promise((resolve, reject) => {
     const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${config.DB_Name}'`;
@@ -72,7 +89,7 @@ function rowData(conn, table) {
   });
 }
 
-function getMetaData(conn, table,) {
+function getMetaData(conn, table) {
   return new Promise((resolve, reject) => {
     const promise1 = columnData(conn, table).catch((e) => console.log(e)); // non serve await perché fa tutto Promise.all
     const promise2 = rowData(conn, table).catch((e) => console.log(e));
