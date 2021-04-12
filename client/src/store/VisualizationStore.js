@@ -2,7 +2,7 @@ import { distance } from 'ml-distance';
 import { makeAutoObservable, observable } from 'mobx';
 import VisualizationManager from '../model/VisualizationManager';
 
-import { VisualizationType } from '../utils/constant';
+import { VisualizationType } from '../utils/visualizations';
 
 class VisualizationStore {
   rootStore;

@@ -4,7 +4,7 @@ import { distance } from 'ml-distance';
 import dataArray from './data';
 import DataModel from '../../model/DataModel';
 import HeatMapModel from '../../model/HeatMapModel';
-import { ClusteringType, DistanceType } from '../../utils';
+import { ClusteringType, DistanceType } from '../../utils/constant';
 
 describe('#HeatMapModel', () => {
   const mockData = [

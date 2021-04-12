@@ -20,6 +20,7 @@
     "mathjs": "^9.3.0",
     "ml-distance": "^3.0.0",
     "ml-distance-matrix": "^2.0.1",
+    "ml-matrix": "^6.7.0",
     "ml-pca": "^4.0.1",
     "mobx": "^6.1.7",
     "mobx-react-lite": "^3.2.0",

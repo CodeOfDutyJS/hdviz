@@ -7860,7 +7860,7 @@ ml-distance@^3.0.0:
     ml-distance-euclidean "^2.0.0"
     ml-tree-similarity "^1.0.0"
 
-ml-matrix@^6.2.0:
+ml-matrix@^6.2.0, ml-matrix@^6.7.0:
   version "6.7.0"
   resolved "https://registry.yarnpkg.com/ml-matrix/-/ml-matrix-6.7.0.tgz#5a00e3075d22fe510696782527e3a5367586f815"
   integrity sha512-4VWuvApdpkVLXdqSLimgLsMmV9xm5lee4BLhGIM1WsdyJZz/HN/WxAYyI3xCDSo4o7umiHW8lj71loOuneUQFQ==

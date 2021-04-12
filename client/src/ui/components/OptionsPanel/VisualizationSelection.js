@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Select, Form, Button } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { VisualizationType } from '../../../utils/constant';
+import { VisualizationType } from '../../../utils/visualizations';
 import { useStore2 } from '../../../store/RootStore';
 
 const { Option } = Select;
