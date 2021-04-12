@@ -1,7 +1,5 @@
 import { distance } from 'ml-distance';
 import { Matrix, correlation } from 'ml-matrix';
-import * as jeezy from 'jeezy';
-// eslint-disable-next-line import/no-cycle
 import { DistanceType, ClusteringType } from '../../utils/options';
 import VisualizationModel from '../VisualizationModel';
 
@@ -28,9 +26,11 @@ class HeatMapModel extends VisualizationModel {
   }
 
   getCorrelationMatrix() {
-    const data = this.dataModel.getSelectedDataset();
+    const d = this.dataModel.getFeatureColumns();
     const cols = this.dataModel.features;
-    const corr = jeezy.arr.correlationMatrix(data, cols);
+    const m = d.map((obj) => Object.values(obj));
+    let c = correlation(m);
+    c = c.to2DArray();
     const matrix = [];
     for (let z = 0; z < cols.length; z++) {
       const entry = {
@@ -40,9 +40,9 @@ class HeatMapModel extends VisualizationModel {
         distances: [],
       };
       for (let i = 0; i < cols.length; i++) {
-        entry.ref.id = corr[z * cols.length + i].column_x;
-        entry.ref[corr[z * cols.length + i].column_y] = corr[z * cols.length + i].correlation;
-        entry.distances.push(Math.sqrt(2 * (1 - corr[z * cols.length + i].correlation)));
+        entry.ref.id = cols[z];
+        entry.ref[cols[i]] = c[z][i];
+        entry.distances.push(Math.sqrt(2 * (1 - c[z][i])));
       }
       matrix.push(entry);
     }
@@ -70,6 +70,25 @@ class HeatMapModel extends VisualizationModel {
       });
     });
     return matrix;
+  }
+
+  getAlphaticallySorted() {
+    const col = this.dataModel.targets[0];
+    const d = this.dataModel.getStandardScore();
+    d.sort((a, b) => {
+      const IdA = a[col].toUpperCase(); // ignore upper and lowercase
+      const IdB = b[col].toUpperCase(); // ignore upper and lowercase
+      if (IdA < IdB) {
+        return -1;
+      }
+      if (IdA > IdB) {
+        return 1;
+      }
+      return 0;
+    });
+    return {
+      children: d,
+    };
   }
 
   getLinkage(clusteringType) {
@@ -143,8 +162,16 @@ class HeatMapModel extends VisualizationModel {
     return this.getDistanceMatrix();
   }
 
-  getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.SINGLE }) {
+  getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.ALPHABETICAL }) {
     this.setDistance(DistanceType.PEARSONS);
+    if (clusteringType === ClusteringType.ALPHABETICAL) {
+      return {
+        cluster: this.getAlphaticallySorted(),
+        clusterCols: this.getLinkage(ClusteringType.SINGLE),
+        targetCols: this.dataModel.targets,
+      };
+    }
+
     const cols = this.getLinkage(clusteringType);
     this.setDistance(distanceFn);
     return {

@@ -5,6 +5,7 @@ export const DistanceType = {
 };
 
 export const ClusteringType = {
+  ALPHABETICAL: 'alphabetical',
   FEATURE: 'feature',
   COMPLETE: 'complete',
   SINGLE: 'single',
