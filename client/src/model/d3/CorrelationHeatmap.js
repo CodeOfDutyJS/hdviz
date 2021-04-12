@@ -109,7 +109,7 @@ function correlationHeatmap({ cluster }) {
   d3.select(window)
     .on('resize', () => {
       d3.select('#area').selectAll('*').remove();
-      correlationHeatmap(cluster);
+      correlationHeatmap({ cluster });
     });
 }
 
