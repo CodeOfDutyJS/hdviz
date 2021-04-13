@@ -3,17 +3,28 @@
 
 const express = require('express');
 const fs = require('fs');
-const mysql = require('mysql');
-const serverModule = require ('./modules/ServerModule');
+//const mysql = require('mysql');
+//const serverModule = require ('./modules/ServerModule');
 const classe = require('./modules/mysqlClass');
 
 const app = express();
 const port = 1337;
 
-//this is a comment in get File
+
+const findDB = async function (config) {
+  const dbType = {
+    mysql: new classe.MySqlDatabase(config),
+    default: function(){
+      console.log('ERROREEEEEEEEEEEEE')}
+  };
+  return dbType[config.DB_Type];
+  // return new classe.MySqlDatabase(config);
+};
+
+
+
 function getFiles(dir, files_) {
   files_ = files_ || [];
-  //commenline
   const files = fs.readdirSync(dir);
   for (const i in files) {
     const name = `${dir}/${files[i]}`;
@@ -46,7 +57,6 @@ app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare
   console.log('api/getDatabases/ called');
 
   let databases = [];
-  console.log(config_files);
   for (i in config_files) {
     databases[i] = config_files[i].DB_Name;
   }
@@ -82,7 +92,7 @@ serverModule.connectTo(configurazione).then(conn => serverModule.showTables(conn
 //let colonne = await serverModule.showTables(connection,configurazione).catch(e => console.log(e));
 
 
-const database = await serverModule.findDB(configurazione);
+const database = await findDB(configurazione);
 const connection = await Promise.resolve( database.connectTo());
 
 let colonne = await Promise.resolve(database.showTable(connection));
@@ -117,7 +127,7 @@ app.get('/api/getData/',async (req, res) => {
   res.json(data);
   connection.end();*/
 
-  const database = await serverModule.findDB(configurazione);
+  const database = await findDB(configurazione);
 const connection = await Promise.resolve( database.connectTo());
 
 let data = await Promise.resolve( database.getMetadata(connection, dbtable));
