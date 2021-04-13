@@ -27,7 +27,7 @@ function getFiles(dir, files_) {
   return files_;
 }
 
-const config_files = getFiles('C:/Users/Matteo/Documents/HD VIZ/hdviz/hdviz/server/src/config');
+const config_files = getFiles(__dirname+'/config');
 
 function selectConfig(dbname) {
   for ( i in config_files) {
