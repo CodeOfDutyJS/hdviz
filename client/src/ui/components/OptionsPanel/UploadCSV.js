@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 import { Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { useStore2 } from '../../../store/RootStore';
+import { useStore } from '../../../store/RootStore';
 
 const UploadCSV = () => {
-  const { modelStore } = useStore2();
+  const { modelStore } = useStore();
   const [fileList, setFileList] = useState([]);
 
   const isCSV = (type) => type === 'application/vnd.ms-excel' || type === 'text/csv';

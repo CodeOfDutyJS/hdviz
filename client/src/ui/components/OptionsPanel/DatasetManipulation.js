@@ -8,13 +8,13 @@ import { observer } from 'mobx-react-lite';
 import { VisualizationType, DistanceType } from '../../../utils/constant';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
-import { useStore2 } from '../../../store/RootStore';
+import { useStore } from '../../../store/RootStore';
 
 const { Option } = Select;
 const { Item } = Form;
 
 const DatasetManipulation = observer(() => {
-  const { modelStore, visualizationStore } = useStore2();
+  const { modelStore, visualizationStore } = useStore();
   const [normalized, setNormalized] = useState(false);
   const [isDistanceMatrix, setIsDistanceMatrix] = useState(true);
 

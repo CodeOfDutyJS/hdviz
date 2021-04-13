@@ -18,4 +18,4 @@ export default RootStore;
 
 export const StoreContext = createContext(RootStore);
 export const StoreProvider = StoreContext.Provider;
-export const useStore2 = () => useContext(StoreContext);
+export const useStore = () => useContext(StoreContext);

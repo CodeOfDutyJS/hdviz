@@ -8,13 +8,13 @@ import { observer } from 'mobx-react-lite';
 import VisualizationSelection from './VisualizationSelection';
 import DatasetManipulation from './DatasetManipulation';
 import DataSource from './DataSource';
-import { useStore2 } from '../../../store/RootStore';
+import { useStore } from '../../../store/RootStore';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
 
 const OptionPanel = observer(() => {
-  const { visualizationStore, modelStore } = useStore2();
+  const { visualizationStore, modelStore } = useStore();
 
   return (
     <Sider id="settingPanel" width="none">
