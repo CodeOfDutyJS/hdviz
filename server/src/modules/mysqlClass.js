@@ -17,6 +17,10 @@ class Database {
     throw new Error('Can\'t SHOW to abstract class Database');
   }
 
+  async getMetadata(database){
+    throw new Error('Can\'t get datas from an abstract class Database');
+  }
+
   endConnection(conn){
     throw new Error('Can\'t end an abstract class Database');
   }
@@ -57,6 +61,42 @@ class MySqlDatabase {
           resolve(columns);
         }
       });
+    });
+  }
+  columnData(conn, table) {
+    return new Promise((resolve, reject) => {
+      conn.query(`SHOW Columns FROM ${table}`, (err, columns, fields) => {
+        if (err) {
+          reject('error in the columnData query');
+        } else {
+          const output = {};
+          // console.log(columns);
+          for (const column of columns) {
+            output[column.Field] = column.Type;
+          }
+          resolve(output);
+        }
+      });
+    });
+  }
+  
+  rowData(conn, table) {
+    return new Promise((resolve, reject) => {
+      conn.query(`SELECT * FROM ${table}`, (err, rows, fields) => {
+        if (err) {
+          reject('Error in the rowData query');
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  }
+  async getMetadata(conn, table){
+    return new Promise((resolve, reject) => {
+      const promise1 = this.columnData(conn, table).catch((e) => console.log(e)); // non serve await perché fa tutto Promise.all
+      const promise2 = this.rowData(conn, table).catch((e) => console.log(e));
+  
+      Promise.all([promise1, promise2]).then((values) => resolve(values));
     });
   }
 

@@ -110,12 +110,20 @@ app.get('/api/getData/',async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
   res.json(data);
   }) );*/
-
+/*
   const connection = await serverModule.connectTo(configurazione).catch(e => console.log(e));;
   let data = await serverModule.getMetaData(connection, dbtable, configurazione).catch(e => console.log(e));;
   res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
   res.json(data);
-  connection.end();
+  connection.end();*/
+
+  const database = await serverModule.findDB(configurazione);
+const connection = await Promise.resolve( database.connectTo());
+
+let data = await Promise.resolve( database.getMetadata(connection, dbtable));
+res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
+res.json(data);
+database.endConnection(connection);
 
 
 console.log('api/getDatabases/ terminated successfully');
