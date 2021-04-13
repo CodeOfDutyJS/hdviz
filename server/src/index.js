@@ -10,9 +10,10 @@ const classe = require('./modules/mysqlClass');
 const app = express();
 const port = 1337;
 
-
+//this is a comment in get File
 function getFiles(dir, files_) {
   files_ = files_ || [];
+  //commenline
   const files = fs.readdirSync(dir);
   for (const i in files) {
     const name = `${dir}/${files[i]}`;
@@ -83,6 +84,7 @@ serverModule.connectTo(configurazione).then(conn => serverModule.showTables(conn
 
 const database = await serverModule.findDB(configurazione);
 const connection = await Promise.resolve( database.connectTo());
+
 let colonne = await Promise.resolve(database.showTable(connection));
 res.setHeader('Access-Control-Allow-Origin', '*');
 res.json(colonne);
