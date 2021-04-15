@@ -3,12 +3,15 @@
 
 const express = require('express');
 const fs = require('fs');
+//const bodyParser = require('body-parser');
+
 const MysqlDatabase = require('./modules/MySQLDB');
 const MongoDB = require('./modules/MongoDB');
 
 
 const app = express();
 const port = 1337;
+
 
 const findDB = async function (config) {
   const dbType = {
@@ -67,7 +70,8 @@ app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare
 
 
 app.get('/api/getTable', async (req, res) => {
-  var dbname = req.param('dbname');
+  console.log("getTable called");
+  let dbname = req.query.dbname;
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
@@ -87,8 +91,10 @@ database.endConnection(connection);
 
 app.get('/api/getData/',async (req, res) => {
 console.log("getData called");
-  let dbname = req.param('dbname');
-  let dbtable = req.param('dbtable')
+  let dbname = req.query.dbname;
+  let dbtable = req.query.dbtable;
+
+
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
