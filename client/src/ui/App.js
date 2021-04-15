@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Layout, PageHeader } from 'antd';
 
-import OptionPanel from './components/OptionsPanel/OptionPanel';
+import { OptionPanel } from './components/OptionsPanel/index';
 import Visualization from './components/Visualization/Visualization';
 
 // import 'antd/dist/antd.css';

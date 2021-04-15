@@ -1,4 +1,4 @@
-import VisualizationModel from '../VisualizationModel';
+import { VisualizationModel } from '../index';
 
 class ScatterPlotMatrixModel extends VisualizationModel {
   getPreparedDataset() {

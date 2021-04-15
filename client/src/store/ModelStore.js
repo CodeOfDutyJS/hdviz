@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import Papa from 'papaparse';
-import DataModel from '../model/DataModel';
+import { DataModel } from '../model/index';
 import { VisualizationType } from '../utils/visualizations';
 
 const parseFile = (rawFile) => new Promise((resolve, reject) => {

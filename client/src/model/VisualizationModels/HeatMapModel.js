@@ -1,7 +1,7 @@
 import { distance } from 'ml-distance';
 import { Matrix, correlation } from 'ml-matrix';
 import { DistanceType, ClusteringType } from '../../utils/options';
-import VisualizationModel from '../VisualizationModel';
+import { VisualizationModel } from '../index';
 
 class HeatMapModel extends VisualizationModel {
   constructor(dataModel, distanceFn = distance.euclidean) {
@@ -162,7 +162,7 @@ class HeatMapModel extends VisualizationModel {
     return this.getDistanceMatrix();
   }
 
-  getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.ALPHABETICAL }) {
+  getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.SINGLE }) {
     this.setDistance(DistanceType.PEARSONS);
     if (clusteringType === ClusteringType.ALPHABETICAL) {
       return {

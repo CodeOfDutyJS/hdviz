@@ -1,5 +1,5 @@
 import { makeAutoObservable, observable } from 'mobx';
-import clearVisualization from './d3/ClearVisualization';
+import { clearVisualization } from './d3/index';
 
 class VisualizationManager {
   _visualizationSelected = null;
