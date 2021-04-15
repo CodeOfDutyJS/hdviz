@@ -3,22 +3,21 @@
 
 const express = require('express');
 const fs = require('fs');
-//const mysql = require('mysql');
-//const serverModule = require ('./modules/ServerModule');
-const classe = require('./modules/mysqlClass');
+const MysqlDatabase = require('./modules/MySQLDB');
+const MongoDB = require('./modules/MongoDB');
+
 
 const app = express();
 const port = 1337;
 
-
 const findDB = async function (config) {
   const dbType = {
-    mysql: new classe.MySqlDatabase(config),
+    MySQL: new MysqlDatabase(config),
+    MongoDB: new MongoDB(config),
     default: function(){
       console.log('ERROREEEEEEEEEEEEE')}
   };
   return dbType[config.DB_Type];
-  // return new classe.MySqlDatabase(config);
 };
 
 
@@ -40,7 +39,7 @@ function getFiles(dir, files_) {
 
 const config_files = getFiles(__dirname+'/config');
 
-function selectConfig(dbname) {
+ function selectConfig(dbname) {
   for ( i in config_files) {
     if (dbname == config_files[i].DB_Name) {
       return config_files[i];
@@ -54,7 +53,6 @@ app.listen(port, () => {
 });
 
 app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
-  console.log('api/getDatabases/ called');
 
   let databases = [];
   for (i in config_files) {
@@ -70,76 +68,41 @@ app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare
 
 app.get('/api/getTable', async (req, res) => {
   var dbname = req.param('dbname');
-  //var dbname = req.body.name;                     //verificare se il modo in cui si fa fetch va bene da parte client
-  console.log('api/getTables/ called');
-
-
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
     res.send(0); // Si Può?
   }
 
-/*
-serverModule.connectTo(configurazione).then(conn => serverModule.showTables(conn,configurazione).then(col => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-   res.json(col);
-   
-}
-).then(conn.end() )); */  //volendo usare await per codice più leggibile
-
-//const connection = await serverModule.connectTo(configurazione).catch(e => console.log(e));
-//let colonne = await serverModule.showTables(connection,configurazione).catch(e => console.log(e));
-
 
 const database = await findDB(configurazione);
 const connection = await Promise.resolve( database.connectTo());
-
-let colonne = await Promise.resolve(database.showTable(connection));
+let tables = await Promise.resolve(database.getTables(connection));
 res.setHeader('Access-Control-Allow-Origin', '*');
-res.json(colonne);
+res.json(tables);
 database.endConnection(connection);
-
-
-  console.log('api/getTables/ terminated successfully');
 
 });
 
 
 app.get('/api/getData/',async (req, res) => {
-  console.log('api/getData/ called');
-  var dbname = req.param('dbname');
-  var dbtable = req.param('dbtable')
+console.log("getData called");
+  let dbname = req.param('dbname');
+  let dbtable = req.param('dbtable')
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
     res.send(0); // Si Può?
   }
-/*
-  serverModule.connectTo(configurazione).then(conn => serverModule.getMetaData( conn,dbtable,configurazione).then( data => {
-    res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
-  res.json(data);
-  }) );*/
-/*
-  const connection = await serverModule.connectTo(configurazione).catch(e => console.log(e));;
-  let data = await serverModule.getMetaData(connection, dbtable, configurazione).catch(e => console.log(e));;
-  res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
-  res.json(data);
-  connection.end();*/
+
+
 
   const database = await findDB(configurazione);
 const connection = await Promise.resolve( database.connectTo());
 
-let data = await Promise.resolve( database.getMetadata(connection, dbtable));
+let data = await Promise.resolve( database.getData(connection, dbtable));
 res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
 res.json(data);
 database.endConnection(connection);
 
-
-console.log('api/getDatabases/ terminated successfully');
-
-
     });
-
-
-// Nome DB, nome collonne, descrizione query
