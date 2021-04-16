@@ -1,4 +1,4 @@
-import { transpose, mean, extent } from 'd3';
+import { transpose, extent } from 'd3';
 import { PCA } from 'ml-pca';
 import VisualizationModel from '../VisualizationModel';
 
@@ -24,6 +24,7 @@ class LinearProjectionModel extends VisualizationModel {
 
   getPreparedDataset() {
     const projection = this.pca({ scale: true });
+
     const label = this.dataModel.getTargetColumns();
 
     const preparedPoints = [];
@@ -47,12 +48,11 @@ class LinearProjectionModel extends VisualizationModel {
     return {
       points: preparedPoints,
       axis: preparedAxis,
-      rangeX: extent(preparedPoints.map((d) => d.x)),
-      rangeY: extent(preparedPoints.map((d) => d.y)),
-      mean: {
-        meanx: mean(preparedPoints.map((d) => d.x)),
-        meany: mean(preparedPoints.map((d) => d.y)),
-      },
+      points_rangeX: extent(preparedPoints.map((d) => d.x)),
+      points_rangeY: extent(preparedPoints.map((d) => d.y)),
+      axis_rangeX: extent(preparedAxis.map((d) => d.x)),
+      axis_rangeY: extent(preparedAxis.map((d) => d.y)),
+      target: this.dataModel.targets.length > 0 ? [...new Set(label.map((d) => d[this.dataModel.targets[0]]))] : null,
     };
   }
 }
