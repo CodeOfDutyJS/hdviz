@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import * as d3 from 'd3';
+import drawTargetLegend from './DrawTargetLegend';
 
 function forceField(data) {
   const drag = (simulation) => {
@@ -42,9 +43,10 @@ function forceField(data) {
 
   const svg = d3.select('#area');
 
-  const { width } = svg.node().getBoundingClientRect();
+  let { width } = svg.node().getBoundingClientRect();
   const { height } = svg.node().getBoundingClientRect();
 
+  width -= 300;
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links)
       .distance((d) => d.value)
@@ -70,6 +72,14 @@ function forceField(data) {
       .attr('cx', (d) => d.x)
       .attr('cy', (d) => d.y);
   });
+
+  drawTargetLegend(color, data.selectedTarget, width + 50, 0, height - 100, 25);
+
+  d3.select(window)
+    .on('resize', () => {
+      d3.select('#area').selectAll('*').remove();
+      forceField(data);
+    });
 }
 
 export default forceField;

@@ -102,7 +102,7 @@ function correlationHeatmap({ cluster }) {
     .transition()
     .style('opacity', 1);
 
-  drawColorScale(c, [-1, 0, 1], width + 150, 100, 100, 25, 'Pearson Coefficent');
+  drawColorScale(c, [-1, 0, 1], width + 150, 30, 100, 25, 'Pearson Coefficent');
 
   const aspect = width / height;
   const chart = d3.select('#area');

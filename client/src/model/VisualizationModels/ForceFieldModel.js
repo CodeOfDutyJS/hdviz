@@ -40,6 +40,7 @@ class ForceFieldModel extends VisualizationModel {
     return {
       nodes: this.getNodes(maxNodes),
       links: this.getLinks(distanceFn, maxNodes, maxLinks),
+      selectedTarget: this.dataModel.getTargetColumns(),
     };
   }
 }

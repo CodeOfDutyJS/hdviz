@@ -169,6 +169,7 @@ class HeatMapModel extends VisualizationModel {
         cluster: this.getAlphaticallySorted(),
         clusterCols: this.getLinkage(ClusteringType.SINGLE),
         targetCols: this.dataModel.targets,
+        selectedTarget: this.dataModel.getTargetColumns(),
       };
     }
 
@@ -178,6 +179,7 @@ class HeatMapModel extends VisualizationModel {
       cluster: this.getLinkage(clusteringType),
       clusterCols: cols,
       targetCols: this.dataModel.targets,
+      selectedTarget: this.dataModel.getTargetColumns(),
     };
   }
 }

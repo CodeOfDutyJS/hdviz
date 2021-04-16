@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import drawColorScale from './DrawColorScale';
+import drawTargetLegend from './DrawTargetLegend';
 
 function getLeaves(cluster) {
   let leaves = [];
@@ -35,12 +36,11 @@ function dataGrid(cluster, cols) {
   return toGrid;
 }
 
-function drawTargetRows(cluster, cols, margin) {
+function drawTargetRows(cluster, cols, margin, selectedTarget) {
   const grid = dataGrid(cluster, cols);
   const rows = d3.max(grid, (d) => d.row);
   const svg = d3.select('#area');
-  const color = d3.scaleOrdinal()
-    .range(d3.schemeCategory10);
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
   let { width, height } = svg.node().getBoundingClientRect();
   width -= margin.right;
   height -= margin.top;
@@ -87,12 +87,15 @@ function drawTargetRows(cluster, cols, margin) {
     .style('opacity', 1e-5)
     .transition()
     .style('opacity', 1);
+
+  drawTargetLegend(color, selectedTarget, width + margin.left + 25 * cols.length + 200, 0, height, 25);
 }
 
 function heatmap({
   cluster,
   clusterCols,
   targetCols,
+  selectedTarget,
 }) {
   console.log('heatmap');
   const svg = d3.select('#area');
@@ -154,8 +157,8 @@ function heatmap({
     .transition()
     .style('opacity', 1);
 
-  drawTargetRows(cluster, targetCols, margin);
-  drawColorScale(c, [-3, 3], width + (targetCols.length * 25) + 50, height - 100, 100, 25, 'Standard Deviation');
+  drawTargetRows(cluster, targetCols, margin, selectedTarget);
+  drawColorScale(c, [-3, 3], width + (targetCols.length * 25) + 50, 30, 100, 25, 'Standard Deviation');
 
   d3.select(window)
     .on('resize', () => {
@@ -164,6 +167,7 @@ function heatmap({
         cluster,
         clusterCols,
         targetCols,
+        selectedTarget,
       });
     });
 }
