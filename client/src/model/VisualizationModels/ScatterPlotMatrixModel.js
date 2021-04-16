@@ -6,6 +6,7 @@ class ScatterPlotMatrixModel extends VisualizationModel {
       data: this.dataModel.getSelectedDataset(),
       features: this.dataModel.features,
       targets: this.dataModel.targets,
+      selectedTarget: this.dataModel.getTargetColumns(),
     };
   }
 }
