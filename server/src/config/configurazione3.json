@@ -4,5 +4,5 @@
   "DB_Address": "localhost",
   "DB_Username": "root",
   "DB_Password": "",
-  "DB_Type": "MySQL"
+  "DB_Type": "mysql"
 }

@@ -3,8 +3,6 @@
 
 const express = require('express');
 const fs = require('fs');
-//const bodyParser = require('body-parser');
-
 const MysqlDatabase = require('./modules/MySQLDB');
 const MongoDB = require('./modules/MongoDB');
 
@@ -15,8 +13,8 @@ const port = 1337;
 
 const findDB = async function (config) {
   const dbType = {
-    MySQL: new MysqlDatabase(config),
-    MongoDB: new MongoDB(config),
+    mysql: new MysqlDatabase(config),
+    mongodb: new MongoDB(config),
     default: function(){
       console.log('ERROREEEEEEEEEEEEE')}
   };

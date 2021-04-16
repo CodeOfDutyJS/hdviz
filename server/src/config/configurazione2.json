@@ -2,5 +2,5 @@
   {
   "DB_Name": "Mongodb",
   "DB_Address": "mongodb://localhost:27017/",
-  "DB_Type": "MongoDB"
+  "DB_Type": "mongodb"
 }
