@@ -1,24 +1,20 @@
-/* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import {
-  Form, Select, Checkbox, Button,
+  Form, Select, Checkbox,
 } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { useStore } from '../../../controller/ControllerProvider';
 import { VisualizationType, DistanceType } from '../../../utils/constant';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
-import { useStore2 } from '../../../store/RootStore';
+import { useStore } from '../../../store/RootStore';
 
 const { Option } = Select;
 const { Item } = Form;
 
 const DatasetManipulation = observer(() => {
-  const { modelStore, visualizationStore } = useStore2();
-
-  const store = useStore();
+  const { modelStore, visualizationStore } = useStore();
   const [normalized, setNormalized] = useState(false);
   const [isDistanceMatrix, setIsDistanceMatrix] = useState(true);
 
@@ -31,7 +27,7 @@ const DatasetManipulation = observer(() => {
   };
 
   const onDistanceChanged = (_distance) => {
-    store.setDistance(_distance);
+    modelStore.setDistance(_distance);
   };
 
   return (
@@ -41,7 +37,6 @@ const DatasetManipulation = observer(() => {
 
       {visualizationStore.visualizationSelected === VisualizationType.FORCEFIELD
         ? (
-          // eslint-disable-next-line max-len
           <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={isDistanceMatrix}>Calculate Distance Matrix</Checkbox>}>
             {isDistanceMatrix ? (
               <Select placeholder="Select distance" onChange={visualizationStore.setDistance}>

@@ -12,8 +12,14 @@ const VisualizationType = {
     model: new ScatterPlotMatrixModel(),
     visualization: scatterPlotMatrix,
   },
-  HEATMAP: { id: 'heatmap', label: 'Heatmap' },
-  CORRELATION_HEATMAP: { id: 'correlation', label: 'Correlation Heatmap' },
+  HEATMAP: {
+    id: 'heatmap',
+    label: 'Heatmap',
+  },
+  CORRELATION_HEATMAP: {
+    id: 'correlation',
+    label: 'Correlation Heatmap',
+  },
   FORCEFIELD: {
     id: 'force',
     label: 'Force Field',
@@ -26,7 +32,10 @@ const VisualizationType = {
     model: new LinearProjectionModel(),
     visualization: linearProjection,
   },
-  PARALLEL_COORDINATES: { id: 'parallel', label: 'Parallel Coordinates' },
+  PARALLEL_COORDINATES: {
+    id: 'parallel',
+    label: 'Parallel Coordinates',
+  },
 };
 
 const DistanceType = {

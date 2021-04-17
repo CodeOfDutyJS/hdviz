@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-function scatterPlotMatrix(data, features, targets) {
+function scatterPlotMatrix({ data, features, targets }) {
   const columns = Object.keys(data[0]).filter((value) => features.includes(value));
   const svg = d3.select('#area');
   const { width } = svg.node().getBoundingClientRect();
