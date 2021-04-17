@@ -5,7 +5,8 @@ import {
 } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { VisualizationType, DistanceType } from '../../../utils/constant';
+import { VisualizationType } from '../../../utils/visualizations';
+import { DistanceType } from '../../../utils/options';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
 import { useStore } from '../../../store/RootStore';
@@ -35,7 +36,7 @@ const DatasetManipulation = observer(() => {
       <FeatureSelection />
       <TargetSelection />
 
-      {visualizationStore.visualizationSelected === VisualizationType.FORCEFIELD
+      {(visualizationStore.visualizationSelected === VisualizationType.FORCEFIELD || visualizationStore.visualizationSelected === VisualizationType.HEATMAP)
         ? (
           <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={isDistanceMatrix}>Calculate Distance Matrix</Checkbox>}>
             {isDistanceMatrix ? (
