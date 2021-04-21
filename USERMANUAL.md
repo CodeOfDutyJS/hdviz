@@ -1,4 +1,4 @@
-# :construction: HD Viz Manuale Utente [WIP] :construction:
+# :construction: HD Viz Manuale Utente v0.2.0 [WIP] :construction:
 
 ## Indice
 - [Introduzione](#introduzione)
