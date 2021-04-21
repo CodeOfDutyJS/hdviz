@@ -3,13 +3,13 @@ import React from 'react';
 import { Form, Select } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { useStore2 } from '../../../store/RootStore';
+import { useStore } from '../../../store/RootStore';
 
 const { Option } = Select;
 const { Item } = Form;
 
 const TargetSelection = observer(() => {
-  const { modelStore, uiStore } = useStore2();
+  const { modelStore, uiStore } = useStore();
 
   return (
     <Item

@@ -1,6 +1,5 @@
 import * as d3 from 'd3';
 import VisualizationModel from '../VisualizationModel';
-import forceField from '../d3/ForceField';
 
 class ForceFieldModel extends VisualizationModel {
   getNodes(maxNodes) {
