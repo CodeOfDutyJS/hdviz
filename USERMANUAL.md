@@ -1,5 +1,28 @@
 # HD Viz
 
+## Indice
+- [Introduzione](#introduzione)
+  * [Scopo del prodotto](#scopo-del-prodotto)
+- [Requisiti di sistema](#requisiti-di-sistema)
+  * [Prerequisiti](#prerequisiti)
+  * [Requisiti Software](#requisiti-software)
+  * [Requisiti Hardware](#requisiti-hardware)
+- [Server (opzionale)](#server--opzionale-)
+  * [Installazione](#installazione)
+  * [Configurazione](#configurazione)
+  * [Esecuzione](#esecuzione)
+- [Web App (necessario)](#web-app--necessario-)
+  * [Installazione](#installazione-1)
+  * [Esecuzione](#esecuzione-1)
+- [Istruzioni per l'utilizzo di HD Viz](#istruzioni-per-l-utilizzo-di-hd-viz)
+  * [Caricamento dataset](#caricamento-dataset)
+    + [Caricamento tramite file .csv](#caricamento-tramite-file-csv)
+    + [Caricamento tramite DB](#caricamento-tramite-db)
+  * [Selezione tipo di visualizzazione](#selezione-tipo-di-visualizzazione)
+  * [Selezione variabili feature e target](#selezione-variabili-feature-e-target)
+  * [Opzioni di Visualizzazione](#opzioni-di-visualizzazione)
+  * [Visualizzazione grafico](#visualizzazione-grafico)
+
 ## Introduzione
 
 ### Scopo del prodotto
