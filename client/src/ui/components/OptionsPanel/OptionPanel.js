@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Layout, Collapse, PageHeader, Button, Alert,
 } from 'antd';
-
 import { observer } from 'mobx-react-lite';
 import VisualizationSelection from './VisualizationSelection';
 import DatasetManipulation from './DatasetManipulation';
@@ -41,7 +40,6 @@ const OptionPanel = observer(() => {
       <Layout id="start-button">
         <Button type="primary" shape="round" onClick={visualizationStore.start}>Start</Button>
       </Layout>
-
       {store.success ? <Alert type="success" message="Success Text" closable onClose={() => { store.success = false; }} /> : null}
     </Sider>
   );

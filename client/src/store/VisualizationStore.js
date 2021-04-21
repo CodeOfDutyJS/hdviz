@@ -8,6 +8,8 @@ class VisualizationStore {
   rootStore;
 
   _visualization = null;
+  targetColor1 = '#ecf1f5';
+  targetColor2 = '#efd2d0';
 
   constructor(rootStore) {
     this.rootStore = rootStore;
