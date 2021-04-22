@@ -22,8 +22,8 @@ const parseFile = (rawFile) => new Promise((resolve, reject) => {
 
 class ModelStore {
   rootStore;
-
   dataModel = null;
+  loadingCompleted = false;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -35,8 +35,8 @@ class ModelStore {
 
   async uploadCSV(file) {
     try {
-      const _data = await parseFile(file);
-      this.dataset = _data;
+      this.dataset = await parseFile(file);
+      this.loadingCompleted = true;
     } catch (error) {
       // TODO: visualizzare errore
       console.log(error);
@@ -61,6 +61,8 @@ class ModelStore {
 
   set dataset(value) {
     this.dataModel.dataset = value;
+
+    this.rootStore.uiStore.loadingDataCompleted = true;
   }
 
   get columns() {

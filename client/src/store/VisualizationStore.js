@@ -1,8 +1,7 @@
 import { distance } from 'ml-distance';
-import { makeAutoObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import VisualizationManager from '../model/VisualizationManager';
-
-import { VisualizationType } from '../utils/constant';
+import VisualizationCollector from '../model/VisualizationsCollector';
 
 class VisualizationStore {
   rootStore;
@@ -36,7 +35,7 @@ class VisualizationStore {
   }
 
   setVisualizationSelected(value) {
-    this._visualization._visualizationSelected = Object.values(VisualizationType).find((v) => v.id === value);
+    this.visualizationSelected = VisualizationCollector.visualizations[value];
 
     this.rootStore.modelStore.checkFeatures();
   }

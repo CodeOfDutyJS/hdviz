@@ -3,19 +3,22 @@ import { CompactPicker } from 'react-color';
 import { Form, Select } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { useStore2 } from '../../../store/RootStore';
+import { useStore } from '../../../store/RootStore';
 
 const { Option } = Select;
 const { Item } = Form;
 
 const TargetSelection = observer(() => {
-  const { modelStore, uiStore, visualizationStore } = useStore2();
+  const { modelStore, uiStore, visualizationStore } = useStore();
+  
   const setTargetColor1 = (color) => {
     visualizationStore.targetColor1 = color.hex;
   };
+  
   const setTargetColor2 = (color) => {
     visualizationStore.targetColor2 = color.hex;
   };
+
   return (
     <>
       <Item

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Select, Form, Button } from 'antd';
+import React from 'react';
+import { Select, Form } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { VisualizationType } from '../../../utils/constant';
-import { useStore2 } from '../../../store/RootStore';
+import { useStore } from '../../../store/RootStore';
+import VisualizationCollector from '../../../model/VisualizationsCollector';
 
 const { Option } = Select;
 const { Item } = Form;
 
 const VisualizationSelection = observer(() => {
-  const { visualizationStore } = useStore2();
+  const { visualizationStore } = useStore();
 
   return (
     <Form>
@@ -22,7 +22,7 @@ const VisualizationSelection = observer(() => {
           onSelect={visualizationStore.setVisualizationSelected}
           value={visualizationStore.visualizationSelected?.id}
         >
-          {Object.values(VisualizationType).map((item) => (
+          {Object.values(VisualizationCollector.visualizations).map((item) => (
             <Option key={item.id}>
               {item.label}
             </Option>
