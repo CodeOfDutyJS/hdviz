@@ -14,7 +14,7 @@ import correlationHeatmap from '../model/d3/CorrelationHeatmap';
 import heatmap from '../model/d3/Heatmap';
 import DataModel from '../model/DataModel';
 import ForceFieldModel from '../model/VisualizationModels/ForceFieldModel';
-import ScatterPlotMatrixModel from '../model/VisualizationModels/ScatterPlotMatrixModel';
+// import ScatterPlotMatrixModel from '../model/VisualizationModels/ScatterPlotMatrixModel';
 import LinearProjectionModel from '../model/VisualizationModels/LinearProjectionModel';
 import HeatMapModel from '../model/VisualizationModels/HeatMapModel';
 import { DistanceType, ClusteringType, VisualizationType } from '../utils/constant';
@@ -155,11 +155,11 @@ class Controller {
         linearProjection(lpm.getPreparedDataset());
         break;
       }
-      case VisualizationType.SCATTER_PLOT_MATRIX: {
-        const spm = new ScatterPlotMatrixModel(this.model);
-        scatterPlotMatrix(spm.getPreparedDataset());
-        break;
-      }
+      // case VisualizationType.SCATTER_PLOT_MATRIX: {
+      //   const spm = new ScatterPlotMatrixModel(this.model);
+      //   scatterPlotMatrix(spm.getPreparedDataset());
+      //   break;
+      // }
       case VisualizationType.CORRELATION_HEATMAP: {
         correlationHeatmap(new HeatMapModel(this.model)
           .setDistance(DistanceType.PEARSONS)

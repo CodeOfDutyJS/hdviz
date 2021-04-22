@@ -3,9 +3,6 @@ import { makeAutoObservable, observable } from 'mobx';
 import VisualizationManager from '../model/VisualizationManager';
 import VisualizationCollector from '../model/VisualizationsCollector';
 
-import { VisualizationType } from '../utils/constant';
-import VisualizationTypes from '../utils/VisualizationTypes';
-
 class VisualizationStore {
   rootStore;
 

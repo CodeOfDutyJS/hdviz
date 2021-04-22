@@ -61,6 +61,8 @@ class ModelStore {
 
   set dataset(value) {
     this.dataModel.dataset = value;
+
+    this.rootStore.uiStore.loadingDataCompleted = true;
   }
 
   get columns() {

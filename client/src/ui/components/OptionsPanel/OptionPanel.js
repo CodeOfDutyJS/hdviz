@@ -15,7 +15,7 @@ const { Sider } = Layout;
 const { Panel } = Collapse;
 
 const OptionPanel = observer(() => {
-  const { visualizationStore } = useStore2();
+  const { visualizationStore, uiStore } = useStore2();
   const store = useStore();
 
   return (
@@ -31,7 +31,7 @@ const OptionPanel = observer(() => {
         <Panel header="Visualization" key="2">
           <VisualizationSelection />
         </Panel>
-        <Panel header="Dataset manipulation" key="3" collapsible={store.loadingCompleted ? 'header' : 'disabled'}>
+        <Panel header="Dataset manipulation" key="3" collapsible={uiStore.loadingDataCompleted ? 'header' : 'disabled'}>
           <DatasetManipulation />
         </Panel>
         <Panel header="Settings" key="4" style={{ display: 'none' }}>

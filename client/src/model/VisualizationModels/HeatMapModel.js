@@ -1,6 +1,9 @@
 import { distance } from 'ml-distance';
 import * as jeezy from 'jeezy';
 import { DistanceType, ClusteringType } from '../../utils/constant';
+// eslint-disable-next-line import/no-cycle
+import heatmap from '../d3/Heatmap';
+import VisualizationCollector from '../VisualizationsCollector';
 
 class HeatMapModel {
   constructor(dataModel, distanceFn = distance.euclidean) {
@@ -208,20 +211,9 @@ class HeatMapModel {
   }
 }
 
-/*
-matrix = [
-  {
-    cluster: {},
-    distances: []
-  },
-  {
-    cluster: {}
-    distances: [],
-  }
-]
-
-the distance matrix always is n colunms and n rows, easy to update on removal
-and when adding elements, as long as we push on the end.
-*/
-
-export default HeatMapModel;
+VisualizationCollector.addVisualization({
+  id: 'heatmap',
+  label: 'Heatmap',
+  model: new HeatMapModel(),
+  visualization: heatmap,
+});

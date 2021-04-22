@@ -1,6 +1,9 @@
 import * as mat from 'mathjs';
 import { PCA } from 'ml-pca';
+import VisualizationTypes from '../../utils/VisualizationTypes';
+import linearProjection from '../d3/LinearProjection';
 import VisualizationModel from '../VisualizationModel';
+import VisualizationCollector from '../VisualizationsCollector';
 
 class LinearProjectionModel extends VisualizationModel {
   // calcola la trasposta di una matrice, ritorna solo le prime due colonne (i due componenti pca)
@@ -122,5 +125,12 @@ class LinearProjectionModel extends VisualizationModel {
     };
   }
 }
+
+VisualizationCollector.addVisualization({
+  id: 'linear',
+  label: 'Linear Projection',
+  model: new LinearProjectionModel(),
+  visualization: linearProjection,
+});
 
 export default LinearProjectionModel;

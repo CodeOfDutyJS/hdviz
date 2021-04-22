@@ -10,7 +10,8 @@ const UploadCSV = () => {
   const [fileList, setFileList] = useState([]);
   const store = useStore();
 
-  const isCSV = (type) => type === 'application/vnd.ms-excel' || type === 'text/csv';
+  // const isCSV = (type) => type === 'application/vnd.ms-excel' || type === 'text/csv';
+  const isCSV = (type) => true;
 
   const onFileUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList.slice(-1));
