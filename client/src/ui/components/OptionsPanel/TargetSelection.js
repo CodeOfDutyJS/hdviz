@@ -12,11 +12,9 @@ const TargetSelection = observer(() => {
   const { modelStore, uiStore, visualizationStore } = useStore2();
   const setTargetColor1 = (color) => {
     visualizationStore.targetColor1 = color.hex;
-    console.log(visualizationStore.targetColor1);
   };
   const setTargetColor2 = (color) => {
     visualizationStore.targetColor2 = color.hex;
-    console.log(visualizationStore.targetColor2);
   };
   return (
     <>
@@ -35,16 +33,19 @@ const TargetSelection = observer(() => {
           {modelStore.columns.map((item) => <Option key={item.value}>{item.value}</Option>)}
         </Select>
       </Item>
-      <Item
-        label="Colore primo target"
-      >
-        { visualizationStore._visualization._visualizationSelected.id !== 'heatmap' ? <CompactPicker color={visualizationStore.targetColor1} onChange={setTargetColor1} /> : null }
-      </Item>
-      <Item
-        label="Colore secondo target"
-      >
-        { visualizationStore._visualization._visualizationSelected.id !== 'heatmap' ? <CompactPicker color={visualizationStore.targetColor2} onChange={setTargetColor2} /> : null }
-      </Item>
+
+      { visualizationStore._visualization._visualizationSelected.id === 'heatmap'
+        ? (
+          <>
+            <Item label="Colore inzio target">
+              <CompactPicker color={visualizationStore.targetColor1} onChange={setTargetColor1} />
+            </Item>
+            <Item label="Colore fine target">
+              <CompactPicker color={visualizationStore.targetColor2} onChange={setTargetColor2} />
+            </Item>
+          </>
+        )
+        : null}
     </>
   );
 });

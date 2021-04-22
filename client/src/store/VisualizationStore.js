@@ -36,7 +36,7 @@ class VisualizationStore {
   }
 
   setVisualizationSelected(value) {
-    this.visualizationSelected = Object.values(VisualizationType).find((v) => v.id === value);
+    this._visualization._visualizationSelected = Object.values(VisualizationType).find((v) => v.id === value);
 
     this.rootStore.modelStore.checkFeatures();
   }
