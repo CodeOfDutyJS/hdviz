@@ -4,7 +4,11 @@ import VisualizationCollector from '../VisualizationsCollector';
 
 class ScatterPlotMatrixModel extends VisualizationModel {
   getPreparedDataset() {
-    return this.dataModel.getSelectedDataset();
+    return {
+      data: this.dataModel.getSelectedDataset(),
+      features: this.dataModel.features,
+      targets: this.dataModel.targets,
+    };
   }
 }
 

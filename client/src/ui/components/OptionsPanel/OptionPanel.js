@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import {
-  Layout, Collapse, PageHeader, Button, Alert,
+  Layout, Collapse, PageHeader, Button,
 } from 'antd';
 
 import { observer } from 'mobx-react-lite';
 import VisualizationSelection from './VisualizationSelection';
 import DatasetManipulation from './DatasetManipulation';
-import { useStore } from '../../../controller/ControllerProvider';
 import DataSource from './DataSource';
-import { useStore2 } from '../../../store/RootStore';
+import { useStore } from '../../../store/RootStore';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
 
 const OptionPanel = observer(() => {
-  const { visualizationStore, uiStore } = useStore2();
-  const store = useStore();
+  const { visualizationStore, uiStore } = useStore();
 
   return (
     <Sider id="settingPanel" width="none">
@@ -41,8 +39,10 @@ const OptionPanel = observer(() => {
       <Layout id="start-button">
         <Button type="primary" shape="round" onClick={visualizationStore.start}>Start</Button>
       </Layout>
-
-      {store.success ? <Alert type="success" message="Success Text" closable onClose={() => { store.success = false; }} /> : null}
+      {
+        // MESSAGGIO DI SUCCESSO
+        // {store.success ? <Alert type="success" message="Success Text" closable onClose={() => { store.success = false; }} /> : null}
+      }
     </Sider>
   );
 });

@@ -3,15 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './ui/App';
 
-import { ControllerProvider } from './controller/ControllerProvider';
-import Controller from './controller/Controller';
-
 import RootStore, { StoreProvider } from './store/RootStore';
 
 import './model/VisualizationModels';
-import VisualizationTypes from './utils/VisualizationTypes';
-
-const controller = new Controller();
 
 const rootStore = new RootStore();
 
@@ -22,9 +16,7 @@ const rootStore = new RootStore();
 
 ReactDOM.render(
   <StoreProvider value={rootStore}>
-    <ControllerProvider value={controller}>
-      <App />
-    </ControllerProvider>
+    <App />
   </StoreProvider>,
   document.getElementById('root'),
 );

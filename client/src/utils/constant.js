@@ -26,7 +26,10 @@ const VisualizationType = {
     model: new LinearProjectionModel(),
     visualization: linearProjection,
   },
-  PARALLEL_COORDINATES: { id: 'parallel', label: 'Parallel Coordinates' },
+  PARALLEL_COORDINATES: {
+    id: 'parallel',
+    label: 'Parallel Coordinates',
+  },
 };
 
 const DistanceType = {
