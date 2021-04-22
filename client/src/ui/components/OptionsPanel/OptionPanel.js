@@ -3,7 +3,6 @@ import React from 'react';
 import {
   Layout, Collapse, PageHeader, Button,
 } from 'antd';
-
 import { observer } from 'mobx-react-lite';
 import VisualizationSelection from './VisualizationSelection';
 import DatasetManipulation from './DatasetManipulation';

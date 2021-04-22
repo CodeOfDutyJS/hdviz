@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { CompactPicker } from 'react-color';
 import { Form, Select } from 'antd';
 
 import { observer } from 'mobx-react-lite';
@@ -9,24 +9,47 @@ const { Option } = Select;
 const { Item } = Form;
 
 const TargetSelection = observer(() => {
-  const { modelStore, uiStore } = useStore();
+  const { modelStore, uiStore, visualizationStore } = useStore();
+  
+  const setTargetColor1 = (color) => {
+    visualizationStore.targetColor1 = color.hex;
+  };
+  
+  const setTargetColor2 = (color) => {
+    visualizationStore.targetColor2 = color.hex;
+  };
 
   return (
-    <Item
-      label="Target"
-      validateStatus={uiStore.maxTargets ? 'warning' : null}
-      hasFeedback
-      help={uiStore.maxTargets ? 'Max 2 target variables' : null}
-    >
-      <Select
-        placeholder="Select target"
-        mode="multiple"
-        onChange={modelStore.setTargets}
-        value={modelStore.targets}
+    <>
+      <Item
+        label="Target"
+        validateStatus={uiStore.maxTargets ? 'warning' : null}
+        hasFeedback
+        help={uiStore.maxTargets ? 'Max 2 target variables' : null}
       >
-        {modelStore.columns.map((item) => <Option key={item.value}>{item.value}</Option>)}
-      </Select>
-    </Item>
+        <Select
+          placeholder="Select target"
+          mode="multiple"
+          onChange={modelStore.setTargets}
+          value={modelStore.targets}
+        >
+          {modelStore.columns.map((item) => <Option key={item.value}>{item.value}</Option>)}
+        </Select>
+      </Item>
+
+      { visualizationStore._visualization._visualizationSelected.id === 'heatmap'
+        ? (
+          <>
+            <Item label="Colore inzio target">
+              <CompactPicker color={visualizationStore.targetColor1} onChange={setTargetColor1} />
+            </Item>
+            <Item label="Colore fine target">
+              <CompactPicker color={visualizationStore.targetColor2} onChange={setTargetColor2} />
+            </Item>
+          </>
+        )
+        : null}
+    </>
   );
 });
 
