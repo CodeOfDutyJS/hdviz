@@ -1,10 +1,7 @@
 /* globals describe, expect, it */
 
-import { distance } from 'ml-distance';
-import dataArray from './data';
 import DataModel from '../../model/DataModel';
-import HeatMapModel from '../../model/HeatMapModel';
-import { ClusteringType, DistanceType } from '../../utils/constant';
+import HeatMapModel from '../../model/VisualizationModels/HeatMapModel';
 
 describe('#HeatMapModel', () => {
   const mockData = [

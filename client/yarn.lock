@@ -6625,11 +6625,6 @@ istanbul-reports@^3.0.2:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
 
-jeezy@^1.13.1:
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/jeezy/-/jeezy-1.13.1.tgz#7325e39726ab4907c62f041a4d4c4133cb069a53"
-  integrity sha512-y0x3fmBoXQOlE9yEyN9JU4Ed1sQAK9a2ce1DybyqUvn77eEGgHqo+HrelAIQy4tNjrrK1woGPeQznM1o4Nyj0w==
-
 jest-changed-files@^26.6.2:
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/jest-changed-files/-/jest-changed-files-26.6.2.tgz#f6198479e1cc66f22f9ae1e22acaa0b429c042d0"
@@ -7772,7 +7767,7 @@ ml-array-max@^1.2.3:
   dependencies:
     is-any-array "^1.0.0"
 
-ml-array-mean@^1.1.1, ml-array-mean@^1.1.5:
+ml-array-mean@^1.1.1:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ml-array-mean/-/ml-array-mean-1.1.5.tgz#d8a468b26e2827c9ffca793331c7a8c0276171d4"
   integrity sha512-CNfsSJzVrU/S6AvJSZJkPvKk6mkEYBkIU7hlSHD1Ha27d2tzfo3b7xG5uP70/USvOfMcyfVRwXbxIiZ9Ky4LKA==

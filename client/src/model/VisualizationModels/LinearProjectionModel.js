@@ -1,7 +1,6 @@
 import { Matrix } from 'ml-matrix';
 import max from 'ml-array-max';
 import min from 'ml-array-min';
-import mean from 'ml-array-mean';
 import { PCA } from 'ml-pca';
 import VisualizationModel from '../VisualizationModel';
 
@@ -27,6 +26,7 @@ class LinearProjectionModel extends VisualizationModel {
 
   getPreparedDataset() {
     const projection = this.pca({ scale: true });
+
     const label = this.dataModel.getTargetColumns();
 
     const preparedPoints = [];
@@ -49,16 +49,17 @@ class LinearProjectionModel extends VisualizationModel {
 
     const xPoints = preparedPoints.map((d) => d.x);
     const yPoints = preparedPoints.map((d) => d.y);
+    const xAxis = preparedAxis.map((d) => d.x);
+    const yAxis = preparedAxis.map((d) => d.y);
 
     return {
       points: preparedPoints,
       axis: preparedAxis,
-      rangeX: [min(xPoints), max(xPoints)],
-      rangeY: [min(yPoints), max(yPoints)],
-      mean: {
-        meanx: mean(xPoints),
-        meany: mean(yPoints),
-      },
+      points_rangeX: [min(xPoints), max(xPoints)],
+      points_rangeY: [min(yPoints), max(yPoints)],
+      axis_rangeX: [min(xAxis), max(xAxis)],
+      axis_rangeY: [min(yAxis), max(yAxis)],
+      target: this.dataModel.targets.length > 0 ? [...new Set(label.map((d) => d[this.dataModel.targets[0]]))] : null,
     };
   }
 }
