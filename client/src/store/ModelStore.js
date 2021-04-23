@@ -11,7 +11,7 @@ const parseFile = (rawFile) => new Promise((resolve, reject) => {
     worker: true,
 
     complete: (results) => {
-      resolve(results.data);
+      resolve(results);
     },
 
     error: (error) => {
@@ -35,11 +35,21 @@ class ModelStore {
 
   async uploadCSV(file) {
     try {
-      this.dataset = await parseFile(file);
+      const results = await parseFile(file);
+      this.dataset = results.data;
       this.loadingCompleted = true;
+      if (results.error.type !== null) {
+        this.rootStore.uiStore.dataError = {
+          status: 'warning',
+          message: `Error ${results.error.code}: ${results.error.message}`,
+        };
+      }
     } catch (error) {
       // TODO: visualizzare errore
-      console.log(error);
+      this.rootStore.uiStore.dataError = {
+        status: 'error',
+        message: `Error ${error.code}: ${error.message}`,
+      };
     }
   }
 

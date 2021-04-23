@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Layout, Collapse, PageHeader, Button,
+  Layout, Collapse, PageHeader, Button, Alert,
 } from 'antd';
 import { observer } from 'mobx-react-lite';
 import VisualizationSelection from './VisualizationSelection';
@@ -16,11 +16,21 @@ const OptionPanel = observer(() => {
   const { visualizationStore, uiStore } = useStore();
 
   return (
+  /**/
     <Sider id="settingPanel" width="none">
       <PageHeader
         className="option-panel-header"
         title="Options Panel"
       />
+      { this.uiStore.dataError?.status
+        ? (
+          <Alert
+            type={this.uiStore.dataError.status}
+            message={this.uiStore.dataError.message}
+            closable
+            onClose={() => { this.uiStore.dataError.status = false; }}
+          />
+        ) : null}
       <Collapse defaultActiveKey={['1', '2']}>
         <Panel header="Data source" key="1">
           <DataSource />
