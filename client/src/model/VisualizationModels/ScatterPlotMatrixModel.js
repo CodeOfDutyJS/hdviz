@@ -13,6 +13,8 @@ class ScatterPlotMatrixModel extends VisualizationModel {
   }
 }
 
+export default ScatterPlotMatrixModel;
+
 VisualizationCollector.addVisualization({
   id: 'scatter',
   label: 'Scatter Plot Matrix',

@@ -10,11 +10,11 @@ const { Item } = Form;
 
 const TargetSelection = observer(() => {
   const { modelStore, uiStore, visualizationStore } = useStore();
-  
+
   const setTargetColor1 = (color) => {
     visualizationStore.targetColor1 = color.hex;
   };
-  
+
   const setTargetColor2 = (color) => {
     visualizationStore.targetColor2 = color.hex;
   };

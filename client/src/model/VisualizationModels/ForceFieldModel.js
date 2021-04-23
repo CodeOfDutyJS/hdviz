@@ -1,12 +1,7 @@
 import * as d3 from 'd3';
-<<<<<<< HEAD
-import { VisualizationModel } from '../index';
-=======
-import VisualizationTypes from '../../utils/VisualizationTypes';
 import forceField from '../d3/ForceField';
-import VisualizationModel from '../VisualizationModel';
+import { VisualizationModel } from '../index';
 import VisualizationCollector from '../VisualizationsCollector';
->>>>>>> cf0f0abf1c00f8e610c9e422027e442e46de8da0
 
 class ForceFieldModel extends VisualizationModel {
   getNodes(maxNodes) {
@@ -51,6 +46,8 @@ class ForceFieldModel extends VisualizationModel {
     };
   }
 }
+
+export default ForceFieldModel;
 
 VisualizationCollector.addVisualization({
   id: 'force',
