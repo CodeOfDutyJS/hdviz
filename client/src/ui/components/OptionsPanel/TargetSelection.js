@@ -36,19 +36,6 @@ const TargetSelection = observer(() => {
           {modelStore.columns.map((item) => <Option key={item.value}>{item.value}</Option>)}
         </Select>
       </Item>
-
-      { visualizationStore._visualization._visualizationSelected.id === 'heatmap'
-        ? (
-          <>
-            <Item label="Colore inzio target">
-              <CompactPicker color={visualizationStore.targetColor1} onChange={setTargetColor1} />
-            </Item>
-            <Item label="Colore fine target">
-              <CompactPicker color={visualizationStore.targetColor2} onChange={setTargetColor2} />
-            </Item>
-          </>
-        )
-        : null}
     </>
   );
 });

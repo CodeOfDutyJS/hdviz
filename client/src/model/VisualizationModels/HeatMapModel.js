@@ -193,4 +193,5 @@ VisualizationCollector.addVisualization({
   label: 'Heatmap',
   model: new HeatMapModel(),
   visualization: heatmap,
+  options: { distance: true },
 });

@@ -20,4 +20,7 @@ VisualizationCollector.addVisualization({
   label: 'Scatter Plot Matrix',
   model: new ScatterPlotMatrixModel(),
   visualization: scatterPlotMatrix,
+  options: {
+    maxFeatures: 5,
+  },
 });

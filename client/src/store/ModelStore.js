@@ -43,7 +43,7 @@ class ModelStore {
   }
 
   checkFeatures() {
-    if (this.rootStore.visualizationStore.visualizationSelected === 'scatter' && this.features.length > 5) {
+    if (this.rootStore.visualizationStore.visualizationSelected.options?.maxFeatures && this.features.length > this.rootStore.visualizationStore.visualizationSelected.options.maxFeatures) {
       this.features = this.features.slice(0, 5);
 
       this.rootStore.uiStore.maxFeatures = true;

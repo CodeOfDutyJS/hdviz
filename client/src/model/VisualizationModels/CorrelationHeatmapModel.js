@@ -1,6 +1,6 @@
 import { DistanceType, ClusteringType } from '../../utils/options';
 // eslint-disable-next-line import/no-cycle
-import { HeatMapModel } from './index';
+import HeatMapModel from './HeatMapModel';
 import VisualizationCollector from '../VisualizationsCollector';
 import { correlationHeatmap } from '../d3';
 
@@ -16,9 +16,9 @@ class CorrelationHeatmapModel extends HeatMapModel {
 export default CorrelationHeatmapModel;
 
 VisualizationCollector.addVisualization({
-  id: 'force',
-  label: 'Force Field',
+  id: 'correlation',
+  label: 'Correlation Heatmap',
   model: new CorrelationHeatmapModel(),
   visualization: correlationHeatmap,
-  options: { distance: true },
+  options: { distance: false },
 });
