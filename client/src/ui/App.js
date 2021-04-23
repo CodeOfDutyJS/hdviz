@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
+import React from 'react';
 
-import { Layout, PageHeader } from 'antd';
+import { Layout } from 'antd';
 
 import { OptionPanel } from './components/OptionsPanel/index';
 import Visualization from './components/Visualization/Visualization';

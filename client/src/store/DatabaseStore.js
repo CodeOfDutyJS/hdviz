@@ -32,7 +32,9 @@ class DatabaseStore {
   }
 
   async getData() {
-    return this.apiService.getData(this.databaseSelected, this.tableSelected);
+    const response = await this.apiService.getData(this.databaseSelected, this.tableSelected);
+    // console.log(test.rows);
+    this.rootStore.modelStore.dataset = response.rows;
   }
 
   // GETTER / SETTER
@@ -91,6 +93,8 @@ class DatabaseStore {
 
   setTableSelected(value) {
     this.tableSelected = value;
+
+    this.getData();
   }
 }
 

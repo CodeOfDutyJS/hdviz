@@ -1,7 +1,9 @@
 import { distance } from 'ml-distance';
-import { Matrix, correlation } from 'ml-matrix';
+import { correlation } from 'ml-matrix';
 import { DistanceType, ClusteringType } from '../../utils/options';
 import { VisualizationModel } from '../index';
+import heatmap from '../d3/Heatmap';
+import VisualizationCollector from '../VisualizationsCollector';
 
 class HeatMapModel extends VisualizationModel {
   constructor(dataModel, distanceFn = distance.euclidean) {
@@ -184,20 +186,9 @@ class HeatMapModel extends VisualizationModel {
   }
 }
 
-/*
-matrix = [
-  {
-    cluster: {},
-    distances: []
-  },
-  {
-    cluster: {}
-    distances: [],
-  }
-]
-
-the distance matrix always is n colunms and n rows, easy to update on removal
-and when adding elements, as long as we push on the end.
-*/
-
-export default HeatMapModel;
+VisualizationCollector.addVisualization({
+  id: 'heatmap',
+  label: 'Heatmap',
+  model: new HeatMapModel(),
+  visualization: heatmap,
+});

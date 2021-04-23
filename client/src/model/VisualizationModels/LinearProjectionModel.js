@@ -1,6 +1,11 @@
-import { transpose, mean, extent } from 'd3';
+import { Matrix } from 'ml-matrix';
+import max from 'ml-array-max';
+import min from 'ml-array-min';
+import mean from 'ml-array-mean';
 import { PCA } from 'ml-pca';
 import { VisualizationModel } from '../index';
+import linearProjection from '../d3/LinearProjection';
+import VisualizationCollector from '../VisualizationsCollector';
 
 class LinearProjectionModel extends VisualizationModel {
   // ritorna le coordinate dei punti proiettati sulle due componenti pca calcolate
@@ -19,7 +24,7 @@ class LinearProjectionModel extends VisualizationModel {
     const x = [];
     x64.data.map((d) => x.push(Array.from(d)));
 
-    return { points: x, axis: transpose(w) };
+    return { points: x, axis: (new Matrix(w)).transpose().to2DArray() };
   }
 
   getPreparedDataset() {
@@ -44,18 +49,28 @@ class LinearProjectionModel extends VisualizationModel {
           label: this.dataModel.features[i],
         }));
 
+    const xPoints = preparedPoints.map((d) => d.x);
+    const yPoints = preparedPoints.map((d) => d.y);
+
     return {
       points: preparedPoints,
       axis: preparedAxis,
-      rangeX: extent(preparedPoints.map((d) => d.x)),
-      rangeY: extent(preparedPoints.map((d) => d.y)),
+      rangeX: [min(xPoints), max(xPoints)],
+      rangeY: [min(yPoints), max(yPoints)],
       mean: {
-        meanx: mean(preparedPoints.map((d) => d.x)),
-        meany: mean(preparedPoints.map((d) => d.y)),
+        meanx: mean(xPoints),
+        meany: mean(yPoints),
       },
       selectedTarget: this.dataModel.getTargetColumns(),
     };
   }
 }
+
+VisualizationCollector.addVisualization({
+  id: 'linear',
+  label: 'Linear Projection',
+  model: new LinearProjectionModel(),
+  visualization: linearProjection,
+});
 
 export default LinearProjectionModel;

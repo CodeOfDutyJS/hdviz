@@ -6,6 +6,8 @@ class UiStore {
   _maxFeatures = false;
   _maxTargets = false;
 
+  _loadingDataCompleted = false;
+
   constructor(rootStore) {
     this.rootStore = rootStore;
 
@@ -27,6 +29,14 @@ class UiStore {
 
   set maxFeatures(value) {
     this._maxFeatures = value;
+  }
+
+  get loadingDataCompleted() {
+    return this._loadingDataCompleted;
+  }
+
+  set loadingDataCompleted(value) {
+    this._loadingDataCompleted = value;
   }
 }
 

@@ -1,13 +1,14 @@
 import { distance } from 'ml-distance';
-import { makeAutoObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import VisualizationManager from '../model/VisualizationManager';
-
-import { VisualizationType } from '../utils/visualizations';
+import VisualizationCollector from '../model/VisualizationsCollector';
 
 class VisualizationStore {
   rootStore;
 
   _visualization = null;
+  targetColor1 = '#ecf1f5';
+  targetColor2 = '#efd2d0';
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -34,7 +35,7 @@ class VisualizationStore {
   }
 
   setVisualizationSelected(value) {
-    this.visualizationSelected = Object.values(VisualizationType).find((v) => v.id === value);
+    this.visualizationSelected = VisualizationCollector.visualizations[value];
 
     this.rootStore.modelStore.checkFeatures();
   }

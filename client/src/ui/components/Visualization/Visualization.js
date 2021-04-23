@@ -1,28 +1,21 @@
-/* eslint-disable no-param-reassign */
-import React, { useState, useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
+import React from 'react';
 
 import { Layout } from 'antd';
-import { useStore } from '../../../controller/ControllerProvider';
 
 const { Content } = Layout;
 
-const Visualization = observer(() => {
-  const store = useStore();
-
-  return (
-    <Content>
-      <svg
-        id="area"
-        style={{
-          height: '100%',
-          width: '100%',
-          marginRight: '0px',
-          marginLeft: '0px',
-        }}
-      />
-    </Content>
-  );
-});
+const Visualization = () => (
+  <Content>
+    <svg
+      id="area"
+      style={{
+        height: '100%',
+        width: '100%',
+        marginRight: '0px',
+        marginLeft: '0px',
+      }}
+    />
+  </Content>
+);
 
 export default Visualization;
