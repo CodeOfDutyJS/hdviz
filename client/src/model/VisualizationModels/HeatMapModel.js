@@ -211,6 +211,8 @@ class HeatMapModel {
   }
 }
 
+export default HeatMapModel;
+
 VisualizationCollector.addVisualization({
   id: 'heatmap',
   label: 'Heatmap',
