@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import Papa from 'papaparse';
 import { DataModel } from '../model/index';
-import { VisualizationType } from '../utils/visualizations';
 
 const parseFile = (rawFile) => new Promise((resolve, reject) => {
   Papa.parse(rawFile, {
@@ -44,7 +43,7 @@ class ModelStore {
   }
 
   checkFeatures() {
-    if (this.rootStore.visualizationStore.visualizationSelected === VisualizationType.SCATTER_PLOT_MATRIX && this.features.length > 5) {
+    if (this.rootStore.visualizationStore.visualizationSelected === 'scatter' && this.features.length > 5) {
       this.features = this.features.slice(0, 5);
 
       this.rootStore.uiStore.maxFeatures = true;
