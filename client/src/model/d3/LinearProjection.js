@@ -10,9 +10,6 @@ function linearProjection(data) {
   const maxX = data.points_rangeX[1];
   const minY = data.points_rangeY[0];
   const maxY = data.points_rangeY[1];
-  const meanX = (maxX + minX) / 2;
-  const meanY = (maxY + minY) / 2;
-
   const axisMinX = data.axis_rangeX[0];
   const axisMaxX = data.axis_rangeX[1];
   const axisMinY = data.axis_rangeY[0];
@@ -71,43 +68,6 @@ function linearProjection(data) {
     .attr('y', (d) => pointsY(d.y * ratio) - 5)
     .attr('font-weight', 600)
     .text((d, i) => i + 1);
-
-  // points legend
-  svg.append('g').selectAll('circle')
-    .data(data.target)
-    .join('circle')
-    .attr('cx', width - 140)
-    .attr('cy', (d, i) => height - 20 - i * 25)
-    .attr('r', 7)
-    .style('fill', (d) => color(d));
-
-  svg.append('g').selectAll('text')
-    .data(data.target)
-    .join('text')
-    .attr('x', width - 120)
-    .attr('y', (d, i) => height - 20 - i * 25)
-    .style('fill', (d) => color(d))
-    .text((d) => d)
-    .attr('text-anchor', 'left')
-    .style('alignment-baseline', 'middle');
-
-  // axis legend
-  svg.append('g').selectAll('text')
-    .data(data.axis)
-    .join('text')
-    .attr('x', 10)
-    .attr('y', (d, i) => height - 20 - i * 25)
-    .text((d, i) => i + 1)
-    .attr('font-weight', 700);
-
-  svg.append('g').selectAll('text')
-    .data(data.axis)
-    .join('text')
-    .attr('x', 30)
-    .attr('y', (d, i) => height - 22 - i * 25)
-    .text((d) => d.label)
-    .attr('text-anchor', 'left')
-    .style('alignment-baseline', 'middle');
 }
 
 export default linearProjection;

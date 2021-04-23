@@ -1,8 +1,14 @@
 import { makeAutoObservable, observable } from 'mobx';
+import clearVisualization from './d3/ClearVisualization';
 
 class VisualizationManager {
   _visualizationSelected = null;
   _options;
+
+  // eslint-disable-next-line class-methods-use-this
+  clear() {
+    clearVisualization();
+  }
 
   constructor() {
     makeAutoObservable(this, { _visualizationSelected: observable.ref, _options: observable.ref }, { autoBind: true });
@@ -13,6 +19,7 @@ class VisualizationManager {
   }
 
   start(data) {
+    this.clear();
     this._visualizationSelected.visualization(this._visualizationSelected.model.addData(data).getPreparedDataset(this._options));
   }
 
