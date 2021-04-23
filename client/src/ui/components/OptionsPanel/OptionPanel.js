@@ -22,14 +22,15 @@ const OptionPanel = observer(() => {
         className="option-panel-header"
         title="Options Panel"
       />
-      { this.uiStore.dataError?.status
+      { uiStore.dataError?.length > 0
         ? (
-          <Alert
-            type={this.uiStore.dataError.status}
-            message={this.uiStore.dataError.message}
-            closable
-            onClose={() => { this.uiStore.dataError.status = false; }}
-          />
+          uiStore.dataError.map((error) => (
+            <Alert
+              type={uiStore.dataError?.length > 20 ? 'error' : error.status}
+              message={error.message}
+              closable
+            />
+          ))
         ) : null}
       <Collapse defaultActiveKey={['1', '2']}>
         <Panel header="Data source" key="1">

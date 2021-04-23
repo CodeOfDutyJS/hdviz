@@ -6,7 +6,7 @@ class UiStore {
   _maxFeatures = false;
   _maxTargets = false;
 
-  _dataError = null;
+  _dataError = [];
   _loadingDataCompleted = false;
 
   constructor(rootStore) {
