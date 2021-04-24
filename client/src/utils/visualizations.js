@@ -1,7 +1,11 @@
+import correlationHeatmap from '../model/d3/CorrelationHeatmap';
 import forceField from '../model/d3/ForceField';
+import heatmap from '../model/d3/Heatmap';
 import linearProjection from '../model/d3/LinearProjection';
 import scatterPlotMatrix from '../model/d3/ScatterPlotMatrix';
 import ForceFieldModel from '../model/VisualizationModels/ForceFieldModel';
+import HeatMapModel from '../model/VisualizationModels/HeatMapModel';
+import CorrelationHeatmapModel from '../model/VisualizationModels/CorrelationHeatmapModel';
 import LinearProjectionModel from '../model/VisualizationModels/LinearProjectionModel';
 import ScatterPlotMatrixModel from '../model/VisualizationModels/ScatterPlotMatrixModel';
 
@@ -15,10 +19,14 @@ const VisualizationType = {
   HEATMAP: {
     id: 'heatmap',
     label: 'Heatmap',
+    model: new HeatMapModel(),
+    visualization: heatmap,
   },
   CORRELATION_HEATMAP: {
     id: 'correlation',
     label: 'Correlation Heatmap',
+    model: new CorrelationHeatmapModel(),
+    visualization: correlationHeatmap,
   },
   FORCEFIELD: {
     id: 'force',
@@ -38,17 +46,5 @@ const VisualizationType = {
   },
 };
 
-const DistanceType = {
-  EUCLIDEAN: 'euclidean',
-  MANHATTAN: 'manhattan',
-  PEARSONS: 'pearsons',
-};
-
-export const ClusteringType = {
-  FEATURE: 'feature',
-  COMPLETE: 'complete',
-  SINGLE: 'single',
-  UPGMA: 'upgma',
-};
-
-export { VisualizationType, DistanceType };
+// eslint-disable-next-line import/prefer-default-export
+export { VisualizationType };

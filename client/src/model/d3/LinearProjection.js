@@ -6,13 +6,19 @@ function linearProjection(data) {
   const { width } = svg.node().getBoundingClientRect();
   const { height } = svg.node().getBoundingClientRect();
 
-  const minX = data.rangeX[0] * 2;
-  const maxX = data.rangeX[1] * 2;
-  const minY = data.rangeY[0] * 2;
-  const maxY = data.rangeY[1] * 2;
+  const minX = data.points_rangeX[0];
+  const maxX = data.points_rangeX[1];
+  const minY = data.points_rangeY[0];
+  const maxY = data.points_rangeY[1];
+  const axisMinX = data.axis_rangeX[0];
+  const axisMaxX = data.axis_rangeX[1];
+  const axisMinY = data.axis_rangeY[0];
+  const axisMaxY = data.axis_rangeY[1];
 
-  const x = d3.scaleLinear([minX, maxX], [0, width]).nice();
-  const y = d3.scaleLinear([minY, maxY], [0, height]).nice();
+  const pointsX = d3.scaleLinear([minX, maxX], [150, width - 150]).clamp(true);
+  const pointsY = d3.scaleLinear([minY, maxY], [150, height - 150]).clamp(true);
+
+  const ratio = Math.min(Math.abs(minX / axisMinX), Math.abs(maxX / axisMaxX), Math.abs(minY / axisMinY), Math.abs(maxY / axisMaxY));
 
   const color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -38,8 +44,8 @@ function linearProjection(data) {
     .data(data.points)
     .join('circle')
     .attr('r', 5)
-    .attr('cx', (d) => x(d.x))
-    .attr('cy', (d) => y(d.y))
+    .attr('cx', (d) => pointsX(d.x))
+    .attr('cy', (d) => pointsY(d.y))
     .style('fill', (d) => color(d.color));
 
   // line
@@ -48,20 +54,20 @@ function linearProjection(data) {
     .selectAll('line')
     .data(data.axis)
     .join('line')
-    .attr('x1', () => x(data.mean.meanx))
-    .attr('y1', () => y(data.mean.meany))
-    .attr('x2', (d) => x(3 * d.x))
-    .attr('y2', (d) => y(3 * d.y))
+    .attr('x1', () => pointsX(0))
+    .attr('y1', () => pointsY(0))
+    .attr('x2', (d) => pointsX(d.x * ratio))
+    .attr('y2', (d) => pointsY(d.y * ratio))
     .attr('marker-end', 'url(#arrow)');
 
   // label
   svg.append('g').selectAll('text')
     .data(data.axis)
     .join('text')
-    .attr('x', (d) => x(3 * d.x))
-    .attr('y', (d) => y(3 * d.y))
-    .style('font', '11px times')
-    .text((d) => d.label);
+    .attr('x', (d) => pointsX(d.x * ratio) + 5)
+    .attr('y', (d) => pointsY(d.y * ratio) - 5)
+    .attr('font-weight', 600)
+    .text((d, i) => i + 1);
 }
 
 export default linearProjection;
