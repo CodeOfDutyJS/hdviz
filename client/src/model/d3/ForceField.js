@@ -26,13 +26,16 @@ function forceField(data) {
       .on('end', dragended);
   };
 
+  const svg = d3.select('#area');
   const color = d3.scaleOrdinal(d3.schemeCategory10);
 
   const { links, nodes } = data;
 
+  const { width, height } = svg.node().getBoundingClientRect();
+
   const scaleLinks = d3.scaleLinear()
     .domain(d3.extent(links, (d) => (d.value)))
-    .range([1, 600]);
+    .range([16, Math.min(width - 150, 600)]);
 
   links.forEach(
     (d) => {
@@ -40,10 +43,7 @@ function forceField(data) {
     },
   );
 
-  const svg = d3.select('#area');
-
-  const { width } = svg.node().getBoundingClientRect();
-  const { height } = svg.node().getBoundingClientRect();
+  // const { height } = svg.node().getBoundingClientRect();
 
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links)

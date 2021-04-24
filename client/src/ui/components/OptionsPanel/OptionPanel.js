@@ -48,6 +48,7 @@ const OptionPanel = observer(() => {
       </Collapse>
       <Layout id="start-button">
         <Button type="primary" shape="round" onClick={visualizationStore.start}>Start</Button>
+        <Button type="default" shape="round" disabled={!visualizationStore.canSave} onClick={visualizationStore.save}>Save</Button>
       </Layout>
       {
         // MESSAGGIO DI SUCCESSO
