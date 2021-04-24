@@ -3,8 +3,10 @@ import * as d3 from 'd3';
 function drawColorScale(color, range, x, y, width, height, name) {
   const svg = d3.select('#area');
   const padding = 0.0;
-  const values = d3.range(d3.min(range), d3.max(range), ((d3.max(range) - d3.min(range)) / 500).toPrecision(4));
-  values[499] = d3.max(range);
+  const values = d3.range(d3.min(range), d3.max(range), ((d3.max(range) - d3.min(range)) / 500).toPrecision(4))
+    .map((value) => value.toPrecision(4));
+
+  values[499] = d3.max(values);
   const xScale = d3.scaleBand()
     .range([x, x + width])
     .paddingInner(0)

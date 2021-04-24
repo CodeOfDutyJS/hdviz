@@ -1,5 +1,6 @@
 import { makeAutoObservable, observable } from 'mobx';
 import { clearVisualization } from './d3/index';
+import NormalizationsCollector from './normalizations/NormalizationsCollector';
 
 class VisualizationManager {
   _visualizationSelected = null;
@@ -20,6 +21,10 @@ class VisualizationManager {
 
   start(data) {
     this.clear();
+    this._visualizationSelected.model
+      .addData(data)
+      ._dataModel
+      .setNorm(NormalizationsCollector._normalizations.ManhattanLengthNorm.func);
     this._visualizationSelected.visualization(this._visualizationSelected.model.addData(data).getPreparedDataset(this._options));
   }
 

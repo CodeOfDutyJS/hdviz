@@ -97,7 +97,6 @@ function heatmap({
   targetCols,
   selectedTarget,
 }) {
-  console.log('heatmap');
   const svg = d3.select('#area');
   const cols = getLeaves(clusterCols).map((value) => value.id);
   const colorRange = ['white', '#ff1a00'];
@@ -109,6 +108,7 @@ function heatmap({
     left: 30,
     right: 400,
   };
+
   let { width, height } = svg.node().getBoundingClientRect();
   width -= margin.right;
   height -= margin.top;
@@ -123,9 +123,13 @@ function heatmap({
     .paddingInner(padding)
     .domain(d3.range(1, rows + 1));
 
+  const min = d3.min(grid, (d) => d.value);
+  const max = d3.max(grid, (d) => d.value);
+
+  const range = [min, max];
   const c = d3.scaleLinear()
     .range(colorRange)
-    .domain([-3, 3]);
+    .domain(range);
 
   const xAxis = d3.axisBottom(x).tickFormat((d, i) => cols[i]);
   const yAxis = d3.axisRight(y).tickFormat([]).tickSize(0);
@@ -158,7 +162,7 @@ function heatmap({
     .style('opacity', 1);
 
   drawTargetRows(cluster, targetCols, margin, selectedTarget);
-  drawColorScale(c, [-3, 3], width + (targetCols.length * 25) + 50, 30, 100, 25, 'Standard Deviation');
+  drawColorScale(c, range, width + (targetCols.length * 25) + 50, 30, 100, 25, 'Standard Deviation');
 
   d3.select(window)
     .on('resize', () => {

@@ -52,7 +52,7 @@ class HeatMapModel extends VisualizationModel {
   }
 
   getDistanceMatrix() {
-    const data = this.dataModel.getStandardScore();
+    const data = this.dataModel.getSelectedDataset();
     const matrix = [];
     data.forEach((row) => {
       if (Object.entries(row).length === 0) return;
@@ -76,7 +76,7 @@ class HeatMapModel extends VisualizationModel {
 
   getAlphaticallySorted() {
     const col = this.dataModel.targets[0];
-    const d = this.dataModel.getStandardScore();
+    const d = this.dataModel.getSelectedDataset();
     d.sort((a, b) => {
       const IdA = a[col].toUpperCase(); // ignore upper and lowercase
       const IdB = b[col].toUpperCase(); // ignore upper and lowercase
