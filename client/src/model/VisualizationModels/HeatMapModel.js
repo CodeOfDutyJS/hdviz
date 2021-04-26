@@ -16,6 +16,17 @@ class HeatMapModel extends VisualizationModel {
     return this;
   }
 
+  getLeavesNumber(cluster) {
+    let leavesN = 0;
+    if (!cluster.children) {
+      return 1;
+    }
+    cluster.children.forEach((value) => {
+      leavesN += this.getLeavesNumber(value);
+    });
+    return leavesN;
+  }
+
   distanceCalculator(a, b) {
     const feats = this.dataModel.features;
     const aValues = [];
@@ -111,11 +122,10 @@ class HeatMapModel extends VisualizationModel {
         }
       });
       // now that you have the minimum build the cluster
-      const r = matrix[indexes[1]];
-      const l = 'branchLength' in r ? r.branchLength : 0;
+      // const r = matrix[indexes[1]];
+      // const l = 'branchLength' in r ? r.branchLength : 0;
       const cluster = {
         id: `cluster${n}`,
-        branchLength: (min / 2) - l,
         children: [],
       };
       indexes.forEach((index) => {
@@ -123,6 +133,7 @@ class HeatMapModel extends VisualizationModel {
       });
       // calculate the distances
       const dist = matrix[indexes[0]].distances.slice();
+      const clusterElementNumber = this.getLeavesNumber(matrix[indexes[0]].ref) + this.getLeavesNumber(matrix[indexes[1]].ref);
       indexes.forEach((index) => {
         const entry = matrix[index].distances;
         entry.forEach((dista, i) => {
@@ -131,6 +142,9 @@ class HeatMapModel extends VisualizationModel {
           }
           if (clusteringType === ClusteringType.COMPLETE) {
             if (dista > dist[i]) dist[i] = dista;
+          }
+          if (clusteringType === ClusteringType.UPGMA) {
+            dist[i] = matrix[indexes[0]].distances[i] + matrix[indexes[1]].distances[i] / clusterElementNumber;
           }
         });
       });
@@ -164,7 +178,7 @@ class HeatMapModel extends VisualizationModel {
     return this.getDistanceMatrix();
   }
 
-  getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.SINGLE }) {
+  getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.UPGMA }) {
     this.setDistance(DistanceType.PEARSONS);
     if (clusteringType === ClusteringType.ALPHABETICAL) {
       return {

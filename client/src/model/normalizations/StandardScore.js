@@ -6,7 +6,6 @@ function toArray(data, feat) {
   return data.reduce((acc, row) => {
     // eslint-disable-next-line no-param-reassign
     acc.push(row[feat]);
-    console.log(acc);
     return acc;
   }, []);
 }
