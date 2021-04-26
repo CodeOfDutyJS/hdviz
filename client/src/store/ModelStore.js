@@ -1,8 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import Papa from 'papaparse';
-import DataModel from '../model/DataModel';
-
 import VisualizationCollector from '../model/VisualizationsCollector';
+import { DataModel } from '../model/index';
 
 const parseFile = (rawFile) => new Promise((resolve, reject) => {
   Papa.parse(rawFile, {
@@ -60,7 +59,7 @@ class ModelStore {
   }
 
   checkFeatures() {
-    if (this.rootStore.visualizationStore.visualizationSelected === VisualizationCollector.visualizations.matrix && this.features.length > 5) {
+    if (this.rootStore.visualizationStore.visualizationSelected.options?.maxFeatures && this.features.length > this.rootStore.visualizationStore.visualizationSelected.options.maxFeatures) {
       this.features = this.features.slice(0, 5);
 
       this.rootStore.uiStore.maxFeatures = true;

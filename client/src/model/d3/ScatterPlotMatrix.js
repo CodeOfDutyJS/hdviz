@@ -1,9 +1,17 @@
 import * as d3 from 'd3';
+import drawTargetLegend from './DrawTargetLegend';
 
-function scatterPlotMatrix({ data, features, targets }) {
+function scatterPlotMatrix({
+  data,
+  features,
+  targets,
+  selectedTarget,
+}) {
   const columns = Object.keys(data[0]).filter((value) => features.includes(value));
   const svg = d3.select('#area');
-  const { width } = svg.node().getBoundingClientRect();
+  let { width } = svg.node().getBoundingClientRect();
+  const { height } = svg.node().getBoundingClientRect();
+  width -= 150;
   const padding = 30;
   const size = (width - (columns.length + 1) * padding) / columns.length + padding;
 
@@ -83,9 +91,7 @@ function scatterPlotMatrix({ data, features, targets }) {
   })();
 
   svg
-    .attr('viewBox', `${-padding} 0 ${width} ${width}`)
-    .style('max-width', '100%')
-    .style('height', 'auto');
+    .attr('viewBox', `${-padding} 0 ${width} ${width}`);
 
   svg.append('style')
     .text('circle.hidden { fill: #000; fill-opacity: 1; r: 1px; }');
@@ -137,6 +143,7 @@ function scatterPlotMatrix({ data, features, targets }) {
     .text((d) => d);
 
   svg.property('value', []);
+  drawTargetLegend(color, selectedTarget, width, 0 + 15, height, 25);
 }
 
 export default scatterPlotMatrix;

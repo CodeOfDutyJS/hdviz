@@ -1,10 +1,13 @@
 import * as d3 from 'd3';
+import drawTargetLegend from './DrawTargetLegend';
 
 function linearProjection(data) {
   const svg = d3.select('#area');
 
-  const { width } = svg.node().getBoundingClientRect();
+  let { width } = svg.node().getBoundingClientRect();
   const { height } = svg.node().getBoundingClientRect();
+
+  width -= 300;
 
   const minX = data.rangeX[0] * 2;
   const maxX = data.rangeX[1] * 2;
@@ -62,6 +65,13 @@ function linearProjection(data) {
     .attr('y', (d) => y(3 * d.y))
     .style('font', '11px times')
     .text((d) => d.label);
+
+  drawTargetLegend(color, data.selectedTarget, width + 50, 0, height, 25);
+  d3.select(window)
+    .on('resize', () => {
+      d3.select('#area').selectAll('*').remove();
+      linearProjection(data);
+    });
 }
 
 export default linearProjection;

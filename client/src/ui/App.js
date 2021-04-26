@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Layout } from 'antd';
 
-import OptionPanel from './components/OptionsPanel/OptionPanel';
+import { OptionPanel } from './components/OptionsPanel/index';
 import Visualization from './components/Visualization/Visualization';
 
 // import 'antd/dist/antd.css';

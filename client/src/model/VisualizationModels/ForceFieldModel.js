@@ -1,12 +1,10 @@
 import * as d3 from 'd3';
-import VisualizationTypes from '../../utils/VisualizationTypes';
 import forceField from '../d3/ForceField';
-import VisualizationModel from '../VisualizationModel';
+import { VisualizationModel } from '../index';
 import VisualizationCollector from '../VisualizationsCollector';
 
 class ForceFieldModel extends VisualizationModel {
   getNodes(maxNodes) {
-    console.log(this.dataModel.targets[1]);
     return this.dataModel.getSelectedDataset()
       .map((value) => ({
         color: this.dataModel.targets.length > 0 ? value?.[this.dataModel.targets[0]] : null,
@@ -44,9 +42,12 @@ class ForceFieldModel extends VisualizationModel {
     return {
       nodes: this.getNodes(maxNodes),
       links: this.getLinks(distanceFn, maxNodes, maxLinks),
+      selectedTarget: this.dataModel.getTargetColumns(),
     };
   }
 }
+
+export default ForceFieldModel;
 
 VisualizationCollector.addVisualization({
   id: 'force',

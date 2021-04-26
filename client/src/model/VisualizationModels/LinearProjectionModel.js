@@ -3,9 +3,8 @@ import max from 'ml-array-max';
 import min from 'ml-array-min';
 import mean from 'ml-array-mean';
 import { PCA } from 'ml-pca';
-import VisualizationTypes from '../../utils/VisualizationTypes';
+import { VisualizationModel } from '../index';
 import linearProjection from '../d3/LinearProjection';
-import VisualizationModel from '../VisualizationModel';
 import VisualizationCollector from '../VisualizationsCollector';
 
 class LinearProjectionModel extends VisualizationModel {
@@ -62,6 +61,7 @@ class LinearProjectionModel extends VisualizationModel {
         meanx: mean(xPoints),
         meany: mean(yPoints),
       },
+      selectedTarget: this.dataModel.getTargetColumns(),
     };
   }
 }

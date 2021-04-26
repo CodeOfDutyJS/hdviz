@@ -2,7 +2,7 @@
 
 import { distance } from 'ml-distance';
 import DataModel from '../../model/DataModel';
-import ForceFieldModel from '../../model/ForceFieldModel';
+import ForceFieldModel from '../../model/VisualizationModels/ForceFieldModel';
 
 const { euclidean } = distance;
 

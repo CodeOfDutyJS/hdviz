@@ -5,7 +5,7 @@ import {
 } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { DistanceType } from '../../../utils/constant';
+import { DistanceType } from '../../../utils/options';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
 import { useStore } from '../../../store/RootStore';
