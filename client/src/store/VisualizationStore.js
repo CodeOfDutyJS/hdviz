@@ -10,7 +10,7 @@ class VisualizationStore {
   _visualization = null;
   targetColor1 = '#ecf1f5';
   targetColor2 = '#efd2d0';
-
+  isNormalized = false;
   canSave = false;
 
   constructor(rootStore) {
@@ -55,6 +55,14 @@ class VisualizationStore {
 
   setDistance(value) {
     this._visualization.addOption({ distanceFn: distance[value] });
+  }
+
+  setIsNormalized(value) {
+    this.isNormalized = value.target.checked;
+  }
+
+  setNormalization(value) {
+    this._visualization.addOption({ normalizeFn: value });
   }
 }
 
