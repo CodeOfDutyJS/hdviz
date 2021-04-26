@@ -68,6 +68,43 @@ function linearProjection(data) {
     .attr('y', (d) => pointsY(d.y * ratio) - 5)
     .attr('font-weight', 600)
     .text((d, i) => i + 1);
+
+  // points legend
+  svg.append('g').selectAll('circle')
+    .data(data.target)
+    .join('circle')
+    .attr('cx', width - 140)
+    .attr('cy', (d, i) => height - 20 - i * 25)
+    .attr('r', 7)
+    .style('fill', (d) => color(d));
+
+  svg.append('g').selectAll('text')
+    .data(data.target)
+    .join('text')
+    .attr('x', width - 120)
+    .attr('y', (d, i) => height - 20 - i * 25)
+    .style('fill', (d) => color(d))
+    .text((d) => d)
+    .attr('text-anchor', 'left')
+    .style('alignment-baseline', 'middle');
+
+  // axis legend
+  svg.append('g').selectAll('text')
+    .data(data.axis)
+    .join('text')
+    .attr('x', 10)
+    .attr('y', (d, i) => height - 20 - i * 25)
+    .text((d, i) => i + 1)
+    .attr('font-weight', 700);
+
+  svg.append('g').selectAll('text')
+    .data(data.axis)
+    .join('text')
+    .attr('x', 30)
+    .attr('y', (d, i) => height - 22 - i * 25)
+    .text((d) => d.label)
+    .attr('text-anchor', 'left')
+    .style('alignment-baseline', 'middle');
 }
 
 export default linearProjection;
