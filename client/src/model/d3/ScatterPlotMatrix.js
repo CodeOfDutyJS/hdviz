@@ -11,7 +11,7 @@ function scatterPlotMatrix({
   const svg = d3.select('#area');
   let { width } = svg.node().getBoundingClientRect();
   const { height } = svg.node().getBoundingClientRect();
-  width -= 200;
+  width -= 150;
   const padding = 30;
   const size = (width - (columns.length + 1) * padding) / columns.length + padding;
 
@@ -143,7 +143,7 @@ function scatterPlotMatrix({
     .text((d) => d);
 
   svg.property('value', []);
-  drawTargetLegend(color, selectedTarget, width, 0, height, 25);
+  drawTargetLegend(color, selectedTarget, width, 0 + 15, height, 25);
 }
 
 export default scatterPlotMatrix;
