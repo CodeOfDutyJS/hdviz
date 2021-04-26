@@ -1,7 +1,0 @@
-{
-  "DB_Name": "testhdviz",
-  "DB_Address": "localhost",
-  "DB_Username": "test",
-  "DB_Password": "",
-  "DB_Type": "MySQL"
-}
