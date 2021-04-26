@@ -3991,6 +3991,11 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
+d3-3d@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/d3-3d/-/d3-3d-0.1.2.tgz#02189c6819d069944735675c6da76d38d685d4ba"
+  integrity sha512-FrSFG+5luVlmXiwsHoP2XtgGQn4VAKgbHWYi4fE24VNQIwCtycM3GseXrTfq9owkj05E9w6D1WworMDCBH40/A==
+
 d3-array@2, d3-array@>=2.5, d3-array@^2.3.0:
   version "2.12.1"
   resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-2.12.1.tgz#e20b41aafcdffdf5d50928004ececf815a465e81"

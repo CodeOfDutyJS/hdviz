@@ -20,7 +20,6 @@ class LinearProjectionModel extends VisualizationModel {
     const x64 = pca.predict(data);
     const x = [];
     x64.data.map((d) => x.push(Array.from(d)));
-
     return { points: x, axis: (new Matrix(w)).transpose().to2DArray() };
   }
 
@@ -31,34 +30,34 @@ class LinearProjectionModel extends VisualizationModel {
 
     const preparedPoints = [];
     projection.points
-      .map((d, i) => preparedPoints
+      .forEach((d, i) => preparedPoints
         .push({
           x: d[0],
           y: d[1],
+          z: d[2],
           color: this.dataModel.targets.length > 0 ? label[i][this.dataModel.targets[0]] : null,
           size: this.dataModel.targets.length > 1 ? label[i][this.dataModel.targets[1]] : null,
         }));
     const preparedAxis = [];
     projection.axis
-      .map((d, i) => preparedAxis
-        .push({
-          x: d[0],
-          y: d[1],
-          label: this.dataModel.features[i],
-        }));
-
-    const xPoints = preparedPoints.map((d) => d.x);
-    const yPoints = preparedPoints.map((d) => d.y);
-    const xAxis = preparedAxis.map((d) => d.x);
-    const yAxis = preparedAxis.map((d) => d.y);
+      .forEach((d, i) => preparedAxis
+        .push([
+          {
+            x: 0,
+            y: 0,
+            z: 0,
+          },
+          {
+            x: d[0],
+            y: d[1],
+            z: d[2],
+          },
+        ]));
 
     return {
       points: preparedPoints,
       axis: preparedAxis,
-      points_rangeX: [min(xPoints), max(xPoints)],
-      points_rangeY: [min(yPoints), max(yPoints)],
-      axis_rangeX: [min(xAxis), max(xAxis)],
-      axis_rangeY: [min(yAxis), max(yAxis)],
+      label: this.dataModel.features,
       target: this.dataModel.targets.length > 0 ? [...new Set(label.map((d) => d[this.dataModel.targets[0]]))] : null,
     };
   }
