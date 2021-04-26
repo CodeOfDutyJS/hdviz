@@ -1,12 +1,31 @@
 /* eslint-disable */
+//node --experimental-modules ServerModule.js
 
 const express = require('express');
 const fs = require('fs');
-const mysql = require('mysql');
-const controller = require ('./modules/controller');
+const MysqlDatabase = require('./modules/MySQLDB');
+const MongoDB = require('./modules/MongoDB');
+
+
 const app = express();
 const port = 1337;
-let config_files = getFiles(__dirname+'/config');
+
+
+const findDB = async function (config) {
+  const dbType = {
+    mysql: new MysqlDatabase(config),
+    mongodb: new MongoDB(config),
+    default: function(){
+      return {
+        error: 1,
+        msg:"No configuration found"
+      };
+    }
+  };
+  return dbType[config.DB_Type];
+};
+
+
 
 function getFiles(dir, files_) {
   files_ = files_ || [];
@@ -23,8 +42,10 @@ function getFiles(dir, files_) {
   return files_;
 }
 
-function selectConfig(dbname) {
-  for (const i in config_files) {
+const config_files = getFiles(__dirname+'/config');
+
+ function selectConfig(dbname) {
+  for ( i in config_files) {
     if (dbname == config_files[i].DB_Name) {
       return config_files[i];
     }
@@ -32,110 +53,62 @@ function selectConfig(dbname) {
   return 0;
 }
 
-app.get('/api/getDatabases/', (req, res) => {
-  console.log('api/getDatabases/ called');
-
-  config_files = getFiles(__dirname+'/config');
-  let databases = [];
-  for (const i in config_files) {
-    databases = config_files[i].DB_Name;
-  }
-  const output = { databases };
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.json([output]);
-
-  console.log('api/getDatabases/ terminated successfully');
-});
-
-app.get('/api/getTables/',async (req, res) => {
-  //var dbname = req.params('dbname');
-  console.log('api/getTables/ called');
-  const dbname = 'testhdviz';
-
-  const configurazione = selectConfig(dbname);
-  if (configurazione == 0) {
-    res.send({});
-  }
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.json(await controller.getTables(dbname,configurazione));
-});
-
-const getMetaData = (connection, tableName, cb) => {
-  connection.query(`SHOW Columns FROM ${tableName}`, (err, columns, fields) => {
-    if (err) {
-      console.log('error in the query');
-      cb(err);
-    } else {
-      const output = {};
-      console.log(columns);
-      for (const column of columns) {
-        output[column.Field] = column.Type;
-      }
-      cb(null, output);
-    }
-  });
-};
-
-const getData = (connection, tableName, cb) => {
-  connection.query(`SELECT * FROM ${tableName}`, (err, rows, fields) => {
-    if (err) {
-      console.log('error in the query');
-      cb(err);
-    } else {
-      cb(null, rows);
-    }
-  });
-};
-
-app.get('/api/getData/', (req, res) => {
-  console.log('api/getData/ called');
-  var dbname = req.param('dbname');
-  var dbtable = req.param('dbtable');
-  // const dbname = 'prova';
-  // const dbtable = 'Candidato';
-
-  const configurazione = selectConfig(dbname);
-  if (configurazione == 0) {
-    res.send(0); // Si Può?
-  }
-
-  const connection = mysql.createConnection({
-    host: configurazione.DB_Address,
-    user: configurazione.DB_Username,
-    password: configurazione.DB_Password,
-    database: configurazione.DB_Name,
-  });
-
-  connection.connect((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Connected to the DB');
-
-      getMetaData(connection, dbtable, (err, columns) => {
-        if (err) {
-          console.log(err);
-        } else {
-          getData(connection, dbtable, (err2, rows) => {
-            if (err2) {
-              console.log(err2);
-            } else {
-              const output = { cols: columns, rows };
-              res.setHeader('Access-Control-Allow-Origin', '*');
-
-              res.json(output);
-              console.log('api/getDatabases/ terminated successfully');
-            }
-          });
-        }
-      });
-    }
-    // connection.end();
-  });
-});
-
 app.listen(port, () => {
   console.log('App is running');
 });
 
-// Nome DB, nome collonne, descrizione query
+app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
+
+  let databases = [];
+  for (i in config_files) {
+    databases[i] = config_files[i].DB_Name;
+  }
+  const output = { databases };
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.json([output]);
+  console.log('api/getDatabases/ terminated successfully');
+
+});
+
+
+app.get('/api/getTable', async (req, res) => {
+  let dbname = req.query.dbname;
+  console.log("getTable called");
+
+  const configurazione = selectConfig(dbname);
+  if (configurazione == 0) {
+    res.json({
+      error: 1,
+      msg:"No configuration found"
+    });
+  }
+  const database = await findDB(configurazione);
+  const connection = await Promise.resolve( database.connectTo());
+  let tables = await Promise.resolve(database.getTables(connection));
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.json(tables);
+  database.endConnection(connection);
+});
+
+
+app.get('/api/getData/',async (req, res) => {
+  console.log("getData called");
+  let dbname = req.query.dbname;
+  let dbtable = req.query.dbtable;
+
+  const configurazione = selectConfig(dbname);
+  if (configurazione == 0) {
+    res.json({
+      error: 1,
+      msg:"No configuration found"
+    });
+  }
+
+  const database = await findDB(configurazione);
+  const connection = await Promise.resolve( database.connectTo());
+
+  let data = await Promise.resolve( database.getData(connection, dbtable));
+  res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
+  res.json(data);
+  database.endConnection(connection);
+});
