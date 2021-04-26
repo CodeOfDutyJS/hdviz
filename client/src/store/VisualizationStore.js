@@ -10,6 +10,7 @@ class VisualizationStore {
   _visualization = null;
   targetColor1 = '#ecf1f5';
   targetColor2 = '#efd2d0';
+
   isNormalized = false;
   canSave = false;
 
@@ -32,9 +33,10 @@ class VisualizationStore {
 
   save() {
     this.ci = 1;
-    if (document.getElementById('area') && this.canSave) saver.saveSvgAsPng(document.getElementById('area'), 'graph.png', { backgroundColor: '#ffffff' });
-    else { // error implementation
-
+    if (document.getElementById('area') && this.canSave) {
+      saver.saveSvgAsPng(document.getElementById('area'), 'graph.png', { backgroundColor: '#ffffff' });
+    } else {
+      // error implementation
     }
   }
 
@@ -62,7 +64,11 @@ class VisualizationStore {
   }
 
   setNormalization(value) {
-    this._visualization.addOption({ normalizeFn: value });
+    this._visualization.addOption({ normalize: value });
+  }
+
+  setClustering(value) {
+    this._visualization.addOption({ clustering: value });
   }
 }
 

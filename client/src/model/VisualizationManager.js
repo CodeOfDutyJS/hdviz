@@ -21,10 +21,10 @@ class VisualizationManager {
 
   start(data) {
     this.clear();
-    this._visualizationSelected.model
-      .addData(data)
-      ._dataModel
-      .setNorm(NormalizationsCollector._normalizations.SS.func);
+    // this._visualizationSelected.model
+    //   .addData(data)
+    //   ._dataModel
+    //   .setNorm(NormalizationsCollector._normalizations.SS.func);
     this._visualizationSelected.visualization(this._visualizationSelected.model.addData(data).getPreparedDataset(this._options));
   }
 

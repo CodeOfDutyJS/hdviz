@@ -5,7 +5,7 @@ import {
 } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { DistanceType } from '../../../utils/options';
+import { DistanceType, ClusteringType } from '../../../utils/options';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
 import { useStore } from '../../../store/RootStore';
@@ -34,7 +34,13 @@ const DatasetManipulation = observer(() => {
       {visualizationStore.visualizationSelected?.options?.clustering
         ? (
           <Item label="Clustering">
-            <Select />
+            <Select placeholder="Select clustering" onChange={visualizationStore.setDistance}>
+              {Object.values(ClusteringType).map((c) => (
+                <Option key={c}>
+                  {`${c[0].toUpperCase()}${c.slice(1)}`}
+                </Option>
+              ))}
+            </Select>
           </Item>
         ) : null}
 

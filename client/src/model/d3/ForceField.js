@@ -32,7 +32,9 @@ function forceField(data) {
 
   const { links, nodes } = data;
 
-  let { width, height } = svg.node().getBoundingClientRect();
+  let { width } = svg.node().getBoundingClientRect();
+
+  const { height } = svg.node().getBoundingClientRect();
 
   const scaleLinks = d3.scaleLinear()
     .domain(d3.extent(links, (d) => (d.value)))

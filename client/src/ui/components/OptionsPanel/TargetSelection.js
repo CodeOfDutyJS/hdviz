@@ -24,7 +24,8 @@ const TargetSelection = observer(() => {
         label="Target"
         validateStatus={uiStore.maxTargets ? 'warning' : null}
         hasFeedback
-        help={uiStore.maxTargets ? 'Max 2 target variables' : null}
+        // eslint-disable-next-line
+        help={uiStore.maxTargets ? 'Max 2 target variables' : ( visualizationStore._visualization._visualizationSelected.id !== 'heatmap' ? 'First target is color, second is shape.' : null )}
       >
         <Select
           placeholder="Select target"
@@ -35,6 +36,18 @@ const TargetSelection = observer(() => {
           {modelStore.columns.map((item) => <Option key={item.value}>{item.value}</Option>)}
         </Select>
       </Item>
+
+      { visualizationStore._visualization._visualizationSelected.id === 'heatmap'
+        ? (
+          <>
+            <Item label="Colore iniziale range">
+              <CompactPicker color={visualizationStore.targetColor1} onChange={setTargetColor1} />
+            </Item>
+            <Item label="Colore finale range">
+              <CompactPicker color={visualizationStore.targetColor2} onChange={setTargetColor2} />
+            </Item>
+          </>
+        ) : null}
     </>
   );
 });
