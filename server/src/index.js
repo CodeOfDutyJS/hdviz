@@ -4,8 +4,8 @@
 const express = require('express');
 const fs = require('fs');
 const MysqlDatabase = require('./modules/MySQLDB');
-const MongoDB = require('./modules/MongoDB');
-const PostgreDB = require('./modules/PostgreDB');
+//const MongoDB = require('./modules/MongoDB');
+//const PostgreDB = require('./modules/PostgreDB');
 
 const app = express();
 const port = 1337;
