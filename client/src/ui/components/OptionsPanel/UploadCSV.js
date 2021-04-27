@@ -18,7 +18,6 @@ const UploadCSV = () => {
   const customUpload = async ({
     onSuccess, onError, file,
   }) => {
-    console.log(file);
     if (!isCSV(file.type)) {
       onError(file);
     } else {

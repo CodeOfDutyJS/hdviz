@@ -33,10 +33,10 @@ const TargetSelection = observer(() => {
       { visualizationStore._visualization._visualizationSelected.options.color === true
         ? (
           <>
-            <Item label="Colore iniziale range">
+            <Item label="Initial range color">
               <CompactPicker color={visualizationStore.targetColor1} onChange={visualizationStore.setInitialHeatmapColor} />
             </Item>
-            <Item label="Colore finale range">
+            <Item label="Final range color">
               <CompactPicker color={visualizationStore.targetColor2} onChange={visualizationStore.setFinalHeatmapColor} />
             </Item>
           </>

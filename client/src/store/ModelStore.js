@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
 import Papa from 'papaparse';
-import VisualizationCollector from '../model/VisualizationsCollector';
 import { DataModel } from '../model/index';
 
 const parseFile = (rawFile) => new Promise((resolve, reject) => {
@@ -49,7 +48,6 @@ class ModelStore {
     } catch (error) {
       // TODO: visualizzare errore
 
-      console.log(error);
       this.rootStore.uiStore.dataError = {
         status: 'error',
         message: `Error: ${error.message}`,

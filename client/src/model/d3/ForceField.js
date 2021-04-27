@@ -1,10 +1,10 @@
-/* eslint-disable no-param-reassign */
 import * as d3 from 'd3';
 import drawTargetLegend from './DrawTargetLegend';
 
 function forceField(data) {
+  /* eslint-disable no-param-reassign */
   const drag = (simulation) => {
-    function dragstarted(event) {
+    function dragStart(event) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       event.subject.fx = event.subject.x;
       event.subject.fy = event.subject.y;
@@ -15,16 +15,16 @@ function forceField(data) {
       event.subject.fy = event.y;
     }
 
-    function dragended(event) {
+    function dragEnd(event) {
       if (!event.active) simulation.alphaTarget(0);
       event.subject.fx = null;
       event.subject.fy = null;
     }
 
     return d3.drag()
-      .on('start', dragstarted)
+      .on('start', dragStart)
       .on('drag', dragged)
-      .on('end', dragended);
+      .on('end', dragEnd);
   };
 
   const svg = d3.select('#area');
