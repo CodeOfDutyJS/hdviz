@@ -17,18 +17,21 @@ function processData({
   const axisMaxY = d3.max(data.axis, (d) => d[1].projected.y);
   const color = d3.scaleOrdinal(d3.schemeCategory10);
   // points
-  const pointsX = d3.scaleLinear()
-    .domain([minX, maxX])
-    .range([1, 500]);
-  const pointsY = d3.scaleLinear()
-    .domain([minY, maxY])
-    .range([1, 500]);
   const ratio = Math.min(
     Math.abs(minX / axisMinX),
     Math.abs(maxX / axisMaxX),
     Math.abs(minY / axisMinY),
     Math.abs(maxY / axisMaxY),
   );
+  console.log(Math.round(width), Math.round(height), width / 2, height / 2);
+  const pointsX = d3.scaleLinear()
+    .domain([minX, maxX])
+    .range([150, width - 150])
+    .clamp(true);
+  const pointsY = d3.scaleLinear()
+    .domain([minY, maxY])
+    .range([150, height - 150])
+    .clamp(true);
 
   svg
     .selectAll('circle')
@@ -47,22 +50,18 @@ function processData({
     .join('line')
     .attr('stroke', '#000')
     .attr('class', '_3d lines')
-    .attr('x1', (d) => pointsX(d[0].projected.x))
-    .attr('y1', (d) => pointsY(d[0].projected.y))
-    .attr('x2', (d) => pointsX(d[1].projected.x))
-    .attr('y2', (d) => pointsY(d[1].projected.y));
+    .attr('x1', (d) => pointsX(d[0].projected.x * ratio))
+    .attr('y1', (d) => pointsY(d[0].projected.y * ratio))
+    .attr('x2', (d) => pointsX(d[1].projected.x * ratio))
+    .attr('y2', (d) => pointsY(d[1].projected.y * ratio));
 
   // label
   svg.selectAll('text')
     .data(data.axis)
     .join('text')
-    .each((d) => {
-      // eslint-disable-next-line no-param-reassign
-      d[1].centroid = { x: d[1].rotated.x, y: d[1].rotated.y, z: d[1].rotated.z };
-    })
     .attr('class', '_3d text')
-    .attr('x', (d) => pointsX(d[1].projected.x) + 5)
-    .attr('y', (d) => pointsY(d[1].projected.y) + 5)
+    .attr('x', (d) => pointsX(d[1].projected.x * ratio) + 5)
+    .attr('y', (d) => pointsY(d[1].projected.y * ratio) - 5)
     .attr('font-weight', 600)
     .text((d, i) => data.label[i]);
 
@@ -70,7 +69,6 @@ function processData({
 }
 
 function drag(props) {
-  /* eslint-disable no-param-reassign */
   const {
     point3d,
     line3d,
@@ -82,6 +80,7 @@ function drag(props) {
   let my = 0;
   let mouseX = 0;
   let mouseY = 0;
+
   function dragStart(event) {
     mx = event.x;
     my = event.y;
@@ -116,15 +115,13 @@ function drag(props) {
 
 function linearProjection(data) {
   const props = {
-    origin: [480, 300],
+    svg: d3.select('#area'),
     startAngle: Math.PI / 4,
-    scale: 50,
     get point3d() {
       const point3d = _3d()
         .x((d) => d.x)
         .y((d) => d.y)
         .z((d) => d.z)
-        .origin(this.origin)
         .rotateY(this.startAngle)
         .rotateX(-this.startAngle);
       return point3d;
@@ -135,16 +132,15 @@ function linearProjection(data) {
         .y((d) => d.y)
         .z((d) => d.z)
         .shape('LINE')
-        .origin(this.origin)
         .rotateY(this.startAngle)
         .rotateX(-this.startAngle);
       return line3d;
     },
     data,
-    svg: d3.select('#area'),
-    get width() { return this.svg.node().getBoundingClientRect().width; },
-    get height() { return this.svg.node().getBoundingClientRect().height; },
   };
+
+  props.width = props.svg.node().getBoundingClientRect().width;
+  props.height = props.svg.node().getBoundingClientRect().height;
 
   props.data.points = props.point3d(props.data.points);
   props.data.axis = props.line3d(props.data.axis);
