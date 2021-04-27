@@ -52,6 +52,11 @@ class LinearProjectionModel extends VisualizationModel {
           },
         ]));
 
+    const xPoints = preparedPoints.map((d) => d.x);
+    const yPoints = preparedPoints.map((d) => d.y);
+    const xAxis = preparedAxis.map((d) => d.x);
+    const yAxis = preparedAxis.map((d) => d.y);
+
     return {
       points: preparedPoints,
       axis: preparedAxis,
