@@ -9,6 +9,7 @@ import { DistanceType, ClusteringType } from '../../../utils/options';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
 import { useStore } from '../../../store/RootStore';
+import NormalizationCollector from '../../../model/normalizations/NormalizationsCollector';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -34,7 +35,7 @@ const DatasetManipulation = observer(() => {
       {visualizationStore.visualizationSelected?.options?.clustering
         ? (
           <Item label="Clustering">
-            <Select placeholder="Select clustering" onChange={visualizationStore.setDistance}>
+            <Select placeholder="Select clustering" onChange={visualizationStore.setClustering}>
               {Object.values(ClusteringType).map((c) => (
                 <Option key={c}>
                   {`${c[0].toUpperCase()}${c.slice(1)}`}
@@ -44,11 +45,27 @@ const DatasetManipulation = observer(() => {
           </Item>
         ) : null}
 
-      <Item className="no-point" label={<Checkbox onChange={visualizationStore.setIsNormalized} checked={visualizationStore.isNormalized}>Normalization</Checkbox>}>
+      <Item
+        className="no-point"
+        label={(
+          <Checkbox
+            onChange={visualizationStore.setIsNormalized}
+            checked={visualizationStore.isNormalized}
+          >
+            Normalization
+          </Checkbox>
+)}
+      >
         {visualizationStore.isNormalized ? (
-          <Select placeholder="Select normalization" onChange={visualizationStore.setNormalization}>
-            <Option key="row">Row Normalization</Option>
-            <Option key="col">Column Normalization</Option>
+          <Select
+            defaultValue={NormalizationCollector._normalizations.noNorm.id}
+            onChange={visualizationStore.setNormalization}
+          >
+            {Object.values(NormalizationCollector.normalizations).map((item) => (
+              <Option key={item.id}>
+                {item.label}
+              </Option>
+            ))}
           </Select>
         ) : null}
       </Item>

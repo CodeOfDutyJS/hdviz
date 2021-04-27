@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
 import Papa from 'papaparse';
-import VisualizationCollector from '../model/VisualizationsCollector';
 import { DataModel } from '../model/index';
 
 const parseFile = (rawFile) => new Promise((resolve, reject) => {
@@ -36,7 +35,6 @@ class ModelStore {
   async uploadCSV(file) {
     try {
       const results = await parseFile(file);
-      console.log(results);
       this.dataset = results.data;
       this.loadingCompleted = true;
       if (results.errors.length > 0) {
@@ -50,7 +48,6 @@ class ModelStore {
     } catch (error) {
       // TODO: visualizzare errore
 
-      console.log(error);
       this.rootStore.uiStore.dataError = {
         status: 'error',
         message: `Error: ${error.message}`,
@@ -70,7 +67,6 @@ class ModelStore {
 
   // GETTER / SETTER
   get data() {
-    console.log(this.dataModel);
     return this.dataModel;
   }
 

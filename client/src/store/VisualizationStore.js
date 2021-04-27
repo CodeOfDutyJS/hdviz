@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import * as saver from 'save-svg-as-png';
 import VisualizationManager from '../model/VisualizationManager';
 import VisualizationCollector from '../model/VisualizationsCollector';
+import NormalizationCollector from '../model/normalizations/NormalizationsCollector';
 
 class VisualizationStore {
   rootStore;
@@ -10,6 +11,8 @@ class VisualizationStore {
   _visualization = null;
   targetColor1 = '#ecf1f5';
   targetColor2 = '#efd2d0';
+  primoRangeHeatmap = 0;
+  secondoRangeHeatmap = 0;
 
   isNormalized = false;
   canSave = false;
@@ -64,11 +67,31 @@ class VisualizationStore {
   }
 
   setNormalization(value) {
-    this._visualization.addOption({ normalize: value });
+    this._visualization.addOption({ normalization: NormalizationCollector._normalizations[value] });
   }
 
   setClustering(value) {
     this._visualization.addOption({ clustering: value });
+  }
+
+  setInitialHeatmapColor(value) {
+    this.targetColor1 = value.hex;
+    this._visualization.addOption({ initialColor: this.targetColor1 });
+  }
+
+  setFinalHeatmapColor(value) {
+    this.targetColor2 = value.hex;
+    this._visualization.addOption({ finalColor: this.targetColor2 });
+  }
+
+  setPrimoRangeHeatmap(value) {
+    this.primoRangeHeatmap = value;
+    this._visualization.addOption({ initialRangeValue: this.primoRangeHeatmap });
+  }
+
+  setSecondoRangeHeatmap(value) {
+    this.secondoRangeHeatmap = value;
+    this._visualization.addOption({ finalRangeValue: this.secondoRangeHeatmap });
   }
 }
 
