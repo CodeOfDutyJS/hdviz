@@ -2,8 +2,8 @@ import React from 'react';
 import { Select, Form } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { useStore } from '../../../store/RootStore';
 import VisualizationCollector from '../../../model/VisualizationsCollector';
+import { useStore } from '../../../store/RootStore';
 
 const { Option } = Select;
 const { Item } = Form;
