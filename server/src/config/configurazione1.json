@@ -1,6 +1,8 @@
-{
+
+  {
   "DB_Name": "iris",
-  "DB_Address": "192.168.178.144",
+  "DB_Address": "localhost",
   "DB_Username": "root",
-  "DB_Password": "admin"
+  "DB_Password": "",
+  "DB_Type": "mysql"
 }
