@@ -10,13 +10,6 @@ const { Item } = Form;
 
 const TargetSelection = observer(() => {
   const { modelStore, uiStore, visualizationStore } = useStore();
-  const setTargetColor1 = (color) => {
-    visualizationStore.targetColor1 = color.hex;
-  };
-
-  const setTargetColor2 = (color) => {
-    visualizationStore.targetColor2 = color.hex;
-  };
 
   return (
     <>
@@ -41,10 +34,10 @@ const TargetSelection = observer(() => {
         ? (
           <>
             <Item label="Colore iniziale range">
-              <CompactPicker color={visualizationStore.targetColor1} onChange={setTargetColor1} />
+              <CompactPicker color={visualizationStore.targetColor1} onChange={visualizationStore.setInitialHeatmapColor} />
             </Item>
             <Item label="Colore finale range">
-              <CompactPicker color={visualizationStore.targetColor2} onChange={setTargetColor2} />
+              <CompactPicker color={visualizationStore.targetColor2} onChange={visualizationStore.setFinalHeatmapColor} />
             </Item>
           </>
         ) : null}

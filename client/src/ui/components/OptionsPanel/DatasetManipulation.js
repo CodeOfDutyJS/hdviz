@@ -34,7 +34,7 @@ const DatasetManipulation = observer(() => {
       {visualizationStore.visualizationSelected?.options?.clustering
         ? (
           <Item label="Clustering">
-            <Select placeholder="Select clustering" onChange={visualizationStore.setDistance}>
+            <Select placeholder="Select clustering" onChange={visualizationStore.setClustering}>
               {Object.values(ClusteringType).map((c) => (
                 <Option key={c}>
                   {`${c[0].toUpperCase()}${c.slice(1)}`}
@@ -44,7 +44,17 @@ const DatasetManipulation = observer(() => {
           </Item>
         ) : null}
 
-      <Item className="no-point" label={<Checkbox onChange={visualizationStore.setIsNormalized} checked={visualizationStore.isNormalized}>Normalization</Checkbox>}>
+      <Item
+        className="no-point"
+        label={(
+          <Checkbox
+            onChange={visualizationStore.setIsNormalized}
+            checked={visualizationStore.isNormalized}
+          >
+            Normalization
+          </Checkbox>
+)}
+      >
         {visualizationStore.isNormalized ? (
           <Select placeholder="Select normalization" onChange={visualizationStore.setNormalization}>
             <Option key="row">Row Normalization</Option>
