@@ -5,7 +5,7 @@ import {
 } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { DistanceType } from '../../../utils/options';
+import { DistanceType, ClusteringType } from '../../../utils/options';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
 import { useStore } from '../../../store/RootStore';
@@ -15,20 +15,6 @@ const { Item } = Form;
 
 const DatasetManipulation = observer(() => {
   const { modelStore, visualizationStore } = useStore();
-  const [normalized, setNormalized] = useState(false);
-  const [isDistanceMatrix, setIsDistanceMatrix] = useState(true);
-
-  const onNormalizeCheckboxChanged = (e) => {
-    setNormalized(e.target.checked);
-  };
-
-  const onMatrixCheckboxChanged = (e) => {
-    setIsDistanceMatrix(e.target.checked);
-  };
-
-  const onDistanceChanged = (_distance) => {
-    modelStore.setDistance(_distance);
-  };
 
   return (
     <Form>
@@ -37,15 +23,36 @@ const DatasetManipulation = observer(() => {
 
       {visualizationStore.visualizationSelected?.options?.distance
         ? (
-          <Item className="no-point" label={<Checkbox onChange={onMatrixCheckboxChanged} checked={isDistanceMatrix}>Calculate Distance Matrix</Checkbox>}>
-            {isDistanceMatrix ? (
-              <Select placeholder="Select distance" onChange={visualizationStore.setDistance}>
-                <Option key={DistanceType.EUCLIDEAN}>Euclidea</Option>
-                <Option key={DistanceType.MANHATTAN}>Manthattan</Option>
-              </Select>
-            ) : null}
+          <Item label="Distance Matrix">
+            <Select placeholder="Select distance" onChange={visualizationStore.setDistance}>
+              <Option key={DistanceType.EUCLIDEAN}>Euclidea</Option>
+              <Option key={DistanceType.MANHATTAN}>Manthattan</Option>
+            </Select>
           </Item>
         ) : null}
+
+      {visualizationStore.visualizationSelected?.options?.clustering
+        ? (
+          <Item label="Clustering">
+            <Select placeholder="Select clustering" onChange={visualizationStore.setDistance}>
+              {Object.values(ClusteringType).map((c) => (
+                <Option key={c}>
+                  {`${c[0].toUpperCase()}${c.slice(1)}`}
+                </Option>
+              ))}
+            </Select>
+          </Item>
+        ) : null}
+
+      <Item className="no-point" label={<Checkbox onChange={visualizationStore.setIsNormalized} checked={visualizationStore.isNormalized}>Normalization</Checkbox>}>
+        {visualizationStore.isNormalized ? (
+          <Select placeholder="Select normalization" onChange={visualizationStore.setNormalization}>
+            <Option key="row">Row Normalization</Option>
+            <Option key="col">Column Normalization</Option>
+          </Select>
+        ) : null}
+      </Item>
+
     </Form>
   );
 });
