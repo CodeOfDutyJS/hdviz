@@ -38,7 +38,7 @@ class LinearProjectionModel extends VisualizationModel {
         }));
     const preparedAxis = [];
     projection.axis
-      .forEach((d, i) => preparedAxis
+      .forEach((d) => preparedAxis
         .push([
           {
             x: 0,
