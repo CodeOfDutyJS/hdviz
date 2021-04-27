@@ -76,6 +76,12 @@ class DataModel {
     );
   }
 
+  getFeatureColumnsNormalized() {
+    const r = this.getFeatureColumns();
+    if (this.toNorm) return this.toNorm(r, this.features);
+    return r;
+  }
+
   getSelectedDataset() {
     const targetCols = this.getTargetColumns();
     const featureCols = this.getFeatureColumns();
