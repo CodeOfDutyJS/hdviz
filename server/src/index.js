@@ -77,8 +77,8 @@ app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare
 
 app.get('/api/getTables', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  //let dbname = req.query.dbname;
-  let dbname = 'test';
+  let dbname = req.query.dbname;
+  //let dbname = 'test';
   console.log("getTable called");
 
   const configurazione = selectConfig(dbname);
