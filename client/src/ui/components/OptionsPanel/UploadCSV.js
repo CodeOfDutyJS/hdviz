@@ -8,7 +8,8 @@ const UploadCSV = () => {
   const { modelStore } = useStore();
   const [fileList, setFileList] = useState([]);
 
-  const isCSV = (type) => type === 'application/vnd.ms-excel' || type === 'text/csv';
+  // const isCSV = (type) => type === 'application/vnd.ms-excel' || type === 'text/csv';
+  const isCSV = (type) => true;
 
   const onFileUploadChange = ({ fileList: newFileList }) => {
     setFileList(newFileList.slice(-1));
@@ -17,7 +18,6 @@ const UploadCSV = () => {
   const customUpload = async ({
     onSuccess, onError, file,
   }) => {
-    console.log(file);
     if (!isCSV(file.type)) {
       onError(file);
     } else {
