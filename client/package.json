@@ -16,8 +16,6 @@
     "d3-3d": "^0.1.2",
     "eslint-plugin-jest": "^24.3.1",
     "less": "^4.1.1",
-    "ml-array-max": "^1.2.3",
-    "ml-array-min": "^1.2.2",
     "ml-distance": "^3.0.0",
     "ml-distance-matrix": "^2.0.1",
     "ml-matrix": "^6.7.0",

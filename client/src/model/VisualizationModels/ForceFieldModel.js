@@ -6,7 +6,7 @@ class ForceFieldModel extends VisualizationModel {
     return this.dataModel.getSelectedDataset()
       .map((value) => ({
         color: this.dataModel.targets.length > 0 ? value?.[this.dataModel.targets[0]] : null,
-        size: this.dataModel.targets.length > 1 ? value?.[this.dataModel.targets[1]] : null,
+        shape: this.dataModel.targets.length > 1 ? value?.[this.dataModel.targets[1]] : null,
         features: JSON.stringify(value),
       }))
       .slice(0, maxNodes);

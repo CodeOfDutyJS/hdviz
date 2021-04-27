@@ -39,6 +39,7 @@ describe('#ForceFieldModel', () => {
       expect(
         'id' in distanceDataset.nodes[0]
         && 'colore' in distanceDataset.nodes[0],
+        && 'shape' in distanceDataset.nodes[0],
       ).toBeTruthy();
       expect(
         'source' in distanceDataset.links[0]
