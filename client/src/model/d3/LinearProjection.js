@@ -53,7 +53,8 @@ function processData({
     .attr('x1', (d) => pointsX(d[0].projected.x * ratio))
     .attr('y1', (d) => pointsY(d[0].projected.y * ratio))
     .attr('x2', (d) => pointsX(d[1].projected.x * ratio))
-    .attr('y2', (d) => pointsY(d[1].projected.y * ratio));
+    .attr('y2', (d) => pointsY(d[1].projected.y * ratio))
+    .attr('marker-end', 'url(#arrow)');
 
   // label
   svg.selectAll('text')
@@ -148,6 +149,21 @@ function linearProjection(data) {
   props.svg = props.svg
     .call(drag(props))
     .append('g');
+
+  // marker
+  props.svg
+    .append('defs')
+    .append('marker')
+    .attr('id', 'arrow')
+    .attr('viewBox', [0, 0, 20, 20])
+    .attr('refX', 5)
+    .attr('refY', 5)
+    .attr('markerWidth', 12)
+    .attr('markerHeight', 12)
+    .attr('orient', 'auto-start-reverse')
+    .append('path')
+    .attr('d', d3.line()([[0, 0], [0, 8], [8, 5]]))
+    .attr('stroke', 'black');
 
   processData(props);
 }
