@@ -3,7 +3,6 @@ import VisualizationModel from '../VisualizationModel';
 
 class ForceFieldModel extends VisualizationModel {
   getNodes(maxNodes) {
-    console.log(this.dataModel.targets[1]);
     return this.dataModel.getSelectedDataset()
       .map((value) => ({
         color: this.dataModel.targets.length > 0 ? value?.[this.dataModel.targets[0]] : null,
