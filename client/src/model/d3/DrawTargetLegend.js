@@ -12,6 +12,9 @@ function drawTargetLegend(color, target, x, y, height, width, column = 0) {
   });
   colorValues = Object.keys(colorValues);
 
+  // eslint-disable-next-line no-param-reassign
+  height = colorValues.length < 8 ? colorValues.length * 30 : height;
+
   const yScale = d3.scaleBand()
     .range([y, y + height])
     .paddingInner(0.5)
@@ -19,15 +22,15 @@ function drawTargetLegend(color, target, x, y, height, width, column = 0) {
 
   const bandwidth = yScale.bandwidth() > 50 ? 50 : yScale.bandwidth();
 
+  const radius = colorValues.length < 8 ? 15 : 5;
   svg.append('g')
-    .selectAll('rect')
+    .selectAll('circle')
     .data(colorValues)
     .enter()
-    .append('rect')
-    .attr('x', x)
-    .attr('y', (d, i) => yScale(i))
-    .attr('width', width)
-    .attr('height', bandwidth)
+    .append('circle')
+    .attr('cx', x)
+    .attr('cy', (d, i) => yScale(i))
+    .attr('r', radius)
     .style('fill', (d, i) => color(d))
     .style('opacity', 1);
 
@@ -38,7 +41,8 @@ function drawTargetLegend(color, target, x, y, height, width, column = 0) {
     .append('text')
     .text((d) => d)
     .attr('x', x + width + 10)
-    .attr('y', (d, i) => yScale(i) + (bandwidth / 2));
+    .attr('y', (d, i) => yScale(i))
+    .attr('fill', (d) => color(d));
 }
 
 export default drawTargetLegend;

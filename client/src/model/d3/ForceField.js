@@ -76,7 +76,7 @@ function forceField(data) {
       .attr('cy', (d) => d.y);
   });
 
-  drawTargetLegend(color, data.selectedTarget, width + 50, 0, height - 100, 25);
+  drawTargetLegend(color, data.selectedTarget, width + 50, 20, height - 100, 25);
 
   d3.select(window)
     .on('resize', () => {
