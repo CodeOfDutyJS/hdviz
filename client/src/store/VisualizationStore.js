@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import * as saver from 'save-svg-as-png';
 import VisualizationManager from '../model/VisualizationManager';
 import VisualizationCollector from '../model/VisualizationsCollector';
+import NormalizationCollector from '../model/normalizations/NormalizationsCollector';
 
 class VisualizationStore {
   rootStore;
@@ -64,7 +65,8 @@ class VisualizationStore {
   }
 
   setNormalization(value) {
-    this._visualization.addOption({ normalize: value });
+    this._visualization.addOption({ normalize: NormalizationCollector._normalizations[value] });
+    console.log(this._visualization._options);
   }
 
   setClustering(value) {
