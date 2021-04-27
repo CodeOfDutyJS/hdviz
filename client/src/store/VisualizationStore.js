@@ -72,11 +72,13 @@ class VisualizationStore {
   }
 
   setInitialHeatmapColor(value) {
-    this._visualization.addOption({ initialColor: value.hex });
+    this.targetColor1 = value.hex;
+    this._visualization.addOption({ initialColor: this.targetColor1 });
   }
 
   setFinalHeatmapColor(value) {
-    this._visualization.addOption({ finalColor: value.hex });
+    this.targetColor2 = value.hex;
+    this._visualization.addOption({ finalColor: this.targetColor2 });
   }
 }
 
