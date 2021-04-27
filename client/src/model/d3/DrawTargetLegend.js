@@ -1,9 +1,8 @@
 import * as d3 from 'd3';
 
-function drawTargetLegend(color, target, x, y, height, width) {
+function drawTargetLegend(color, target, x, y, height, width, column = 0) {
   const svg = d3.select('#area');
-  const colorTitle = Object.keys(target[0])[0];
-  // const shapeTitle = Object.keys(target[0])[1];
+  const colorTitle = Object.keys(target[0])[column];
   let colorValues = {};
   const valueArray = target.map((value) => value[colorTitle]);
   valueArray.forEach((value) => {
