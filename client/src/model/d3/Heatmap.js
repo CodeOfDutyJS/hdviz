@@ -1,4 +1,6 @@
 import * as d3 from 'd3';
+import drawColorScale from './DrawColorScale';
+import drawTargetLegend from './DrawTargetLegend';
 
 function getLeaves(cluster) {
   let leaves = [];
@@ -34,22 +36,15 @@ function dataGrid(cluster, cols) {
   return toGrid;
 }
 
-function drawTargetRows(cluster, cols) {
+function drawTargetRows(cluster, cols, margin, selectedTarget) {
   const grid = dataGrid(cluster, cols);
   const rows = d3.max(grid, (d) => d.row);
   const svg = d3.select('#area');
-  const color = d3.scaleOrdinal()
-    .range(d3.schemeCategory10);
-
-  const margin = {
-    top: 20,
-    bottom: 20,
-    left: 100,
-    right: 20,
-  };
-
-  const width = 25 * cols.length || svg.node().getBoundingClientRect().width;
-  const height = 600 || svg.node().getBoundingClientRect().height;
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
+  let { width, height } = svg.node().getBoundingClientRect();
+  width -= margin.right;
+  height -= margin.top;
+  height -= margin.bottom;
 
   const y = d3.scaleBand()
     .range([margin.top, height + margin.top])
@@ -57,7 +52,7 @@ function drawTargetRows(cluster, cols) {
     .domain(d3.range(1, rows + 1));
 
   const x = d3.scaleBand()
-    .range([700, 700 + 25 * cols.length])
+    .range([width + margin.left, width + margin.left + 25 * cols.length])
     .paddingInner(0)
     .domain(d3.range(1, cols.length + 1));
 
@@ -71,8 +66,13 @@ function drawTargetRows(cluster, cols) {
 
   svg.append('g')
     .attr('class', 'x axis2')
-    .attr('transform', `translate(750, ${height + margin.top})`)
-    .call(xAxis);
+    .attr('transform', `translate(0, ${height + margin.top})`)
+    .call(xAxis)
+    .selectAll('text')
+    .style('text-anchor', 'end')
+    .attr('dx', '-.8em')
+    .attr('dy', '.15em')
+    .attr('transform', 'rotate(-65)');
 
   svg.append('g')
     .selectAll('rect')
@@ -87,27 +87,32 @@ function drawTargetRows(cluster, cols) {
     .style('opacity', 1e-5)
     .transition()
     .style('opacity', 1);
+
+  drawTargetLegend(color, selectedTarget, width + margin.left + 25 * cols.length + 200, 0, height, 25);
 }
 
 function heatmap({
   cluster,
   clusterCols,
   targetCols,
+  selectedTarget,
 }) {
-  console.log('heatmap');
+  const svg = d3.select('#area');
   const cols = getLeaves(clusterCols).map((value) => value.id);
   const colorRange = ['white', '#ff1a00'];
   const grid = dataGrid(cluster, cols);
   const rows = d3.max(grid, (d) => d.row);
-  const width = 600;
-  const height = 600;
   const margin = {
     top: 20,
-    bottom: 20,
-    left: 100,
-    right: 20,
+    bottom: 150,
+    left: 30,
+    right: 400,
   };
-  const svg = d3.select('#area');
+
+  let { width, height } = svg.node().getBoundingClientRect();
+  width -= margin.right;
+  height -= margin.top;
+  height -= margin.bottom;
   const padding = 0.0;
   const x = d3.scaleBand()
     .range([margin.left, width + margin.left])
@@ -118,9 +123,13 @@ function heatmap({
     .paddingInner(padding)
     .domain(d3.range(1, rows + 1));
 
+  const min = d3.min(grid, (d) => d.value);
+  const max = d3.max(grid, (d) => d.value);
+
+  const range = [min, max];
   const c = d3.scaleLinear()
     .range(colorRange)
-    .domain([-3, 3]);
+    .domain(range);
 
   const xAxis = d3.axisBottom(x).tickFormat((d, i) => cols[i]);
   const yAxis = d3.axisRight(y).tickFormat([]).tickSize(0);
@@ -152,7 +161,19 @@ function heatmap({
     .transition()
     .style('opacity', 1);
 
-  drawTargetRows(cluster, targetCols);
+  drawTargetRows(cluster, targetCols, margin, selectedTarget);
+  drawColorScale(c, range, width + (targetCols.length * 25) + 50, 30, 100, 25, 'Standard Deviation');
+
+  d3.select(window)
+    .on('resize', () => {
+      d3.select('#area').selectAll('*').remove();
+      heatmap({
+        cluster,
+        clusterCols,
+        targetCols,
+        selectedTarget,
+      });
+    });
 }
 
 export default heatmap;

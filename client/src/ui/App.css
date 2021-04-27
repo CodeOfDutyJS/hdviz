@@ -1,10 +1,22 @@
+.range-number{
+  margin-top: 0.8em;
+}
+
+.first-range-number{
+  margin-right: 1em;
+}
+
+.second-range-number{
+  margin-left: 1em;
+}
+
 #root {
   height: 100%;
 }
 
 #area{
   width: 50%;
-  margin-left: 2em;
+  /* margin-left: 10%; */
 }
 
 #hdviz {
@@ -46,11 +58,19 @@
 
 #start-button{
   background-color: #353535;
-  padding: 1.5em 5em;
+  padding: 1.5em 0;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
 }
 
 #start-button span{
   color: #353535;
+}
+
+#start-button > button{
+  padding: 0 32px;
+  margin: 0 8px;
 }
 
 /* MOBILE */

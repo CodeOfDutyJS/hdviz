@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import Papa from 'papaparse';
-import DataModel from '../model/DataModel';
-import { VisualizationType } from '../utils/visualizations';
+import { DataModel } from '../model/index';
 
 const parseFile = (rawFile) => new Promise((resolve, reject) => {
   Papa.parse(rawFile, {
@@ -11,7 +10,7 @@ const parseFile = (rawFile) => new Promise((resolve, reject) => {
     worker: true,
 
     complete: (results) => {
-      resolve(results.data);
+      resolve(results);
     },
 
     error: (error) => {
@@ -35,16 +34,29 @@ class ModelStore {
 
   async uploadCSV(file) {
     try {
-      this.dataset = await parseFile(file);
+      const results = await parseFile(file);
+      this.dataset = results.data;
       this.loadingCompleted = true;
+      if (results.errors.length > 0) {
+        results.errors.forEach((error) => {
+          this.rootStore.uiStore.dataError.push({
+            status: 'warning',
+            message: `Error ${error.code}: ${error.message}`,
+          });
+        });
+      }
     } catch (error) {
       // TODO: visualizzare errore
-      console.log(error);
+
+      this.rootStore.uiStore.dataError = {
+        status: 'error',
+        message: `Error: ${error.message}`,
+      };
     }
   }
 
   checkFeatures() {
-    if (this.rootStore.visualizationStore.visualizationSelected === VisualizationType.SCATTER_PLOT_MATRIX && this.features.length > 5) {
+    if (this.rootStore.visualizationStore.visualizationSelected.options?.maxFeatures && this.features.length > this.rootStore.visualizationStore.visualizationSelected.options.maxFeatures) {
       this.features = this.features.slice(0, 5);
 
       this.rootStore.uiStore.maxFeatures = true;
@@ -55,12 +67,13 @@ class ModelStore {
 
   // GETTER / SETTER
   get data() {
-    console.log(this.dataModel);
     return this.dataModel;
   }
 
   set dataset(value) {
     this.dataModel.dataset = value;
+
+    this.rootStore.uiStore.loadingDataCompleted = true;
   }
 
   get columns() {

@@ -1,7 +1,9 @@
 import { distance } from 'ml-distance';
-import { Matrix, correlation } from 'ml-matrix';
+import { correlation } from 'ml-matrix';
 import { DistanceType, ClusteringType } from '../../utils/options';
-import VisualizationModel from '../VisualizationModel';
+import { VisualizationModel } from '../index';
+import heatmap from '../d3/Heatmap';
+import VisualizationCollector from '../VisualizationsCollector';
 
 class HeatMapModel extends VisualizationModel {
   constructor(dataModel, distanceFn = distance.euclidean) {
@@ -12,6 +14,17 @@ class HeatMapModel extends VisualizationModel {
   setDistance(distanceFn) {
     this._distanceFn = distanceFn;
     return this;
+  }
+
+  getLeavesNumber(cluster) {
+    let leavesN = 0;
+    if (!cluster.children) {
+      return 1;
+    }
+    cluster.children.forEach((value) => {
+      leavesN += this.getLeavesNumber(value);
+    });
+    return leavesN;
   }
 
   distanceCalculator(a, b) {
@@ -50,7 +63,7 @@ class HeatMapModel extends VisualizationModel {
   }
 
   getDistanceMatrix() {
-    const data = this.dataModel.getStandardScore();
+    const data = this.dataModel.getSelectedDataset();
     const matrix = [];
     data.forEach((row) => {
       if (Object.entries(row).length === 0) return;
@@ -74,7 +87,7 @@ class HeatMapModel extends VisualizationModel {
 
   getAlphaticallySorted() {
     const col = this.dataModel.targets[0];
-    const d = this.dataModel.getStandardScore();
+    const d = this.dataModel.getSelectedDataset();
     d.sort((a, b) => {
       const IdA = a[col].toUpperCase(); // ignore upper and lowercase
       const IdB = b[col].toUpperCase(); // ignore upper and lowercase
@@ -109,11 +122,10 @@ class HeatMapModel extends VisualizationModel {
         }
       });
       // now that you have the minimum build the cluster
-      const r = matrix[indexes[1]];
-      const l = 'branchLength' in r ? r.branchLength : 0;
+      // const r = matrix[indexes[1]];
+      // const l = 'branchLength' in r ? r.branchLength : 0;
       const cluster = {
         id: `cluster${n}`,
-        branchLength: (min / 2) - l,
         children: [],
       };
       indexes.forEach((index) => {
@@ -121,6 +133,7 @@ class HeatMapModel extends VisualizationModel {
       });
       // calculate the distances
       const dist = matrix[indexes[0]].distances.slice();
+      const clusterElementNumber = this.getLeavesNumber(matrix[indexes[0]].ref) + this.getLeavesNumber(matrix[indexes[1]].ref);
       indexes.forEach((index) => {
         const entry = matrix[index].distances;
         entry.forEach((dista, i) => {
@@ -129,6 +142,9 @@ class HeatMapModel extends VisualizationModel {
           }
           if (clusteringType === ClusteringType.COMPLETE) {
             if (dista > dist[i]) dist[i] = dista;
+          }
+          if (clusteringType === ClusteringType.UPGMA) {
+            dist[i] = matrix[indexes[0]].distances[i] + matrix[indexes[1]].distances[i] / clusterElementNumber;
           }
         });
       });
@@ -162,13 +178,14 @@ class HeatMapModel extends VisualizationModel {
     return this.getDistanceMatrix();
   }
 
-  getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.ALPHABETICAL }) {
+  getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.UPGMA }) {
     this.setDistance(DistanceType.PEARSONS);
     if (clusteringType === ClusteringType.ALPHABETICAL) {
       return {
         cluster: this.getAlphaticallySorted(),
         clusterCols: this.getLinkage(ClusteringType.SINGLE),
         targetCols: this.dataModel.targets,
+        selectedTarget: this.dataModel.getTargetColumns(),
       };
     }
 
@@ -178,24 +195,17 @@ class HeatMapModel extends VisualizationModel {
       cluster: this.getLinkage(clusteringType),
       clusterCols: cols,
       targetCols: this.dataModel.targets,
+      selectedTarget: this.dataModel.getTargetColumns(),
     };
   }
 }
 
-/*
-matrix = [
-  {
-    cluster: {},
-    distances: []
-  },
-  {
-    cluster: {}
-    distances: [],
-  }
-]
-
-the distance matrix always is n colunms and n rows, easy to update on removal
-and when adding elements, as long as we push on the end.
-*/
-
 export default HeatMapModel;
+
+VisualizationCollector.addVisualization({
+  id: 'heatmap',
+  label: 'Heatmap',
+  model: new HeatMapModel(),
+  visualization: heatmap,
+  options: { distance: true, clustering: true, color: true },
+});

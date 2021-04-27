@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
-import VisualizationModel from '../VisualizationModel';
+import forceField from '../d3/ForceField';
+import { VisualizationModel } from '../index';
+import VisualizationCollector from '../VisualizationsCollector';
 
 class ForceFieldModel extends VisualizationModel {
   getNodes(maxNodes) {
@@ -40,8 +42,17 @@ class ForceFieldModel extends VisualizationModel {
     return {
       nodes: this.getNodes(maxNodes),
       links: this.getLinks(distanceFn, maxNodes, maxLinks),
+      selectedTarget: this.dataModel.getTargetColumns(),
     };
   }
 }
 
 export default ForceFieldModel;
+
+VisualizationCollector.addVisualization({
+  id: 'force',
+  label: 'Force Field',
+  model: new ForceFieldModel(),
+  visualization: forceField,
+  options: { distance: true },
+});

@@ -1,6 +1,8 @@
 import { Matrix } from 'ml-matrix';
 import { PCA } from 'ml-pca';
-import VisualizationModel from '../VisualizationModel';
+import { VisualizationModel } from '../index';
+import linearProjection from '../d3/LinearProjection';
+import VisualizationCollector from '../VisualizationsCollector';
 
 class LinearProjectionModel extends VisualizationModel {
   // ritorna le coordinate dei punti proiettati sulle due componenti pca calcolate
@@ -52,11 +54,6 @@ class LinearProjectionModel extends VisualizationModel {
           },
         ]));
 
-    const xPoints = preparedPoints.map((d) => d.x);
-    const yPoints = preparedPoints.map((d) => d.y);
-    const xAxis = preparedAxis.map((d) => d.x);
-    const yAxis = preparedAxis.map((d) => d.y);
-
     return {
       points: preparedPoints,
       axis: preparedAxis,
@@ -65,5 +62,12 @@ class LinearProjectionModel extends VisualizationModel {
     };
   }
 }
+
+VisualizationCollector.addVisualization({
+  id: 'linear',
+  label: 'Linear Projection',
+  model: new LinearProjectionModel(),
+  visualization: linearProjection,
+});
 
 export default LinearProjectionModel;

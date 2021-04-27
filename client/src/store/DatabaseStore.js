@@ -21,18 +21,33 @@ class DatabaseStore {
 
   async setDatabases() {
     this.databasesLoading = true;
-    this.databases = await this.apiService.getDatabases();
+    const response = await this.apiService.getDatabases();
+    if (!response.error) {
+      this.databases = response;
+    } else {
+      throw new Error(response.msg);
+    }
     this.databasesLoading = false;
   }
 
   async setTables() {
     this.tablesLoading = true;
-    this.tables = await this.apiService.getTables(this._databaseSelected);
+    const response = await this.apiService.getTables(this._databaseSelected);
+    if (!response.error) {
+      this.tables = response;
+    } else {
+      throw new Error(response.msg);
+    }
     this.tablesLoading = false;
   }
 
   async getData() {
-    return this.apiService.getData(this.databaseSelected, this.tableSelected);
+    const response = await this.apiService.getData(this.databaseSelected, this.tableSelected);
+    if (!response.error) {
+      this.rootStore.modelStore.dataset = response.rows;
+    } else {
+      throw new Error(response.msg);
+    }
   }
 
   // GETTER / SETTER
@@ -42,6 +57,17 @@ class DatabaseStore {
 
   set databases(value) {
     this._databases = value;
+  }
+
+  getDatabaseConnections() {
+    try {
+      this.setDatabases();
+    } catch (error) {
+      this.rootStore.uiStore.dataError.push({
+        status: 'error',
+        message: `${error}`,
+      });
+    }
   }
 
   get databasesLoading() {
@@ -62,7 +88,14 @@ class DatabaseStore {
 
   setDatabaseSelected(value) {
     this.databaseSelected = value;
-    this.setTables();
+    try {
+      this.setTables();
+    } catch (error) {
+      this.rootStore.uiStore.dataError.push({
+        status: 'error',
+        message: `${error}`,
+      });
+    }
   }
 
   get tables() {
@@ -91,6 +124,14 @@ class DatabaseStore {
 
   setTableSelected(value) {
     this.tableSelected = value;
+    try {
+      this.getData();
+    } catch (error) {
+      this.rootStore.uiStore.dataError.push({
+        status: 'error',
+        message: `${error}`,
+      });
+    }
   }
 }
 

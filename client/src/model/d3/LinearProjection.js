@@ -63,7 +63,7 @@ function processData({
     .attr('x', (d) => pointsX(d[1].projected.x * ratio) + 5)
     .attr('y', (d) => pointsY(d[1].projected.y * ratio) - 5)
     .attr('font-weight', 600)
-    .text((d, i) => i + 1);
+    .text((d, i) => data.feature[1]);
 
   d3.selectAll('._3d').sort(_3d().sort);
 }
@@ -176,24 +176,6 @@ function linearProjection(data) {
     .attr('x', props.width - 120)
     .attr('y', (d, i) => props.height - 20 - i * 25)
     .style('fill', (d) => props.color(d))
-    .text((d) => d)
-    .attr('text-anchor', 'left')
-    .style('alignment-baseline', 'middle');
-
-  // axis legend
-  props.svg.append('g').selectAll('text')
-    .data(data.feature)
-    .join('text')
-    .attr('x', 10)
-    .attr('y', (d, i) => props.height - 20 - i * 25)
-    .text((d, i) => i + 1)
-    .attr('font-weight', 700);
-
-  props.svg.append('g').selectAll('text')
-    .data(data.feature)
-    .join('text')
-    .attr('x', 30)
-    .attr('y', (d, i) => props.height - 22 - i * 25)
     .text((d) => d)
     .attr('text-anchor', 'left')
     .style('alignment-baseline', 'middle');
