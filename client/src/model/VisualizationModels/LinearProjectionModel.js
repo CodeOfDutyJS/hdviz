@@ -1,6 +1,4 @@
 import { Matrix } from 'ml-matrix';
-import max from 'ml-array-max';
-import min from 'ml-array-min';
 import { PCA } from 'ml-pca';
 import VisualizationModel from '../VisualizationModel';
 
@@ -57,7 +55,7 @@ class LinearProjectionModel extends VisualizationModel {
     return {
       points: preparedPoints,
       axis: preparedAxis,
-      label: this.dataModel.features,
+      feature: this.dataModel.features,
       target: this.dataModel.targets.length > 0 ? [...new Set(label.map((d) => d[this.dataModel.targets[0]]))] : null,
     };
   }

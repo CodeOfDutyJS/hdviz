@@ -6,6 +6,7 @@ function processData({
   svg,
   width,
   height,
+  color,
 }) {
   const minX = d3.min(data.points, (d) => d.projected.x);
   const maxX = d3.max(data.points, (d) => d.projected.x);
@@ -15,7 +16,6 @@ function processData({
   const axisMaxX = d3.max(data.axis, (d) => d[1].projected.x);
   const axisMinY = d3.min(data.axis, (d) => d[1].projected.y);
   const axisMaxY = d3.max(data.axis, (d) => d[1].projected.y);
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
   // points
   const ratio = Math.min(
     Math.abs(minX / axisMinX),
@@ -23,7 +23,6 @@ function processData({
     Math.abs(minY / axisMinY),
     Math.abs(maxY / axisMaxY),
   );
-  console.log(Math.round(width), Math.round(height), width / 2, height / 2);
   const pointsX = d3.scaleLinear()
     .domain([minX, maxX])
     .range([150, width - 150])
@@ -64,7 +63,7 @@ function processData({
     .attr('x', (d) => pointsX(d[1].projected.x * ratio) + 5)
     .attr('y', (d) => pointsY(d[1].projected.y * ratio) - 5)
     .attr('font-weight', 600)
-    .text((d, i) => data.label[i]);
+    .text((d, i) => i + 1);
 
   d3.selectAll('._3d').sort(_3d().sort);
 }
@@ -116,6 +115,7 @@ function drag(props) {
 
 function linearProjection(data) {
   const props = {
+    color: d3.scaleOrdinal(d3.schemeCategory10),
     svg: d3.select('#area'),
     startAngle: Math.PI / 4,
     get point3d() {
@@ -146,10 +146,6 @@ function linearProjection(data) {
   props.data.points = props.point3d(props.data.points);
   props.data.axis = props.line3d(props.data.axis);
 
-  props.svg = props.svg
-    .call(drag(props))
-    .append('g');
-
   // marker
   props.svg
     .append('defs')
@@ -164,6 +160,47 @@ function linearProjection(data) {
     .append('path')
     .attr('d', d3.line()([[0, 0], [0, 8], [8, 5]]))
     .attr('stroke', 'black');
+
+  // points legend
+  props.svg.append('g').selectAll('circle')
+    .data(data.target)
+    .join('circle')
+    .attr('cx', props.width - 140)
+    .attr('cy', (d, i) => props.height - 20 - i * 25)
+    .attr('r', 7)
+    .style('fill', (d) => props.color(d));
+
+  props.svg.append('g').selectAll('text')
+    .data(data.target)
+    .join('text')
+    .attr('x', props.width - 120)
+    .attr('y', (d, i) => props.height - 20 - i * 25)
+    .style('fill', (d) => props.color(d))
+    .text((d) => d)
+    .attr('text-anchor', 'left')
+    .style('alignment-baseline', 'middle');
+
+  // axis legend
+  props.svg.append('g').selectAll('text')
+    .data(data.feature)
+    .join('text')
+    .attr('x', 10)
+    .attr('y', (d, i) => props.height - 20 - i * 25)
+    .text((d, i) => i + 1)
+    .attr('font-weight', 700);
+
+  props.svg.append('g').selectAll('text')
+    .data(data.feature)
+    .join('text')
+    .attr('x', 30)
+    .attr('y', (d, i) => props.height - 22 - i * 25)
+    .text((d) => d)
+    .attr('text-anchor', 'left')
+    .style('alignment-baseline', 'middle');
+
+  props.svg = props.svg
+    .call(drag(props))
+    .append('g');
 
   processData(props);
 }
