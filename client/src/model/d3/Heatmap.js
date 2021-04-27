@@ -88,7 +88,8 @@ function drawTargetRows(cluster, cols, margin, selectedTarget) {
     .transition()
     .style('opacity', 1);
 
-  drawTargetLegend(color, selectedTarget, width + margin.left + 25 * cols.length + 200, 0, height, 25);
+  drawTargetLegend(color, selectedTarget, width + (cols.length * 25) + 50, 120, height - 120, 25);
+  if (Object.keys(selectedTarget[0]).length === 2) drawTargetLegend(color, selectedTarget, width + (cols.length * 25) + 125, 120, height - 120, 25, 1);
 }
 
 function heatmap({
@@ -163,7 +164,7 @@ function heatmap({
     .style('opacity', 1);
 
   drawTargetRows(cluster, targetCols, margin, selectedTarget);
-  drawColorScale(c, range, width + (targetCols.length * 25) + 50, 30, 100, 25, 'Standard Deviation');
+  drawColorScale(c, range, width + (targetCols.length * 25) + 50, 30, 100, 25, 'Cell value');
 
   d3.select(window)
     .on('resize', () => {
