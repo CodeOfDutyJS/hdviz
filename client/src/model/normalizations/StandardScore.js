@@ -29,7 +29,6 @@ function StandardScore(data, columns) {
 
 export default StandardScore;
 
-console.log('e');
 NormalizationsCollector.addNormalization({
   id: 'SS',
   label: 'Standard Score',
