@@ -70,6 +70,14 @@ class VisualizationStore {
   setClustering(value) {
     this._visualization.addOption({ clustering: value });
   }
+
+  setInitialHeatmapColor(value) {
+    this._visualization.addOption({ initialColor: value.hex });
+  }
+
+  setFinalHeatmapColor(value) {
+    this._visualization.addOption({ finalColor: value.hex });
+  }
 }
 
 export default VisualizationStore;
