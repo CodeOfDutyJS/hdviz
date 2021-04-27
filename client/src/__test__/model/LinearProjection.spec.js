@@ -1,5 +1,4 @@
 /* globals describe, expect, it */
-import { PCA } from 'ml-pca';
 import DataModel from '../../model/DataModel';
 import LinearProjectionModel from '../../model/VisualizationModels/LinearProjectionModel';
 
