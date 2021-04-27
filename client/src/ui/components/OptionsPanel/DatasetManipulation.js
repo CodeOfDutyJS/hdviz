@@ -9,6 +9,7 @@ import { DistanceType, ClusteringType } from '../../../utils/options';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
 import { useStore } from '../../../store/RootStore';
+import NormalizationCollector from '../../../model/normalizations/NormalizationsCollector';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -56,9 +57,15 @@ const DatasetManipulation = observer(() => {
 )}
       >
         {visualizationStore.isNormalized ? (
-          <Select placeholder="Select normalization" onChange={visualizationStore.setNormalization}>
-            <Option key="row">Row Normalization</Option>
-            <Option key="col">Column Normalization</Option>
+          <Select
+            defaultValue={NormalizationCollector._normalizations.noNorm.id}
+            onChange={visualizationStore.setNormalization}
+          >
+            {Object.values(NormalizationCollector.normalizations).map((item) => (
+              <Option key={item.id}>
+                {item.label}
+              </Option>
+            ))}
           </Select>
         ) : null}
       </Item>
