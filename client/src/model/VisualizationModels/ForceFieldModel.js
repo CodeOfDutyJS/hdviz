@@ -38,7 +38,10 @@ class ForceFieldModel extends VisualizationModel {
     return links;
   }
 
-  getPreparedDataset({ distanceFn, maxNodes, maxLinks }) {
+  getPreparedDataset({
+    normalization, distanceFn, maxNodes, maxLinks,
+  }) {
+    this.dataModel.setNorm(normalization ? normalization.func : null);
     return {
       nodes: this.getNodes(maxNodes),
       links: this.getLinks(distanceFn, maxNodes, maxLinks),

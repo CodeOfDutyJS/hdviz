@@ -96,10 +96,11 @@ function heatmap({
   clusterCols,
   targetCols,
   selectedTarget,
+  color,
 }) {
   const svg = d3.select('#area');
   const cols = getLeaves(clusterCols).map((value) => value.id);
-  const colorRange = ['white', '#ff1a00'];
+  const colorRange = color;
   const grid = dataGrid(cluster, cols);
   const rows = d3.max(grid, (d) => d.row);
   const margin = {
@@ -126,7 +127,7 @@ function heatmap({
   const min = d3.min(grid, (d) => d.value);
   const max = d3.max(grid, (d) => d.value);
 
-  const range = [min, max];
+  const range = [min, (min + max) / 2, max];
   const c = d3.scaleLinear()
     .range(colorRange)
     .domain(range);
@@ -172,6 +173,7 @@ function heatmap({
         clusterCols,
         targetCols,
         selectedTarget,
+        color,
       });
     });
 }

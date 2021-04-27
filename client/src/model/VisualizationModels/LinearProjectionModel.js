@@ -27,7 +27,8 @@ class LinearProjectionModel extends VisualizationModel {
     return { points: x, axis: (new Matrix(w)).transpose().to2DArray() };
   }
 
-  getPreparedDataset() {
+  getPreparedDataset({ normalization }) {
+    this.dataModel.setNorm(normalization ? normalization.func : null);
     const projection = this.pca({ scale: true });
     const label = this.dataModel.getTargetColumns();
 

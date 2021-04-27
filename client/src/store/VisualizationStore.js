@@ -65,8 +65,7 @@ class VisualizationStore {
   }
 
   setNormalization(value) {
-    this._visualization.addOption({ normalize: NormalizationCollector._normalizations[value] });
-    console.log(this._visualization._options);
+    this._visualization.addOption({ normalization: NormalizationCollector._normalizations[value] });
   }
 
   setClustering(value) {

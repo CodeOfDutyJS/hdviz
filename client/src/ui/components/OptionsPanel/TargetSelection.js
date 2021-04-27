@@ -30,7 +30,7 @@ const TargetSelection = observer(() => {
         </Select>
       </Item>
 
-      { visualizationStore._visualization._visualizationSelected.id === 'heatmap'
+      { visualizationStore._visualization._visualizationSelected.options.color === true
         ? (
           <>
             <Item label="Colore iniziale range">
