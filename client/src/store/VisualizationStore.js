@@ -11,6 +11,8 @@ class VisualizationStore {
   _visualization = null;
   targetColor1 = '#ecf1f5';
   targetColor2 = '#efd2d0';
+  primoRangeHeatmap = 0;
+  secondoRangeHeatmap = 0;
 
   isNormalized = false;
   canSave = false;
@@ -80,6 +82,16 @@ class VisualizationStore {
   setFinalHeatmapColor(value) {
     this.targetColor2 = value.hex;
     this._visualization.addOption({ finalColor: this.targetColor2 });
+  }
+
+  setPrimoRangeHeatmap(value) {
+    this.primoRangeHeatmap = value;
+    this._visualization.addOption({ initialRangeValue: this.primoRangeHeatmap });
+  }
+
+  setSecondoRangeHeatmap(value) {
+    this.secondoRangeHeatmap = value;
+    this._visualization.addOption({ finalRangeValue: this.secondoRangeHeatmap });
   }
 }
 

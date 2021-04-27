@@ -179,7 +179,7 @@ class HeatMapModel extends VisualizationModel {
   }
 
   getPreparedDataset({
-    normalization, initialColor, finalColor, distanceFn = DistanceType.PEARSONS, clustering = ClusteringType.UPGMA,
+    normalization, initialColor, finalColor, initialRangeValue, finalRangeValue, distanceFn = DistanceType.PEARSONS, clustering = ClusteringType.UPGMA,
   }) {
     this.dataModel.setNorm(normalization ? normalization.func : null);
     this.setDistance(DistanceType.PEARSONS);
@@ -190,6 +190,7 @@ class HeatMapModel extends VisualizationModel {
         targetCols: this.dataModel.targets,
         selectedTarget: this.dataModel.getTargetColumns(),
         color: [initialColor, '#FFF', finalColor],
+        heatmapRange: [initialRangeValue, finalRangeValue],
       };
     }
 
@@ -201,6 +202,7 @@ class HeatMapModel extends VisualizationModel {
       targetCols: this.dataModel.targets,
       selectedTarget: this.dataModel.getTargetColumns(),
       color: [initialColor, '#FFF', finalColor],
+      heatmapRange: [initialRangeValue, finalRangeValue],
     };
   }
 }
@@ -212,5 +214,7 @@ VisualizationCollector.addVisualization({
   label: 'Heatmap',
   model: new HeatMapModel(),
   visualization: heatmap,
-  options: { distance: true, clustering: true, color: true },
+  options: {
+    distance: true, clustering: true, color: true, range: true,
+  },
 });

@@ -72,6 +72,7 @@ VisualizationCollector.addVisualization({
   label: 'Linear Projection',
   model: new LinearProjectionModel(),
   visualization: linearProjection,
+  options: { distance: false },
 });
 
 export default LinearProjectionModel;

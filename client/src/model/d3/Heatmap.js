@@ -98,6 +98,7 @@ function heatmap({
   targetCols,
   selectedTarget,
   color,
+  heatmapRange,
 }) {
   const svg = d3.select('#area');
   const cols = getLeaves(clusterCols).map((value) => value.id);
@@ -128,7 +129,22 @@ function heatmap({
   const min = d3.min(grid, (d) => d.value);
   const max = d3.max(grid, (d) => d.value);
 
-  const range = [min, (min + max) / 2, max];
+  let range = [min, (min + max) / 2, max];
+  if (heatmapRange && heatmapRange[0] != null && heatmapRange[1] != null) {
+    // eslint-disable-next-line no-param-reassign
+    if (heatmapRange[0] === 0) heatmapRange[0] = min;
+    // eslint-disable-next-line no-param-reassign
+    if (heatmapRange[1] === 0) heatmapRange[1] = max;
+    if (heatmapRange[0] > heatmapRange[1]) {
+      const tmp = heatmapRange[0];
+      // eslint-disable-next-line no-param-reassign, prefer-destructuring
+      heatmapRange[0] = heatmapRange[1];
+      // eslint-disable-next-line no-param-reassign
+      heatmapRange[1] = tmp;
+    }
+
+    range = [heatmapRange[0], (heatmapRange[0] + heatmapRange[1]) / 2, heatmapRange[1]];
+  }
   const c = d3.scaleLinear()
     .range(colorRange)
     .domain(range);

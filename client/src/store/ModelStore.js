@@ -36,7 +36,6 @@ class ModelStore {
   async uploadCSV(file) {
     try {
       const results = await parseFile(file);
-      console.log(results);
       this.dataset = results.data;
       this.loadingCompleted = true;
       if (results.errors.length > 0) {
@@ -70,7 +69,6 @@ class ModelStore {
 
   // GETTER / SETTER
   get data() {
-    console.log(this.dataModel);
     return this.dataModel;
   }
 

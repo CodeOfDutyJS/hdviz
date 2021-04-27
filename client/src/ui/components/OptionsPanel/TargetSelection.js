@@ -1,6 +1,6 @@
 import React from 'react';
 import { CompactPicker } from 'react-color';
-import { Form, Select } from 'antd';
+import { Form, Select, InputNumber } from 'antd';
 
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../store/RootStore';
@@ -38,6 +38,16 @@ const TargetSelection = observer(() => {
             </Item>
             <Item label="Colore finale range">
               <CompactPicker color={visualizationStore.targetColor2} onChange={visualizationStore.setFinalHeatmapColor} />
+            </Item>
+          </>
+        ) : null}
+      { visualizationStore._visualization._visualizationSelected.options.range === true
+        ? (
+          <>
+            <Item label="Heatmap visualization range" className="range-number">
+              <InputNumber className="first-range-number" onChange={visualizationStore.setPrimoRangeHeatmap} />
+              to
+              <InputNumber className="second-range-number" onChange={visualizationStore.setSecondoRangeHeatmap} />
             </Item>
           </>
         ) : null}
