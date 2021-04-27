@@ -17,8 +17,8 @@ const port = 1337;
 const findDB = async function (config) {
   const dbType = {
     mysql: new MysqlDatabase(config),
-    mongodb: new MongoDB(config),
-    postgresql: new PostgreDB(config),
+    //mongodb: new MongoDB(config),
+    //postgresql: new PostgreDB(config),
     default: function(){
       console.log('Error')
     }
@@ -75,9 +75,10 @@ app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare
 });
 
 
-app.get('/api/getTable', async (req, res) => {
+app.get('/api/getTables', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   let dbname = req.query.dbname;
+  //let dbname = 'test';
   console.log("getTable called");
 
   const configurazione = selectConfig(dbname);
@@ -90,16 +91,21 @@ app.get('/api/getTable', async (req, res) => {
   }
   try{
     const database = await findDB(configurazione);
+    if(!database){
+      res.json({
+        error: 1,
+        msg:'Database type not found'
+      })
+      return;
+    }
     const connection = await Promise.resolve( database.connectTo());
     let tables = await Promise.resolve(database.getTables(connection));
     res.json(tables);
     database.endConnection(connection);
   }
   catch(e){
-    res.json({
-      error: 1,
-      msg: e
-    })
+    console.log(e);
+    res.json(e);
   }
 });
 
@@ -119,15 +125,19 @@ app.get('/api/getData/',async (req, res) => {
   }
   try{
     const database = await findDB(configurazione);
+    if(!database){
+      res.json({
+        error: 1,
+        msg:'Database type not found'
+      })
+    }
     const connection = await Promise.resolve( database.connectTo());
     let data = await Promise.resolve( database.getData(connection, dbtable));
     res.json(data);
     database.endConnection(connection);
   }
   catch{
-    res.json({
-      error: 1,
-      msg: e
-    })
+    console.log(e);
+    res.json(e)
   }
 });

@@ -1,6 +1,6 @@
 
   {
-  "DB_Name": "iris",
+  "DB_Name": "test",
   "DB_Address": "localhost",
   "DB_Username": "root",
   "DB_Password": "",
