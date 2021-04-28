@@ -23,20 +23,18 @@ function drawTargetLegend(color, target, x, y, height, width) {
   svg.append('g')
     .selectAll('rect')
     .data(colorValues)
-    .enter()
-    .append('rect')
+    .join('rect')
     .attr('x', x)
     .attr('y', (d, i) => yScale(i))
     .attr('width', width)
     .attr('height', bandwidth)
-    .style('fill', (d, i) => color(d))
+    .style('fill', (d) => color(d))
     .style('opacity', 1);
 
   svg.append('g')
     .selectAll('text')
     .data(colorValues)
-    .enter()
-    .append('text')
+    .join('text')
     .text((d) => d)
     .attr('x', x + width + 10)
     .attr('y', (d, i) => yScale(i) + (bandwidth / 2));
