@@ -4,8 +4,11 @@
 const express = require('express');
 const fs = require('fs');
 const MysqlDatabase = require('./modules/MySQLDB');
-const MongoDB = require('./modules/MongoDB');
+//const MongoDB = require('./modules/MongoDB');
+//const PostgreDB = require('./modules/PostgreDB');
 
+
+const config_files = getFiles(__dirname+'/config');
 
 const app = express();
 const port = 1337;
@@ -15,8 +18,10 @@ const findDB = async function (config) {
   const dbType = {
     mysql: new MysqlDatabase(config),
     mongodb: new MongoDB(config),
+    postgresql: new PostgreDB(config),
     default: function(){
-      console.log('ERROREEEEEEEEEEEEE')}
+      console.log('Error')
+    }
   };
   return dbType[config.DB_Type];
 };
@@ -38,7 +43,7 @@ function getFiles(dir, files_) {
   return files_;
 }
 
-const config_files = getFiles(__dirname+'/config');
+
 
  function selectConfig(dbname) {
   for ( i in config_files) {
@@ -54,59 +59,75 @@ app.listen(port, () => {
 });
 
 app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
-
+  res.setHeader('Access-Control-Allow-Origin', '*');
   let databases = [];
   for (i in config_files) {
     databases[i] = config_files[i].DB_Name;
   }
-  const output = { databases };
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.json([output]);
-  console.log('api/getDatabases/ terminated successfully');
-
+  if (databases=="")  {
+    res.json({
+      error: 1,
+      msg:"No configuration found"
+    });
+    return;
+  }
+  res.json([{databases}]);
 });
 
 
 app.get('/api/getTable', async (req, res) => {
-  console.log("getTable called");
+  res.setHeader('Access-Control-Allow-Origin', '*');
   let dbname = req.query.dbname;
+  console.log("getTable called");
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
-    res.send(0); // Si Può?
+    res.json({
+      error: 1,
+      msg:"No configuration found"
+    });
+    return;
   }
-
-
-const database = await findDB(configurazione);
-const connection = await Promise.resolve( database.connectTo());
-let tables = await Promise.resolve(database.getTables(connection));
-res.setHeader('Access-Control-Allow-Origin', '*');
-res.json(tables);
-database.endConnection(connection);
-
+  try{
+    const database = await findDB(configurazione);
+    const connection = await Promise.resolve( database.connectTo());
+    let tables = await Promise.resolve(database.getTables(connection));
+    res.json(tables);
+    database.endConnection(connection);
+  }
+  catch(e){
+    res.json({
+      error: 1,
+      msg: e
+    })
+  }
 });
 
 
 app.get('/api/getData/',async (req, res) => {
-console.log("getData called");
+  res.setHeader('Access-Control-Allow-Origin', '*');
   let dbname = req.query.dbname;
   let dbtable = req.query.dbtable;
 
-
-
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
-    res.send(0); // Si Può?
-  }
-
-
-
-  const database = await findDB(configurazione);
-const connection = await Promise.resolve( database.connectTo());
-
-let data = await Promise.resolve( database.getData(connection, dbtable));
-res.setHeader('Access-Control-Allow-Origin', '*');  //inserire la promessa in getMetaData()
-res.json(data);
-database.endConnection(connection);
-
+    res.json({
+      error: 1,
+      msg:"No configuration found"
     });
+    return;
+  }
+  try{
+    const database = await findDB(configurazione);
+    const connection = await Promise.resolve( database.connectTo());
+    let data = await Promise.resolve( database.getData(connection, dbtable));
+    res.json(data);
+    database.endConnection(connection);
+  }
+  catch{
+    res.json({
+      error: 1,
+      msg: e
+    })
+  }
+});s
