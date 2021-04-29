@@ -19,7 +19,10 @@ module.exports = class MySqlDatabase extends Database {
 
       connection.connect((err) => {
         if (err) {
-          reject('Error - unable to connect to the database');
+          resolve({
+            error: 1,
+            msg:"Error connecting to the DB"
+          });
         } else {
           resolve(connection);
         }
@@ -28,11 +31,14 @@ module.exports = class MySqlDatabase extends Database {
   }
 
   async getTables(conn) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve/*, reject*/) => {
       const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${this.config.DB_Name}'`;
       conn.query(table, (error, columns, fields) => {
         if (error) {
-          reject('Erorr in the mysql table query');
+          resolve({
+            error: 1,
+            msg:"Error executing the query"
+          });
         } else {
           resolve(columns.map(res => res.table_name));
         }
@@ -44,7 +50,10 @@ module.exports = class MySqlDatabase extends Database {
     return new Promise((resolve, reject) => {
       conn.query(`SELECT * FROM ${table}`, (err, rows, fields) => {
         if (err) {
-          reject('Error in the rowData query');
+          resolve({
+            error: 1,
+            msg:"Error executing the query"
+          });
         } else {
           resolve(rows);
         }
