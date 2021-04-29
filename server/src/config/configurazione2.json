@@ -1,6 +1,6 @@
 
   {
   "DB_Name": "Mongodb",
-  "DB_Address": "mongod",
+  "DB_Address": "mongodb://localhost:27017/",
   "DB_Type": "mongodb"
 }

@@ -105,6 +105,7 @@ app.get('/api/getTable', async (req, res) => {
 
 
 app.get('/api/getData/',async (req, res) => {
+  console.log("getData");
   res.setHeader('Access-Control-Allow-Origin', '*');
   let dbname = req.query.dbname;
   let dbtable = req.query.dbtable;
@@ -124,7 +125,7 @@ app.get('/api/getData/',async (req, res) => {
     res.json(data);
     database.endConnection(connection);
   }
-  catch{
+  catch(e){
     res.json({
       error: 1,
       msg: e

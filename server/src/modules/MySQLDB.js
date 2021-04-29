@@ -31,7 +31,7 @@ module.exports = class MySqlDatabase extends Database {
   }
 
   async getTables(conn) {
-    return new Promise((resolve/*, reject*/) => {
+    return new Promise((resolve, reject) => {
       const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${this.config.DB_Name}'`;
       conn.query(table, (error, columns, fields) => {
         if (error) {

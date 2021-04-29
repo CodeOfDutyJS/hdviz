@@ -2,7 +2,7 @@
   {
   "DB_Name": "iris",
   "DB_Address": "localhost",
-  "DB_Username": "rot",
+  "DB_Username": "root",
   "DB_Password": "",
   "DB_Type": "mysql"
 }
