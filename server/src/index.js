@@ -4,7 +4,7 @@
 const express = require('express');
 const fs = require('fs');
 const MysqlDatabase = require('./modules/MySQLDB');
-//const MongoDB = require('./modules/MongoDB');
+const MongoDB = require('./modules/MongoDB');
 //const PostgreDB = require('./modules/PostgreDB');
 
 
@@ -18,7 +18,7 @@ const findDB = async function (config) {
   const dbType = {
     mysql: new MysqlDatabase(config),
     mongodb: new MongoDB(config),
-    postgresql: new PostgreDB(config),
+    //postgresql: new PostgreDB(config),
     default: function(){
       console.log('Error')
     }
@@ -130,4 +130,4 @@ app.get('/api/getData/',async (req, res) => {
       msg: e
     })
   }
-});s
+});

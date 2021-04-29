@@ -1,6 +1,7 @@
 /* eslint-disable new-cap */
 /* eslint-disable max-len */
 /* eslint-disable linebreak-style */
+const ObjectId = require('mongodb').ObjectID;
 const mongo = require('mongodb').MongoClient;
 const Database = require('./Database');
 
@@ -13,9 +14,15 @@ module.exports = class MongoDb extends Database {
   async connectTo() {
     return new Promise((resolve, reject) => {
 
-      resolve(new mongo.connect(this.uri, {
-        useUnifiedTopology: true,
-      }));
+      mongo.connect(this.uri, { useUnifiedTopology: true, }, (err, db) => {
+        if (err){resolve({
+          msg:"Error connecting to the DB"
+        });
+      }else resolve(db)
+    }
+
+      );
+
     });
   }
 
