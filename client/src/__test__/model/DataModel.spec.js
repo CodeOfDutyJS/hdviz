@@ -90,6 +90,10 @@ describe('#DataModel', () => {
         ]);
     });
   });
+  /*
+  commmentato perchè queste funzioni sono state spostate da
+  datamodel, ma potrebbero essere utili per altri test
+
   describe('#Statistical Analysis', () => {
     const dataset = new DataModel();
     dataset.dataset = mockData;
@@ -116,4 +120,5 @@ describe('#DataModel', () => {
       expect(dataset.getPopulationDeviation('height').toPrecision(3)).toEqual('2.69');
     });
   });
+  */
 });

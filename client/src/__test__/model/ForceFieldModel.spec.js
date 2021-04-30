@@ -72,6 +72,12 @@ describe('#ForceFieldModel', () => {
           { source: 1, target: 3, value: euclidean([3, 5], [9, 11]) },
           { source: 2, target: 3, value: euclidean([6, 8], [9, 11]) },
         ],
+        selectedTarget: [
+          { a: 'first' },
+          { a: 'second' },
+          { a: 'third' },
+          { a: 'fourth' },
+        ],
       });
     });
   });
