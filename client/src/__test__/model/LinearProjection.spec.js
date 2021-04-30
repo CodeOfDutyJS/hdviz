@@ -308,7 +308,7 @@ describe('#LinearProjectionModel', () => {
   });
 
   describe('#getPreparedDataset', () => {
-    const preparedDataset = linearProjectionModel.getPreparedDataset();
+    const preparedDataset = linearProjectionModel.getPreparedDataset({ normalization: null });
     const expectedDataset = {
       points: [{
         x: -0.146, y: -0.706, z: -0.756, color: 'Arizona', size: null,
