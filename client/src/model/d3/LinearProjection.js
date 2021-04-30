@@ -7,6 +7,7 @@ function processData({
   width,
   height,
   color,
+  shape,
 }) {
   const minX = d3.min(data.points, (d) => d.projected.x);
   const maxX = d3.max(data.points, (d) => d.projected.x);
@@ -32,17 +33,18 @@ function processData({
     .range([150, height - 150])
     .clamp(true);
 
+  const symbol = d3.symbol();
+
   svg
-    .selectAll('circle')
+    .selectAll('path')
     .data(data.points)
     .attr('class', '_3d points')
-    .join('circle')
-    .attr('r', 5)
+    .join('path')
     .attr('stroke', '#fff')
     .attr('stroke-width', '1.5')
-    .attr('cx', (d) => pointsX(d.projected.x))
-    .attr('cy', (d) => pointsY(d.projected.y))
-    .attr('fill', (d) => color(d.color));
+    .attr('transform', (d) => `translate(${pointsX(d.projected.x)},${pointsY(d.projected.y)})`)
+    .attr('fill', (d) => color(d.color))
+    .attr('d', symbol.type((d) => shape(d.shape)));
 
   svg.selectAll('line')
     .data(data.axis)
@@ -116,6 +118,7 @@ function drag(props) {
 function linearProjection(data) {
   const props = {
     color: d3.scaleOrdinal(d3.schemeCategory10),
+    shape: d3.scaleOrdinal(d3.symbols),
     svg: d3.select('#area'),
     startAngle: Math.PI / 4,
     get point3d() {

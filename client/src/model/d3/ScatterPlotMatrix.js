@@ -59,6 +59,8 @@ function scatterPlotMatrix({
 
     cell.call(brush);
   };
+  const symbol = d3.symbol();
+  const shape = d3.scaleOrdinal(d3.symbols);
 
   const color = d3.scaleOrdinal()
     .domain(data.map((d) => d[targets[0]]))
@@ -117,16 +119,14 @@ function scatterPlotMatrix({
     .attr('height', size - padding);
 
   cell.each(function ([i, j]) {
-    d3.select(this).selectAll('circle')
+    d3.select(this).selectAll('path')
       .data(data.filter((d) => !Number.isNaN(d[columns[i]]) && !Number.isNaN(d[columns[j]])))
-      .join('circle')
-      .attr('cx', (d) => x[i](d[columns[i]]))
-      .attr('cy', (d) => y[j](d[columns[j]]));
+      .join('path')
+      .attr('transform', (d) => `translate(${x[i](d[columns[i]])},${y[j](d[columns[j]])})`);
   });
 
-  const circle = cell.selectAll('circle')
-    .attr('r', 3.5)
-    .attr('fill-opacity', 0.7)
+  const circle = cell.selectAll('path')
+    .attr('d', symbol.type((d) => shape(d[targets[1]])))
     .attr('fill', (d) => color(d[targets[0]]));
 
   cell.call(startBrush, circle, svg);
