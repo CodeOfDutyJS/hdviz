@@ -96,7 +96,7 @@ function scatterPlotMatrix({
     .attr('viewBox', `${-padding} 0 ${width} ${width}`);
 
   svg.append('style')
-    .text('circle.hidden { fill: #000; fill-opacity: 1; r: 1px; }');
+    .text('path.hidden { fill: #000; fill-opacity: 1; transform: scale(0.3, 0.3);}');
 
   svg.append('g')
     .call(xAxis);
@@ -119,14 +119,16 @@ function scatterPlotMatrix({
     .attr('height', size - padding);
 
   cell.each(function ([i, j]) {
-    d3.select(this).selectAll('path')
+    d3.select(this).selectAll('g')
       .data(data.filter((d) => !Number.isNaN(d[columns[i]]) && !Number.isNaN(d[columns[j]])))
-      .join('path')
+      .join('g')
       .attr('transform', (d) => `translate(${x[i](d[columns[i]])},${y[j](d[columns[j]])})`);
   });
 
-  const circle = cell.selectAll('path')
+  const circle = cell.selectAll('g')
+    .append('path')
     .attr('d', symbol.type((d) => shape(d[targets[1]])))
+    .attr('fill-opacity', 0.7)
     .attr('fill', (d) => color(d[targets[0]]));
 
   cell.call(startBrush, circle, svg);
