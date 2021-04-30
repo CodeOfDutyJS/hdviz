@@ -5,6 +5,7 @@ import ForceFieldModel from './ForceFieldModel';
 import HeatMapModel from './HeatMapModel';
 import LinearProjectionModel from './LinearProjectionModel';
 import ScatterPlotMatrixModel from './ScatterPlotMatrixModel';
+import ParallelCoordinates from './ParallelCoordinatesModel';
 
 export {
   CorrelationHeatmapModel,
@@ -12,4 +13,5 @@ export {
   HeatMapModel,
   LinearProjectionModel,
   ScatterPlotMatrixModel,
+  ParallelCoordinates,
 };
