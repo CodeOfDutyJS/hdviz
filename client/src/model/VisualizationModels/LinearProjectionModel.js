@@ -23,7 +23,8 @@ class LinearProjectionModel extends VisualizationModel {
     return { points: x, axis: (new Matrix(w)).transpose().to2DArray() };
   }
 
-  getPreparedDataset() {
+  getPreparedDataset({ normalization }) {
+    this.dataModel.setNorm(normalization ? normalization.func : null);
     const projection = this.pca({ scale: true });
 
     const label = this.dataModel.getTargetColumns();
@@ -36,7 +37,7 @@ class LinearProjectionModel extends VisualizationModel {
           y: d[1],
           z: d[2],
           color: this.dataModel.targets.length > 0 ? label[i][this.dataModel.targets[0]] : null,
-          size: this.dataModel.targets.length > 1 ? label[i][this.dataModel.targets[1]] : null,
+          shape: this.dataModel.targets.length > 1 ? label[i][this.dataModel.targets[1]] : null,
         }));
     const preparedAxis = [];
     projection.axis
@@ -68,6 +69,7 @@ VisualizationCollector.addVisualization({
   label: 'Linear Projection',
   model: new LinearProjectionModel(),
   visualization: linearProjection,
+  options: { distance: false },
 });
 
 export default LinearProjectionModel;

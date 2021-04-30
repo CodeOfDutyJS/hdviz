@@ -178,24 +178,31 @@ class HeatMapModel extends VisualizationModel {
     return this.getDistanceMatrix();
   }
 
-  getPreparedDataset({ distanceFn = DistanceType.PEARSONS, clusteringType = ClusteringType.UPGMA }) {
+  getPreparedDataset({
+    normalization, initialColor, finalColor, initialRangeValue, finalRangeValue, distanceFn = DistanceType.PEARSONS, clustering = ClusteringType.UPGMA,
+  }) {
+    this.dataModel.setNorm(normalization ? normalization.func : null);
     this.setDistance(DistanceType.PEARSONS);
-    if (clusteringType === ClusteringType.ALPHABETICAL) {
+    if (clustering === ClusteringType.ALPHABETICAL) {
       return {
         cluster: this.getAlphaticallySorted(),
         clusterCols: this.getLinkage(ClusteringType.SINGLE),
         targetCols: this.dataModel.targets,
         selectedTarget: this.dataModel.getTargetColumns(),
+        color: [initialColor, '#FFF', finalColor],
+        heatmapRange: [initialRangeValue, finalRangeValue],
       };
     }
 
-    const cols = this.getLinkage(clusteringType);
+    const cols = this.getLinkage(clustering);
     this.setDistance(distanceFn);
     return {
-      cluster: this.getLinkage(clusteringType),
+      cluster: this.getLinkage(clustering),
       clusterCols: cols,
       targetCols: this.dataModel.targets,
       selectedTarget: this.dataModel.getTargetColumns(),
+      color: [initialColor, '#FFF', finalColor],
+      heatmapRange: [initialRangeValue, finalRangeValue],
     };
   }
 }
@@ -207,5 +214,7 @@ VisualizationCollector.addVisualization({
   label: 'Heatmap',
   model: new HeatMapModel(),
   visualization: heatmap,
-  options: { distance: true, clustering: true, color: true },
+  options: {
+    distance: true, clustering: true, color: true, range: true,
+  },
 });

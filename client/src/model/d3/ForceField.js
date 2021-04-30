@@ -30,6 +30,9 @@ function forceField(data) {
   const svg = d3.select('#area');
   const color = d3.scaleOrdinal(d3.schemeCategory10);
 
+  const symbol = d3.symbol();
+  const shape = d3.scaleOrdinal(d3.symbols);
+
   const { links, nodes } = data;
 
   let { width } = svg.node().getBoundingClientRect();
@@ -48,7 +51,8 @@ function forceField(data) {
 
   // const { height } = svg.node().getBoundingClientRect();
 
-  width -= 300;
+  width -= 150;
+
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links)
       .distance((d) => d.value)
@@ -59,10 +63,10 @@ function forceField(data) {
   const node = svg.append('g')
     .attr('stroke', '#fff')
     .attr('stroke-width', 1.5)
-    .selectAll('circle')
+    .selectAll('path')
     .data(nodes)
-    .join('circle')
-    .attr('r', 5)
+    .join('path')
+    .attr('d', symbol.type((d) => shape(d.shape)))
     .attr('fill', (d) => color(d.color))
     .call(drag(simulation));
 
@@ -71,11 +75,10 @@ function forceField(data) {
 
   simulation.on('tick', () => {
     node
-      .attr('cx', (d) => d.x)
-      .attr('cy', (d) => d.y);
+      .attr('transform', (d) => `translate(${d.x},${d.y})`);
   });
 
-  drawTargetLegend(color, data.selectedTarget, width + 50, 0, height - 100, 25);
+  drawTargetLegend(color, data.selectedTarget, width + 50, 20, height - 100, 25);
 
   d3.select(window)
     .on('resize', () => {
