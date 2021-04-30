@@ -56,7 +56,10 @@ class ModelStore {
   }
 
   checkFeatures() {
-    if (this.rootStore.visualizationStore.visualizationSelected.options?.maxFeatures && this.features.length > this.rootStore.visualizationStore.visualizationSelected.options.maxFeatures) {
+    if (
+      this.rootStore.visualizationStore.visualizationSelected.options?.maxFeatures
+      && this.features.length > this.rootStore.visualizationStore.visualizationSelected.options.maxFeatures
+    ) {
       this.features = this.features.slice(0, 5);
 
       this.rootStore.uiStore.maxFeatures = true;
