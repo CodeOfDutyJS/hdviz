@@ -3,7 +3,8 @@ import scatterPlotMatrix from '../d3/ScatterPlotMatrix';
 import VisualizationCollector from '../VisualizationsCollector';
 
 class ScatterPlotMatrixModel extends VisualizationModel {
-  getPreparedDataset() {
+  getPreparedDataset({ normalization }) {
+    this.dataModel.setNorm(normalization ? normalization.func : null);
     return {
       data: this.dataModel.getSelectedDataset(),
       features: this.dataModel.features,

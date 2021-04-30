@@ -67,7 +67,7 @@ class VisualizationStore {
   }
 
   setNormalization(value) {
-    this._visualization.addOption({ normalize: NormalizationCollector._normalizations[value] });
+    this._visualization.addOption({ normalization: NormalizationCollector._normalizations[value] });
   }
 
   setClustering(value) {
@@ -86,7 +86,7 @@ class VisualizationStore {
 
   setPrimoRangeHeatmap(value) {
     this.primoRangeHeatmap = value;
-    this._visualization.addOption({ initalRangeValue: this.primoRangeHeatmap });
+    this._visualization.addOption({ initialRangeValue: this.primoRangeHeatmap });
   }
 
   setSecondoRangeHeatmap(value) {

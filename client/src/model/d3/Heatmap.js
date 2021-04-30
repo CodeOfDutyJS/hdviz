@@ -88,7 +88,8 @@ function drawTargetRows(cluster, cols, margin, selectedTarget) {
     .transition()
     .style('opacity', 1);
 
-  drawTargetLegend(color, selectedTarget, width + margin.left + 25 * cols.length + 200, 0, height, 25);
+  drawTargetLegend(color, selectedTarget, width + (cols.length * 25) + 50, 120, height - 120, 25);
+  if (Object.keys(selectedTarget[0]).length === 2) drawTargetLegend(color, selectedTarget, width + (cols.length * 25) + 125, 120, height - 120, 25, 1);
 }
 
 function heatmap({
@@ -96,10 +97,12 @@ function heatmap({
   clusterCols,
   targetCols,
   selectedTarget,
+  color,
+  heatmapRange,
 }) {
   const svg = d3.select('#area');
   const cols = getLeaves(clusterCols).map((value) => value.id);
-  const colorRange = ['white', '#ff1a00'];
+  const colorRange = color;
   const grid = dataGrid(cluster, cols);
   const rows = d3.max(grid, (d) => d.row);
   const margin = {
@@ -126,7 +129,22 @@ function heatmap({
   const min = d3.min(grid, (d) => d.value);
   const max = d3.max(grid, (d) => d.value);
 
-  const range = [min, max];
+  let range = [min, (min + max) / 2, max];
+  if (heatmapRange && heatmapRange[0] != null && heatmapRange[1] != null) {
+    // eslint-disable-next-line no-param-reassign
+    if (heatmapRange[0] === 0) heatmapRange[0] = min;
+    // eslint-disable-next-line no-param-reassign
+    if (heatmapRange[1] === 0) heatmapRange[1] = max;
+    if (heatmapRange[0] > heatmapRange[1]) {
+      const tmp = heatmapRange[0];
+      // eslint-disable-next-line no-param-reassign, prefer-destructuring
+      heatmapRange[0] = heatmapRange[1];
+      // eslint-disable-next-line no-param-reassign
+      heatmapRange[1] = tmp;
+    }
+
+    range = [heatmapRange[0], (heatmapRange[0] + heatmapRange[1]) / 2, heatmapRange[1]];
+  }
   const c = d3.scaleLinear()
     .range(colorRange)
     .domain(range);
@@ -162,7 +180,7 @@ function heatmap({
     .style('opacity', 1);
 
   drawTargetRows(cluster, targetCols, margin, selectedTarget);
-  drawColorScale(c, range, width + (targetCols.length * 25) + 50, 30, 100, 25, 'Standard Deviation');
+  drawColorScale(c, range, width + (targetCols.length * 25) + 50, 30, 100, 25, 'Cell value');
 
   d3.select(window)
     .on('resize', () => {
@@ -172,6 +190,7 @@ function heatmap({
         clusterCols,
         targetCols,
         selectedTarget,
+        color,
       });
     });
 }

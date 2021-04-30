@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import { makeAutoObservable, runInAction } from 'mobx';
 
 class DatabaseStore {
@@ -21,30 +22,49 @@ class DatabaseStore {
 
   async setDatabases() {
     this.databasesLoading = true;
-    const response = await this.apiService.getDatabases();
-    if (!response.error) {
-      this.databases = response;
-    } else {
-      throw new Error(response.msg);
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const response = await this.apiService.getDatabases();
+
+      if (!response.error) {
+        this.databases = response[0].databases;
+      } else {
+        throw response.msg;
+      }
+
+      this.databasesLoading = false;
+    } catch (error) {
+      this.rootStore.uiStore.dataError.push({
+        status: 'error',
+        message: `${error}`,
+      });
     }
-    this.databasesLoading = false;
   }
 
   async setTables() {
     this.tablesLoading = true;
-    const response = await this.apiService.getTables(this._databaseSelected);
-    if (!response.error) {
-      this.tables = response;
-    } else {
-      throw new Error(response.msg);
+    try {
+      const response = await this.apiService.getTables(this._databaseSelected);
+
+      if (!response.error) {
+        this.tables = response;
+      } else {
+        throw response.msg;
+      }
+      this.tablesLoading = false;
+    } catch (error) {
+      this.rootStore.uiStore.dataError.push({
+        status: 'error',
+        message: `${error}`,
+      });
     }
-    this.tablesLoading = false;
   }
 
   async getData() {
     const response = await this.apiService.getData(this.databaseSelected, this.tableSelected);
+
     if (!response.error) {
-      this.rootStore.modelStore.dataset = response.rows;
+      this.rootStore.modelStore.dataset = response;
     } else {
       throw new Error(response.msg);
     }
@@ -59,9 +79,9 @@ class DatabaseStore {
     this._databases = value;
   }
 
-  getDatabaseConnections() {
+  async getDatabaseConnections() {
     try {
-      this.setDatabases();
+      await this.setDatabases();
     } catch (error) {
       this.rootStore.uiStore.dataError.push({
         status: 'error',
@@ -86,10 +106,10 @@ class DatabaseStore {
     this._databaseSelected = value;
   }
 
-  setDatabaseSelected(value) {
+  async setDatabaseSelected(value) {
     this.databaseSelected = value;
     try {
-      this.setTables();
+      await this.setTables();
     } catch (error) {
       this.rootStore.uiStore.dataError.push({
         status: 'error',
@@ -122,10 +142,10 @@ class DatabaseStore {
     this._tableSelected = value;
   }
 
-  setTableSelected(value) {
+  async setTableSelected(value) {
     this.tableSelected = value;
     try {
-      this.getData();
+      await this.getData();
     } catch (error) {
       this.rootStore.uiStore.dataError.push({
         status: 'error',
