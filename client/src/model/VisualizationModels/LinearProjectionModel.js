@@ -1,7 +1,7 @@
 import { Matrix } from 'ml-matrix';
 import { PCA } from 'ml-pca';
 import { VisualizationModel } from '../index';
-import linearProjection from '../d3/LinearProjection';
+import { linearProjection } from '../d3/index';
 import VisualizationCollector from '../VisualizationsCollector';
 
 class LinearProjectionModel extends VisualizationModel {

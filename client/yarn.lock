@@ -7775,7 +7775,7 @@ ml-array-max@^1.2.3:
   dependencies:
     is-any-array "^1.0.0"
 
-ml-array-mean@^1.1.1:
+ml-array-mean@^1.1.1, ml-array-mean@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ml-array-mean/-/ml-array-mean-1.1.5.tgz#d8a468b26e2827c9ffca793331c7a8c0276171d4"
   integrity sha512-CNfsSJzVrU/S6AvJSZJkPvKk6mkEYBkIU7hlSHD1Ha27d2tzfo3b7xG5uP70/USvOfMcyfVRwXbxIiZ9Ky4LKA==

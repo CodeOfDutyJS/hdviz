@@ -1,11 +1,11 @@
 import { VisualizationModel } from '../index';
-import parallelCoordinates from '../d3/ParallelCoordinates';
+import { parallelCoordinates } from '../d3/index';
 import VisualizationCollector from '../VisualizationsCollector';
 
 class ParallelCoordinatesModel extends VisualizationModel {
   getPreparedDataset() {
     return {
-      data: this.dataModel.getSelectedDataset(),
+      selectedData: this.dataModel.getSelectedDataset(),
       features: this.dataModel.features,
       targets: this.dataModel.targets,
       selectedTarget: this.dataModel.getTargetColumns(),
