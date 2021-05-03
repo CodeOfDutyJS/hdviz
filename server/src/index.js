@@ -69,8 +69,7 @@ app.get('/api/getDatabases', (req, res) => {
 
 app.get('/api/getTable', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  const { dbname } = req.query.dbname;
-  console.log('getTable called');
+  const dbname  = req.query.dbname;
 
   const configurazione = selectConfig(dbname);
   if (configurazione === 0) {
@@ -96,8 +95,8 @@ app.get('/api/getTable', async (req, res) => {
 
 app.get('/api/getData/', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  const { dbname } = req.query.dbname;
-  const { dbtable } = req.query.dbtable;
+  const dbname  = req.query.dbname;
+  const dbtable  = req.query.dbtable;
 
   const configurazione = selectConfig(dbname);
   if (configurazione === 0) {

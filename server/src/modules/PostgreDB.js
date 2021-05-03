@@ -1,6 +1,6 @@
-import { Client } from 'pg';
+const postsgre = require('pg');
 
-class PostgreDB {
+module.exports = class PostgreDB {
   constructor(config) {
     this.config = config;
   }
@@ -66,7 +66,3 @@ class PostgreDB {
     conn.end();
   }
 }
-
-export default {
-  PostgreDB,
-};

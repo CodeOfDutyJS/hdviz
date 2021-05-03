@@ -1,7 +1,7 @@
-import { MongoClient } from 'mongodb';
-import Database from './Database';
+const MongoClient = require('mongodb').MongoClient;
+const Database = require('./Database');
 
-export default class MongoDb extends Database {
+module.exports = class MongoDb extends Database {
   constructor(config) {
     super(config);
     this.uri = config.DB_Address + config.DB_Name;
