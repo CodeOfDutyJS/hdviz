@@ -1,7 +1,6 @@
 /* eslint-disable new-cap */
 /* eslint-disable max-len */
-/* eslint-disable linebreak-style */
-const ObjectId = require('mongodb').ObjectID;
+/* eslint-disable linebreak-style */ 
 const mongo = require('mongodb').MongoClient;
 const Database = require('./Database');
 
