@@ -4,7 +4,6 @@ import umap from '../d3/Umap';
 import VisualizationModel from '../VisualizationModel';
 import VisualizationCollector from '../VisualizationsCollector';
 import StandardScore from '../normalizations/StandardScore';
-
 class UmapModel extends VisualizationModel {
   Umap(label) {
     const uMap = new UMAP({
@@ -21,13 +20,13 @@ class UmapModel extends VisualizationModel {
     // umap.setSupervisedProjection(label);
     uMap.fit(data);
     const trasformed = uMap.getEmbedding();
-
     return { points: trasformed };
   }
 
   getPreparedDataset() {
     const label = this.dataModel.getTargetColumns();
     const projection = this.Umap([...new Set(label.map((d) => d[this.dataModel.targets[0]]))]);
+
 
     const preparedPoints = [];
     projection.points
@@ -50,7 +49,6 @@ class UmapModel extends VisualizationModel {
 }
 
 export default UmapModel;
-
 VisualizationCollector.addVisualization({
   id: 'umap',
   label: 'UMAP',
