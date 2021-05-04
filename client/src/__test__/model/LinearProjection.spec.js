@@ -1,4 +1,4 @@
-/* globals describe, expect, it */
+import { describe, it, expect } from '@jest/globals';
 import DataModel from '../../model/DataModel';
 import LinearProjectionModel from '../../model/VisualizationModels/LinearProjectionModel';
 
