@@ -1,4 +1,4 @@
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb').MongoClient;
 const Database = require('./Database');
 
 module.exports = class MongoDb extends Database {
@@ -35,4 +35,4 @@ module.exports = class MongoDb extends Database {
   async endConnection(conn) {
     conn.close();
   }
-}
+};

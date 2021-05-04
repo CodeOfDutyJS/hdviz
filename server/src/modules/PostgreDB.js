@@ -1,4 +1,4 @@
-const postsgre = require('pg');
+const { Client } = require('pg');
 
 module.exports = class PostgreDB {
   constructor(config) {
@@ -65,4 +65,4 @@ module.exports = class PostgreDB {
   async endConnection(conn) {
     conn.end();
   }
-}
+};
