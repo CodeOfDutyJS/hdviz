@@ -26,7 +26,7 @@ const DatabaseSelection = observer(() => {
           onSelect={databaseStore.setDatabaseSelected}
           value={databaseStore.databaseSelected}
         >
-          {databaseStore.databases.map((item) => <Option key={item.databases}>{item.databases}</Option>)}
+          {databaseStore.databases.map((item) => <Option key={item}>{item}</Option>)}
         </Select>
       </Item>
 
@@ -38,7 +38,7 @@ const DatabaseSelection = observer(() => {
           onSelect={databaseStore.setTableSelected}
           value={databaseStore.tableSelected}
         >
-          {databaseStore.tables.map((item) => <Option key={item.table_name}>{item.table_name}</Option>)}
+          {databaseStore.tables.map((item) => <Option key={item}>{item}</Option>)}
         </Select>
       </Item>
     </Form>

@@ -6,7 +6,9 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
-    "mysql": "^2.18.1"
+    "mongodb": "^3.6.6",
+    "mysql": "^2.18.1",
+    "pg": "^8.6.0"
   },
   "scripts": {
     "start": "node src/index.js",
