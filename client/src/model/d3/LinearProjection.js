@@ -65,7 +65,7 @@ function processData({
     .attr('x', (d) => pointsX(d[1].projected.x * ratio) + 5)
     .attr('y', (d) => pointsY(d[1].projected.y * ratio) - 5)
     .attr('font-weight', 600)
-    .text((d, i) => data.feature[1]);
+    .text((d, i) => data.feature[i]);
 
   d3.selectAll('._3d').sort(_3d().sort);
 }

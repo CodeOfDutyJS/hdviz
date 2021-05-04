@@ -24,21 +24,23 @@ describe('#ForceFieldModel', () => {
 
   const dataModel = new DataModel();
   dataModel.dataset = mockDataset;
-  dataModel.feature = ['b', 'd'];
-  dataModel.target = ['a'];
-  const forceFieldModel = new ForceFieldModel(dataModel);
+  dataModel.features = ['b', 'd'];
+  dataModel.targets = ['a'];
+  const forceFieldModel = new ForceFieldModel();
+  forceFieldModel.addData(dataModel);
 
   describe('#distanceFn', () => {
     expect(forceFieldModel.dataModel.getFeatureColumns()).not.toBeNull();
-    const distanceDataset = forceFieldModel.getPreparedDataset(distance.euclidean, 4, 6);
+    const distanceDataset = forceFieldModel.getPreparedDataset({ distanceFn: distance.euclidean, maxNodes: 4, maxLinks: 6 });
     it('should return a correctly formatted object', () => {
       expect(
         'nodes' in distanceDataset
         && 'links' in distanceDataset,
       ).toBeTruthy();
       expect(
-        'id' in distanceDataset.nodes[0]
-        && 'colore' in distanceDataset.nodes[0],
+        'features' in distanceDataset.nodes[0]
+        && 'color' in distanceDataset.nodes[0]
+        && 'shape' in distanceDataset.nodes[0],
       ).toBeTruthy();
       expect(
         'source' in distanceDataset.links[0]
@@ -50,16 +52,16 @@ describe('#ForceFieldModel', () => {
       expect(distanceDataset).toEqual({
         nodes: [
           {
-            id: 0, colore: 'first', forma: undefined, features: JSON.stringify(mockDataset[0], ['b', 'd', 'a']),
+            color: 'first', shape: null, features: JSON.stringify(mockDataset[0], ['b', 'd', 'a']),
           },
           {
-            id: 1, colore: 'second', forma: undefined, features: JSON.stringify(mockDataset[1], ['b', 'd', 'a']),
+            color: 'second', shape: null, features: JSON.stringify(mockDataset[1], ['b', 'd', 'a']),
           },
           {
-            id: 2, colore: 'third', forma: undefined, features: JSON.stringify(mockDataset[2], ['b', 'd', 'a']),
+            color: 'third', shape: null, features: JSON.stringify(mockDataset[2], ['b', 'd', 'a']),
           },
           {
-            id: 3, colore: 'fourth', forma: undefined, features: JSON.stringify(mockDataset[3], ['b', 'd', 'a']),
+            color: 'fourth', shape: null, features: JSON.stringify(mockDataset[3], ['b', 'd', 'a']),
           },
         ],
         links: [
@@ -69,6 +71,12 @@ describe('#ForceFieldModel', () => {
           { source: 1, target: 2, value: euclidean([3, 5], [6, 8]) },
           { source: 1, target: 3, value: euclidean([3, 5], [9, 11]) },
           { source: 2, target: 3, value: euclidean([6, 8], [9, 11]) },
+        ],
+        selectedTarget: [
+          { a: 'first' },
+          { a: 'second' },
+          { a: 'third' },
+          { a: 'fourth' },
         ],
       });
     });
