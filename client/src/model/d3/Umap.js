@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 
 function umap(data) {
-  console.log('eee');
   const svg = d3.select('#area');
 
   const { width } = svg.node().getBoundingClientRect();
@@ -28,7 +27,7 @@ function umap(data) {
     .data(data.points)
     .join('path')
     .attr('d', symbol.type((d) => shape(d.shape)))
-    .attr('transform', (d) => `translate(${pointsX(d.x)},${pointsX(d.y)})`)
+    .attr('transform', (d) => `translate(${pointsX(d.x)},${pointsY(d.y)})`)
     .style('fill', (d) => color(d.color));
 }
 
