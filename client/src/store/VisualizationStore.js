@@ -93,6 +93,21 @@ class VisualizationStore {
     this.secondoRangeHeatmap = value;
     this._visualization.addOption({ finalRangeValue: this.secondoRangeHeatmap });
   }
+
+  setSpread(value) {
+    this._visualization.addOption({ spread: value });
+    console.log(this._visualization._options);
+  }
+
+  setNeighbors(value) {
+    this._visualization.addOption({ nNeighbors: value });
+    console.log(this._visualization._options);
+  }
+
+  setMinDistance(value) {
+    this._visualization.addOption({ minDistance: value });
+    console.log(this._visualization._options);
+  }
 }
 
 export default VisualizationStore;
