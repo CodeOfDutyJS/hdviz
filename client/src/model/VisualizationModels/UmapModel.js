@@ -1,31 +1,32 @@
 import { UMAP } from 'umap-js';
 import { extent } from 'd3';
+import umap from '../d3/Umap';
 import VisualizationModel from '../VisualizationModel';
-
+import VisualizationCollector from '../VisualizationsCollector';
+import StandardScore from '../normalizations/StandardScore';
 class UmapModel extends VisualizationModel {
-  umap(label) {
-    const umap = new UMAP({
+  Umap(label) {
+    const uMap = new UMAP({
       nComponents: 2,
       minDist: 0.1,
       spread: 1,
       nNeighbors: 15,
     });
-    console.log(this.dataModel.getSelectedDataset());
     const data = this.dataModel
-      .getStandardScore()
+      .setNorm(StandardScore)
+      .getFeatureColumnsNormalized()
       .map((row) => Object.values(row));
 
     // umap.setSupervisedProjection(label);
-    console.log(data);
-    umap.fit(data);
-    const trasformed = umap.getEmbedding();
-
+    uMap.fit(data);
+    const trasformed = uMap.getEmbedding();
     return { points: trasformed };
   }
 
   getPreparedDataset() {
     const label = this.dataModel.getTargetColumns();
-    const projection = this.umap([...new Set(label.map((d) => d[this.dataModel.targets[0]]))]);
+    const projection = this.Umap([...new Set(label.map((d) => d[this.dataModel.targets[0]]))]);
+
 
     const preparedPoints = [];
     projection.points
@@ -48,3 +49,10 @@ class UmapModel extends VisualizationModel {
 }
 
 export default UmapModel;
+VisualizationCollector.addVisualization({
+  id: 'umap',
+  label: 'UMAP',
+  model: new UmapModel(),
+  visualization: umap,
+  options: { distance: false },
+});

@@ -1,7 +1,4 @@
 /* globals describe, expect, it */
-
-import { transpose, mean, extent } from 'd3';
-import { PCA } from 'ml-pca';
 import DataModel from '../../model/DataModel';
 import LinearProjectionModel from '../../model/VisualizationModels/LinearProjectionModel';
 
@@ -260,19 +257,32 @@ describe('#LinearProjectionModel', () => {
 
   describe('#pca', () => {
     const projection = linearProjectionModel.pca({ scale: true });
-    const expected = [[-0.146, -0.706, -0.756, 0.746, -0.401, -0.278, -0.654, -0.512],
-      [1.077, 0.901, 0.997, 0.902, 0.104, -0.431, -0.213, 0.873], [-2.567, 0.288, -0.765, -1.066, -0.370, 1.297, -0.195, 0.325],
-      [-0.719, 0.225, 1.054, 1.264, 0.423, -0.699, -0.269, 0.044], [-0.225, 1.852, 0.783, -0.061, -2.909, 0.115, 0.322, -0.387],
-      [-2.164, 1.189, -0.852, 0.075, 0.681, -0.586, 1.180, -0.018], [0.469, 1.929, -0.812, -1.476, 0.994, -0.628, 0.068, 0.085],
-      [0.661, -1.930, 0.097, -0.908, -0.299, -1.598, -0.404, -0.268], [-0.468, 0.132, -0.021, -1.960, 0.506, 0.759, -0.570, -0.443],
-      [-1.037, -0.256, 2.001, 0.521, -0.020, -0.292, -0.323, 0.322], [1.549, -3.254, -0.954, 0.854, -0.075, 0.358, 0.606, 0.302],
-      [1.022, 1.586, -0.457, -0.749, 0.016, 0.147, -0.120, 0.378], [-0.881, -0.644, 2.794, 0.036, 0.486, 0.415, 0.003, 0.049],
-      [-1.751, -0.871, -1.198, 1.127, -0.357, 0.825, -0.639, 0.038], [1.420, 1.111, -1.002, 0.888, 0.102, -1.002, -0.336, -0.450],
-      [1.148, -2.670, 0.437, -2.106, -0.270, -0.200, 0.298, -0.026], [3.240, 0.733, -0.329, 0.976, 0.776, 1.659, -0.021, -0.465],
-      [-0.448, -0.166, -0.853, -0.118, 0.330, 0.209, -0.255, 0.692], [-1.932, -0.730, -1.911, 0.797, -0.031, -0.522, 0.310, -0.116],
-      [-0.938, 0.514, 1.293, 0.227, 1.146, 0.034, 0.311, -0.753], [2.082, 1.323, -0.353, -0.338, -0.561, -0.232, 0.132, 0.408],
+    const expected = [
+      [-0.146, -0.706, -0.756, 0.746, -0.401, -0.278, -0.654, -0.512],
+      [1.077, 0.901, 0.997, 0.902, 0.104, -0.431, -0.213, 0.873],
+      [-2.567, 0.288, -0.765, -1.066, -0.370, 1.297, -0.195, 0.325],
+      [-0.719, 0.225, 1.054, 1.264, 0.423, -0.699, -0.269, 0.044],
+      [-0.225, 1.852, 0.783, -0.061, -2.909, 0.115, 0.322, -0.387],
+      [-2.164, 1.189, -0.852, 0.075, 0.681, -0.586, 1.180, -0.018],
+      [0.469, 1.929, -0.812, -1.476, 0.994, -0.628, 0.068, 0.085],
+      [0.661, -1.930, 0.097, -0.908, -0.299, -1.598, -0.404, -0.268],
+      [-0.468, 0.132, -0.021, -1.960, 0.506, 0.759, -0.570, -0.443],
+      [-1.037, -0.256, 2.001, 0.521, -0.020, -0.292, -0.323, 0.322],
+      [1.549, -3.254, -0.954, 0.854, -0.075, 0.358, 0.606, 0.302],
+      [1.022, 1.586, -0.457, -0.749, 0.016, 0.147, -0.120, 0.378],
+      [-0.881, -0.644, 2.794, 0.036, 0.486, 0.415, 0.003, 0.049],
+      [-1.751, -0.871, -1.198, 1.127, -0.357, 0.825, -0.639, 0.038],
+      [1.420, 1.111, -1.002, 0.888, 0.102, -1.002, -0.336, -0.450],
+      [1.148, -2.670, 0.437, -2.106, -0.270, -0.200, 0.298, -0.026],
+      [3.240, 0.733, -0.329, 0.976, 0.776, 1.659, -0.021, -0.465],
+      [-0.448, -0.166, -0.853, -0.118, 0.330, 0.209, -0.255, 0.692],
+      [-1.932, -0.730, -1.911, 0.797, -0.031, -0.522, 0.310, -0.116],
+      [-0.938, 0.514, 1.293, 0.227, 1.146, 0.034, 0.311, -0.753],
+      [2.082, 1.323, -0.353, -0.338, -0.561, -0.232, 0.132, 0.408],
       [0.609, -0.558, 0.811, 0.366, -0.272, 0.649, 0.770, -0.081]];
-    const expectedAxis = [[-0.445, 0.232, 0.067, -0.555, -0.400, 0.006, 0.205, -0.481],
+
+    const expectedAxis = [
+      [-0.445, 0.232, 0.067, -0.555, -0.400, 0.006, 0.205, -0.481],
       [-0.571, 0.100, 0.071, -0.332, 0.335, 0.133, -0.150, 0.628],
       [0.348, -0.161, 0.467, -0.409, -0.268, -0.537, 0.117, 0.302],
       [0.288, 0.409, -0.142, -0.333, 0.680, -0.298, 0.064, -0.247],
@@ -298,85 +308,84 @@ describe('#LinearProjectionModel', () => {
   });
 
   describe('#getPreparedDataset', () => {
-    const preparedDataset = linearProjectionModel.getPreparedDataset();
+    const preparedDataset = linearProjectionModel.getPreparedDataset({ normalization: null });
     const expectedDataset = {
       points: [{
-        x: -0.146, y: -0.706, color: 'Arizona', size: null,
+        x: -0.146, y: -0.706, z: -0.756, color: 'Arizona', shape: null,
       },
       {
-        x: 1.077, y: 0.901, color: 'Boston', size: null,
+        x: 1.077, y: 0.901, z: 0.997, color: 'Boston', shape: null,
       },
       {
-        x: -2.567, y: 0.288, color: 'Central', size: null,
+        x: -2.567, y: 0.288, z: -0.765, color: 'Central', shape: null,
       },
       {
-        x: -0.719, y: 0.225, color: 'Common', size: null,
+        x: -0.719, y: 0.225, z: 1.054, color: 'Common', shape: null,
       },
       {
-        x: -0.225, y: 1.852, color: 'Consolid', size: null,
+        x: -0.225, y: 1.852, z: 0.783, color: 'Consolid', shape: null,
       },
       {
-        x: -2.164, y: 1.189, color: 'Florida', size: null,
+        x: -2.164, y: 1.189, z: -0.852, color: 'Florida', shape: null,
       },
       {
-        x: 0.469, y: 1.929, color: 'Hawaiian', size: null,
+        x: 0.469, y: 1.929, z: -0.812, color: 'Hawaiian', shape: null,
       },
       {
-        x: 0.661, y: -1.930, color: 'Idaho', size: null,
+        x: 0.661, y: -1.930, z: 0.097, color: 'Idaho', shape: null,
       },
       {
-        x: -0.468, y: 0.132, color: 'Kentucky', size: null,
+        x: -0.468, y: 0.132, z: -0.021, color: 'Kentucky', shape: null,
       },
       {
-        x: -1.037, y: -0.256, color: 'Madison', size: null,
+        x: -1.037, y: -0.256, z: 2.001, color: 'Madison', shape: null,
       },
       {
-        x: 1.549, y: -3.254, color: 'Nevada', size: null,
+        x: 1.549, y: -3.254, z: -0.954, color: 'Nevada', shape: null,
       },
       {
-        x: 1.022, y: 1.586, color: 'NewEngland', size: null,
+        x: 1.022, y: 1.586, z: -0.457, color: 'NewEngland', shape: null,
       },
       {
-        x: -0.881, y: -0.644, color: 'Northern', size: null,
+        x: -0.881, y: -0.644, z: 2.794, color: 'Northern', shape: null,
       },
       {
-        x: -1.751, y: -0.871, color: 'Oklahoma', size: null,
+        x: -1.751, y: -0.871, z: -1.198, color: 'Oklahoma', shape: null,
       },
       {
-        x: 1.420, y: 1.111, color: 'Pacific', size: null,
+        x: 1.420, y: 1.111, z: -1.002, color: 'Pacific', shape: null,
       },
       {
-        x: 1.148, y: -2.670, color: 'Puget', size: null,
+        x: 1.148, y: -2.670, z: 0.437, color: 'Puget', shape: null,
       },
       {
-        x: 3.240, y: 0.733, color: 'SanDiego', size: null,
+        x: 3.240, y: 0.733, z: -0.329, color: 'SanDiego', shape: null,
       },
       {
-        x: -0.448, y: -0.166, color: 'Southern', size: null,
+        x: -0.448, y: -0.166, z: -0.853, color: 'Southern', shape: null,
       },
       {
-        x: -1.932, y: -0.730, color: 'Texas', size: null,
+        x: -1.932, y: -0.730, z: -1.911, color: 'Texas', shape: null,
       },
       {
-        x: -0.938, y: 0.514, color: 'Wisconsin', size: null,
+        x: -0.938, y: 0.514, z: 1.293, color: 'Wisconsin', shape: null,
       },
       {
-        x: 2.082, y: 1.323, color: 'United', size: null,
+        x: 2.082, y: 1.323, z: -0.353, color: 'United', shape: null,
       },
       {
-        x: 0.609, y: -0.558, color: 'Virginia', size: null,
+        x: 0.609, y: -0.558, z: 0.811, color: 'Virginia', shape: null,
       }],
-      axis: [{ x: -0.445, y: 0.232, label: 'x1' },
-        { x: -0.571, y: 0.100, label: 'x2' },
-        { x: 0.348, y: -0.161, label: 'x3' },
-        { x: 0.288, y: 0.409, label: 'x4' },
-        { x: 0.355, y: -0.282, label: 'x5' },
-        { x: -0.053, y: -0.603, label: 'x6' },
-        { x: -0.167, y: 0.085, label: 'x7' },
-        { x: 0.335, y: 0.539, label: 'x8' }],
-      rangeX: [-2.567, 3.240],
-      rangeY: [-3.254, 1.929],
-      mean: { meanx: 0, meany: 0 },
+      axis: [
+        [{ x: 0, y: 0, z: 0 }, { x: -0.445, y: 0.232, z: 0.067 }],
+        [{ x: 0, y: 0, z: 0 }, { x: -0.571, y: 0.100, z: 0.071 }],
+        [{ x: 0, y: 0, z: 0 }, { x: 0.348, y: -0.161, z: 0.467 }],
+        [{ x: 0, y: 0, z: 0 }, { x: 0.288, y: 0.409, z: -0.142 }],
+        [{ x: 0, y: 0, z: 0 }, { x: 0.355, y: -0.282, z: 0.281 }],
+        [{ x: 0, y: 0, z: 0 }, { x: -0.053, y: -0.603, z: -0.331 }],
+        [{ x: 0, y: 0, z: 0 }, { x: -0.167, y: 0.085, z: 0.737 }],
+        [{ x: 0, y: 0, z: 0 }, { x: 0.335, y: 0.539, z: -0.134 }],
+      ],
     };
 
     it('expect the correct coordinates for display the points', () => {
@@ -385,18 +394,21 @@ describe('#LinearProjectionModel', () => {
           .toBeTruthy();
         expect(Math.abs(p.y - expectedDataset.points[i].y) < 0.1 || Math.abs(p.y + expectedDataset.points[i].y) < 0.1)
           .toBeTruthy();
+        expect(Math.abs(p.z - expectedDataset.points[i].z) < 0.1 || Math.abs(p.z + expectedDataset.points[i].z) < 0.1)
+          .toBeTruthy();
         expect(p.color).toEqual(expectedDataset.points[i].color);
-        expect(p.size).toEqual(expectedDataset.points[i].size);
+        expect(p.shape).toEqual(expectedDataset.points[i].shape);
       });
     });
 
     it('expect the correct coordinates for display the axis', () => {
       preparedDataset.axis.forEach((a, i) => {
-        expect(Math.abs(a.x - expectedDataset.axis[i].x) < 0.1 || Math.abs(a.x + expectedDataset.axis[i].x) < 0.1)
+        expect(Math.abs(a[1].x - expectedDataset.axis[i][1].x) < 0.1 || Math.abs(a[1].x + expectedDataset.axis[i][1].x) < 0.1)
           .toBeTruthy();
-        expect(Math.abs(a.y - expectedDataset.axis[i].y) < 0.1 || Math.abs(a.y + expectedDataset.axis[i].y) < 0.1)
+        expect(Math.abs(a[1].y - expectedDataset.axis[i][1].y) < 0.1 || Math.abs(a[1].y + expectedDataset.axis[i][1].y) < 0.1)
           .toBeTruthy();
-        expect(a.label).toEqual(expectedDataset.axis[i].label);
+        expect(Math.abs(a[1].z - expectedDataset.axis[i][1].z) < 0.1 || Math.abs(a[1].z + expectedDataset.axis[i][1].z) < 0.1)
+          .toBeTruthy();
       });
     });
 

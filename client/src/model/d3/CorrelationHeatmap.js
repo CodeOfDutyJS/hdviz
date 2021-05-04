@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import drawColorScale from './DrawColorScale';
 
 function getLeaves(cluster) {
   let leaves = [];
@@ -35,14 +36,10 @@ function correlationMap(cluster) {
   return toGrid;
 }
 
-function correlationHeatmap({ cluster }) {
-  console.log('ehi');
-  console.log(cluster);
+function correlationHeatmap({ color, cluster }) {
   const cols = [];
-  console.log(getLeaves(cluster));
   getLeaves(cluster)
     .forEach((leaf) => cols.push(leaf.id));
-  console.log(cols);
   const grid = correlationMap(cluster);
   const rows = d3.max(grid, (d) => d.row);
   const margin = {
@@ -60,6 +57,7 @@ function correlationHeatmap({ cluster }) {
   // svg.attr('viewBox', '0 0 600 600').attr('preserveAspectRatio', 'xMinYMin');
   // const { height } = svg.node().getBoundingClientRect();
 
+  const colorRange = color;
   const padding = 0.1;
   const x = d3.scaleBand()
     .range([margin.left, width + margin.left])
@@ -71,7 +69,7 @@ function correlationHeatmap({ cluster }) {
     .domain(d3.range(1, rows + 1));
 
   const c = d3.scaleLinear()
-    .range(['#b50e0e', 'white', '#053061'])
+    .range(colorRange)
     .domain([1, 0, -1]);
 
   const xAxis = d3.axisBottom(x).tickFormat((d, i) => cols[i]);
@@ -103,6 +101,8 @@ function correlationHeatmap({ cluster }) {
     .style('opacity', 1e-5)
     .transition()
     .style('opacity', 1);
+
+  drawColorScale(c, [-1, 0, 1], width + 175, 30, 100, 25, 'Pearson Coefficent');
 
   const aspect = width / height;
   const chart = d3.select('#area');
