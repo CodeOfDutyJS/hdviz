@@ -1,4 +1,4 @@
-/* globals describe, expect, it */
+import { describe, it, expect } from '@jest/globals';
 import DataModel from '../../model/DataModel';
 import LinearProjectionModel from '../../model/VisualizationModels/LinearProjectionModel';
 
@@ -308,73 +308,73 @@ describe('#LinearProjectionModel', () => {
   });
 
   describe('#getPreparedDataset', () => {
-    const preparedDataset = linearProjectionModel.getPreparedDataset();
+    const preparedDataset = linearProjectionModel.getPreparedDataset({ normalization: null });
     const expectedDataset = {
       points: [{
-        x: -0.146, y: -0.706, z: -0.756, color: 'Arizona', size: null,
+        x: -0.146, y: -0.706, z: -0.756, color: 'Arizona', shape: null,
       },
       {
-        x: 1.077, y: 0.901, z: 0.997, color: 'Boston', size: null,
+        x: 1.077, y: 0.901, z: 0.997, color: 'Boston', shape: null,
       },
       {
-        x: -2.567, y: 0.288, z: -0.765, color: 'Central', size: null,
+        x: -2.567, y: 0.288, z: -0.765, color: 'Central', shape: null,
       },
       {
-        x: -0.719, y: 0.225, z: 1.054, color: 'Common', size: null,
+        x: -0.719, y: 0.225, z: 1.054, color: 'Common', shape: null,
       },
       {
-        x: -0.225, y: 1.852, z: 0.783, color: 'Consolid', size: null,
+        x: -0.225, y: 1.852, z: 0.783, color: 'Consolid', shape: null,
       },
       {
-        x: -2.164, y: 1.189, z: -0.852, color: 'Florida', size: null,
+        x: -2.164, y: 1.189, z: -0.852, color: 'Florida', shape: null,
       },
       {
-        x: 0.469, y: 1.929, z: -0.812, color: 'Hawaiian', size: null,
+        x: 0.469, y: 1.929, z: -0.812, color: 'Hawaiian', shape: null,
       },
       {
-        x: 0.661, y: -1.930, z: 0.097, color: 'Idaho', size: null,
+        x: 0.661, y: -1.930, z: 0.097, color: 'Idaho', shape: null,
       },
       {
-        x: -0.468, y: 0.132, z: -0.021, color: 'Kentucky', size: null,
+        x: -0.468, y: 0.132, z: -0.021, color: 'Kentucky', shape: null,
       },
       {
-        x: -1.037, y: -0.256, z: 2.001, color: 'Madison', size: null,
+        x: -1.037, y: -0.256, z: 2.001, color: 'Madison', shape: null,
       },
       {
-        x: 1.549, y: -3.254, z: -0.954, color: 'Nevada', size: null,
+        x: 1.549, y: -3.254, z: -0.954, color: 'Nevada', shape: null,
       },
       {
-        x: 1.022, y: 1.586, z: -0.457, color: 'NewEngland', size: null,
+        x: 1.022, y: 1.586, z: -0.457, color: 'NewEngland', shape: null,
       },
       {
-        x: -0.881, y: -0.644, z: 2.794, color: 'Northern', size: null,
+        x: -0.881, y: -0.644, z: 2.794, color: 'Northern', shape: null,
       },
       {
-        x: -1.751, y: -0.871, z: -1.198, color: 'Oklahoma', size: null,
+        x: -1.751, y: -0.871, z: -1.198, color: 'Oklahoma', shape: null,
       },
       {
-        x: 1.420, y: 1.111, z: -1.002, color: 'Pacific', size: null,
+        x: 1.420, y: 1.111, z: -1.002, color: 'Pacific', shape: null,
       },
       {
-        x: 1.148, y: -2.670, z: 0.437, color: 'Puget', size: null,
+        x: 1.148, y: -2.670, z: 0.437, color: 'Puget', shape: null,
       },
       {
-        x: 3.240, y: 0.733, z: -0.329, color: 'SanDiego', size: null,
+        x: 3.240, y: 0.733, z: -0.329, color: 'SanDiego', shape: null,
       },
       {
-        x: -0.448, y: -0.166, z: -0.853, color: 'Southern', size: null,
+        x: -0.448, y: -0.166, z: -0.853, color: 'Southern', shape: null,
       },
       {
-        x: -1.932, y: -0.730, z: -1.911, color: 'Texas', size: null,
+        x: -1.932, y: -0.730, z: -1.911, color: 'Texas', shape: null,
       },
       {
-        x: -0.938, y: 0.514, z: 1.293, color: 'Wisconsin', size: null,
+        x: -0.938, y: 0.514, z: 1.293, color: 'Wisconsin', shape: null,
       },
       {
-        x: 2.082, y: 1.323, z: -0.353, color: 'United', size: null,
+        x: 2.082, y: 1.323, z: -0.353, color: 'United', shape: null,
       },
       {
-        x: 0.609, y: -0.558, z: 0.811, color: 'Virginia', size: null,
+        x: 0.609, y: -0.558, z: 0.811, color: 'Virginia', shape: null,
       }],
       axis: [
         [{ x: 0, y: 0, z: 0 }, { x: -0.445, y: 0.232, z: 0.067 }],
@@ -397,7 +397,7 @@ describe('#LinearProjectionModel', () => {
         expect(Math.abs(p.z - expectedDataset.points[i].z) < 0.1 || Math.abs(p.z + expectedDataset.points[i].z) < 0.1)
           .toBeTruthy();
         expect(p.color).toEqual(expectedDataset.points[i].color);
-        expect(p.size).toEqual(expectedDataset.points[i].size);
+        expect(p.shape).toEqual(expectedDataset.points[i].shape);
       });
     });
 
