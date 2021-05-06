@@ -6,7 +6,7 @@ import Item from 'antd/lib/list/Item';
 import { useStore } from '../../../store/RootStore';
 
 const NeighborsSlider = () => {
-  const [inputValue, setInputValue] = useState(0);
+  const [inputValue, setInputValue] = useState(15);
   const { visualizationStore } = useStore();
   const onChange = (value) => {
     setInputValue(value);
