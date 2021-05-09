@@ -1,31 +1,26 @@
-/* eslint-disable linebreak-style */
-// eslint-disable-next-line max-classes-per-file
-const { Client } = require('pg')
-const format = require('pg-format')
+const { Client } = require('pg');
 
-class PostgreDB {
+module.exports = class PostgreDB {
   constructor(config) {
     this.config = config;
   }
 
   async connectTo() {
     return new Promise((resolve, reject) => {
-
       console.log('Connessione in postgres');
-      let connstring = 'postgres://'+this.config.DB_Username+':'+this.config.DB_Password+'@'+this.config.DB_Address+':'+this.config.DB_Port+'/'+this.config.DB_Name;
+      const connstring = `postgres://${this.config.DB_Username}:${this.config.DB_Password}@${this.config.DB_Address}:${this.config.DB_Port}/${this.config.DB_Name}`;
       const conn = new Client({
-        connectionString: connstring
+        connectionString: connstring,
       });
       console.log('Sto per avviare la connessione');
-      connection.connect((err) => {
+      conn.connect((err) => {
         if (err) {
-          reject('Error - unable to connect to the database');
+          reject(new Error('Error - unable to connect to the database'));
         } else {
           console.log('ho ritornato la connessione');
-          resolve(connection);
+          resolve(conn);
         }
       });
-
     });
   }
 
@@ -35,9 +30,9 @@ class PostgreDB {
       console.log('Sto per eseguire la query');
       const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${this.config.DB_Name}'`;
       console.log('Query Eseguita');
-      conn.query(table, (error, columns, fields) => {
+      conn.query(table, (error, columns) => {
         if (error) {
-          reject('Erorr in the postgresql table query');
+          reject(new Error('Erorr in the postgresql table query'));
         } else {
           console.log('columns');
           resolve(columns);
@@ -45,30 +40,29 @@ class PostgreDB {
       });
     });
   }
+
+  // eslint-disable-next-line class-methods-use-this
   rowData(conn, table) {
     return new Promise((resolve, reject) => {
-      conn.query(`SELECT * FROM ${table}`, (err, rows, fields) => {
+      conn.query(`SELECT * FROM ${table}`, (err, rows) => {
         if (err) {
-          reject('Error in the rowData query');
+          reject(new Error('Error in the rowData query'));
         } else {
           resolve(rows);
         }
       });
     });
   }
-  async getMetadata(conn, table){
-    return new Promise((resolve, reject) => {
-      const promise2 = this.rowData(conn, table).catch((e) => console.log(e));
 
-      Promise.all([promise1, promise2]).then((values) => resolve(values));
+  async getMetadata(conn, table) {
+    return new Promise((resolve) => {
+      const promise = this.rowData(conn, table).catch((e) => console.log(e));
+      Promise.all([promise]).then((values) => resolve(values));
     });
   }
 
-  async endConnection(conn){
+  // eslint-disable-next-line class-methods-use-this
+  async endConnection(conn) {
     conn.end();
   }
-}
-
-module.exports = {
-  PostgreDB,
 };

@@ -15,13 +15,12 @@ class UmapModel extends VisualizationModel {
     });
     const data = this.dataModel
       .setNorm(StandardScore)
-      .getSelectedDataset()
+      .getFeatureColumnsNormalized()
       .map((row) => Object.values(row));
 
     // umap.setSupervisedProjection(label);
     uMap.fit(data);
     const trasformed = uMap.getEmbedding();
-
     return { points: trasformed };
   }
 
@@ -50,11 +49,10 @@ class UmapModel extends VisualizationModel {
 }
 
 export default UmapModel;
-
-/* VisualizationCollector.addVisualization({
+VisualizationCollector.addVisualization({
   id: 'umap',
-  label: 'Umap',
+  label: 'UMAP',
   model: new UmapModel(),
   visualization: umap,
   options: { distance: false },
-}); */
+});

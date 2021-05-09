@@ -1,15 +1,9 @@
-/* eslint-disable linebreak-style */
-// eslint-disable-next-line max-classes-per-file
 const mysql = require('mysql');
 const Database = require('./Database');
 
 module.exports = class MySqlDatabase extends Database {
-  constructor(config) {
-    super(config);
-  }
-
   async connectTo() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const connection = mysql.createConnection({
         host: this.config.DB_Address,
         user: this.config.DB_Username,
@@ -21,7 +15,7 @@ module.exports = class MySqlDatabase extends Database {
         if (err) {
           reject({
             error: 1,
-            msg:"Error connecting to the DB"
+            msg: 'Error connecting to the DB',
           });
         } else {
           resolve(connection);
@@ -31,28 +25,29 @@ module.exports = class MySqlDatabase extends Database {
   }
 
   async getTables(conn) {
-    return new Promise((resolve/*, reject*/) => {
+    return new Promise((resolve) => {
       const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${this.config.DB_Name}'`;
-      conn.query(table, (error, columns, fields) => {
+      conn.query(table, (error, columns) => {
         if (error) {
           reject({
             error: 1,
-            msg:"Error executing the getTable query"
+            msg: 'Error executing the query',
           });
         } else {
-          resolve(columns.map(res => res.table_name));
+          resolve(columns.map((res) => res.table_name));
         }
       });
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async getData(conn, table) {
-    return new Promise((resolve, reject) => {
-      conn.query(`SELECT * FROM ${table}`, (err, rows, fields) => {
+    return new Promise((resolve) => {
+      conn.query(`SELECT * FROM ${table}`, (err, rows) => {
         if (err) {
           reject({
             error: 1,
-            msg:"Error executing the getData query"
+            msg: 'Error executing the query',
           });
         } else {
           resolve(rows);
@@ -61,6 +56,7 @@ module.exports = class MySqlDatabase extends Database {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async endConnection(conn) {
     conn.end();
   }
