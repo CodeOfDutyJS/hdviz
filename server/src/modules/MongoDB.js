@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 const Database = require('./Database');
 
 module.exports = class MongoDb extends Database {

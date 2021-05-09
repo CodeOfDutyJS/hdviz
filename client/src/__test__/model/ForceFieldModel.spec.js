@@ -1,5 +1,4 @@
-/* globals describe, expect, it */
-
+import { describe, test, expect } from '@jest/globals';
 import { distance } from 'ml-distance';
 import DataModel from '../../model/DataModel';
 import ForceFieldModel from '../../model/VisualizationModels/ForceFieldModel';
@@ -32,7 +31,7 @@ describe('#ForceFieldModel', () => {
   describe('#distanceFn', () => {
     expect(forceFieldModel.dataModel.getFeatureColumns()).not.toBeNull();
     const distanceDataset = forceFieldModel.getPreparedDataset({ distanceFn: distance.euclidean, maxNodes: 4, maxLinks: 6 });
-    it('should return a correctly formatted object', () => {
+    test('should return a correctly formatted object', () => {
       expect(
         'nodes' in distanceDataset
         && 'links' in distanceDataset,
@@ -48,7 +47,7 @@ describe('#ForceFieldModel', () => {
         && 'value' in distanceDataset.links[0],
       ).toBeTruthy();
     });
-    it('should calculate euclidean between nodes correctly', () => {
+    test('should calculate euclidean between nodes correctly', () => {
       expect(distanceDataset).toEqual({
         nodes: [
           {
