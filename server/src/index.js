@@ -3,9 +3,9 @@
 
 const express = require('express');
 const fs = require('fs');
-const MysqlDatabase = require('./modules/MySQLDB');
-const MongoDB = require('./modules/MongoDB');
 //const PostgreDB = require('./modules/PostgreDB');
+const {findDB}  = require("./utils");
+const { getFiles} = require("./utils");
 
 
 const config_files = getFiles(__dirname+'/config');
@@ -14,38 +14,8 @@ const app = express();
 const port = 1337;
 
 
-const findDB = async function (config) {
-  const dbType = {
-    mysql: new MysqlDatabase(config),
-    mongodb: new MongoDB(config),
-    //postgresql: new PostgreDB(config),
-    default: function(){
-      console.log('Error')
-    }
-  };
-  return dbType[config.DB_Type];
-};
+const selectConfig = function(dbname) {
 
-
-
-function getFiles(dir, files_) {
-  files_ = files_ || [];
-  const files = fs.readdirSync(dir);
-  for (const i in files) {
-    const name = `${dir}/${files[i]}`;
-    if (fs.statSync(name).isDirectory()) {
-      getFiles(name, files_);
-    } else {
-      const text = fs.readFileSync(name, 'utf8');
-      files_.push(JSON.parse(text));
-    }
-  }
-  return files_;
-}
-
-
-
- function selectConfig(dbname) {
   for ( i in config_files) {
     if (dbname == config_files[i].DB_Name) {
       return config_files[i];
@@ -53,6 +23,7 @@ function getFiles(dir, files_) {
   }
   return 0;
 }
+
 
 app.listen(port, () => {
   console.log('App is running');
@@ -132,3 +103,7 @@ app.get('/api/getData/',async (req, res) => {
     })
   }
 });
+
+module.exports = {
+  getFiles, findDB, selectConfig
+}
