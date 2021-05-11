@@ -2,44 +2,41 @@ import { makeAutoObservable } from 'mobx';
 import Papa from 'papaparse';
 import { DataModel } from '../model/index';
 
-const parseFile = (rawFile) => new Promise((resolve, reject) => {
-  Papa.parse(rawFile, {
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true,
-    worker: true,
-
-    complete: (results) => {
-      resolve(results);
-    },
-
-    error: (error) => {
-      reject(error.message);
-    },
-  });
-});
-
 class ModelStore {
-  rootStore;
-  dataModel = null;
   loadingCompleted = false;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
-
-    makeAutoObservable(this, { rootStore: false }, { autoBind: true });
-
     this.dataModel = new DataModel();
+    makeAutoObservable(this, { rootStore: false }, { autoBind: true });
+  }
+
+  static parseFile(rawFile) {
+    return new Promise((resolve, reject) => {
+      Papa.parse(rawFile, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        worker: true,
+        complete: (results) => {
+          resolve(results);
+        },
+        error: (error) => {
+          reject(error.message);
+        },
+      });
+    });
   }
 
   async uploadCSV(file) {
+    const dataError = this.rootStore.getUiStoreDataError() || [];
     try {
-      const results = await parseFile(file);
+      const results = await this.constructor.parseFile(file);
       this.dataset = results.data;
       this.loadingCompleted = true;
       if (results.errors.length > 0) {
         results.errors.forEach((error) => {
-          this.rootStore.uiStore.dataError.push({
+          dataError.push({
             status: 'warning',
             message: `Error ${error.code}: ${error.message}`,
           });
@@ -47,24 +44,23 @@ class ModelStore {
       }
     } catch (error) {
       // TODO: visualizzare errore
-
-      this.rootStore.uiStore.dataError = {
+      dataError.length = 0;
+      dataError.push({
         status: 'error',
         message: `Error: ${error.message}`,
-      };
+      });
     }
   }
 
   checkFeatures() {
     if (
-      this.rootStore.visualizationStore.visualizationSelected.options?.maxFeatures
-      && this.features.length > this.rootStore.visualizationStore.visualizationSelected.options.maxFeatures
+      this.rootStore.getVisualizationSelectedMaxFeatures()
+      && this.features.length > this.rootStore.getVisualizationSelectedMaxFeatures()
     ) {
       this.features = this.features.slice(0, 5);
-
-      this.rootStore.uiStore.maxFeatures = true;
+      this.rootStore.setUiStoreMaxFeatures(true);
     } else {
-      this.rootStore.uiStore.maxFeatures = false;
+      this.rootStore.setUiStoreMaxFeatures(false);
     }
   }
 
@@ -75,8 +71,7 @@ class ModelStore {
 
   set dataset(value) {
     this.dataModel.dataset = value;
-
-    this.rootStore.uiStore.loadingDataCompleted = true;
+    this.rootStore.setUiStoreLoadingDataCompleted(true);
   }
 
   get columns() {
@@ -115,10 +110,9 @@ class ModelStore {
   setTargets(value) {
     if (value.length > 2) {
       value.pop();
-
-      this.rootStore.uiStore.maxTargets = true;
+      this.rootStore.setUiStoreMaxTargets(true);
     } else {
-      this.rootStore.uiStore.maxTargets = false;
+      this.rootStore.setUiStoreMaxTargets(false);
     }
     this.targets = value;
   }

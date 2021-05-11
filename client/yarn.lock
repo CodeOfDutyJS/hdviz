@@ -7780,7 +7780,7 @@ ml-array-max@^1.2.3:
   dependencies:
     is-any-array "^1.0.0"
 
-ml-array-mean@^1.1.1:
+ml-array-mean@^1.1.1, ml-array-mean@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ml-array-mean/-/ml-array-mean-1.1.5.tgz#d8a468b26e2827c9ffca793331c7a8c0276171d4"
   integrity sha512-CNfsSJzVrU/S6AvJSZJkPvKk6mkEYBkIU7hlSHD1Ha27d2tzfo3b7xG5uP70/USvOfMcyfVRwXbxIiZ9Ky4LKA==
@@ -7825,6 +7825,11 @@ ml-array-variance@^1.1.6:
   dependencies:
     is-any-array "^1.0.0"
     ml-array-mean "^1.1.5"
+
+ml-dataset-iris@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ml-dataset-iris/-/ml-dataset-iris-1.1.1.tgz#eb93a85cac6b9a27b44219db53b3e3543a62c4ff"
+  integrity sha512-EqzTQIOgzFqnNAvdsMDCfg5fbi3rXdJuCd+abjkB1TGh33iIiVgeqO5TWBYLATSnSmBsXdixjVDMh7R4sEqsAA==
 
 ml-distance-euclidean@^2.0.0:
   version "2.0.0"
