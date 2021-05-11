@@ -5,7 +5,7 @@ import {
 import { useStore } from '../../../store/RootStore';
 
 const MinDistanceSlider = () => {
-  const [inputValue, setInputValue] = useState(0);
+  const [inputValue, setInputValue] = useState(0.1);
   const { visualizationStore } = useStore();
   const onChange = (value) => {
     if (Number.isNaN(value)) {

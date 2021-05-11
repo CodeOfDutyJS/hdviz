@@ -5,7 +5,7 @@ import {
 import { useStore } from '../../../store/RootStore';
 
 const SpreadSlider = () => {
-  const [inputValue, setInputValue] = useState(0.5);
+  const [inputValue, setInputValue] = useState(1);
   const { visualizationStore } = useStore();
   const onChange = (value) => {
     if (Number.isNaN(value)) {
