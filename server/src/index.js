@@ -4,8 +4,7 @@
 const express = require('express');
 const fs = require('fs');
 //const PostgreDB = require('./modules/PostgreDB');
-const {findDB}  = require("./utils");
-const { getFiles} = require("./utils");
+const {findDB, getFiles}  = require("./utils");
 
 
 const config_files = getFiles(__dirname+'/config');
