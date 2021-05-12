@@ -49,7 +49,7 @@ const DatasetManipulation = observer(() => {
         ) : null}
 
       {/* visualizationStore.isNormalized */}
-      { visualizationStore._visualization._visualizationSelected.id !== 'umap' ? (
+      { visualizationStore._visualization._visualizationSelected?.id !== 'umap' ? (
         <>
           <Checkbox
             onChange={visualizationStore.setIsNormalized}

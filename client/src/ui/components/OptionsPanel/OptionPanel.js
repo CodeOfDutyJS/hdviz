@@ -3,6 +3,8 @@ import React from 'react';
 import {
   Layout, Collapse, PageHeader, Button, Alert,
 } from 'antd';
+
+import { DownloadOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react-lite';
 import VisualizationSelection from './VisualizationSelection';
 import DatasetManipulation from './DatasetManipulation';
@@ -48,7 +50,7 @@ const OptionPanel = observer(() => {
       </Collapse>
       <Layout id="start-button">
         <Button type="primary" shape="round" onClick={visualizationStore.start}>Start</Button>
-        <Button type="default" shape="round" disabled={!visualizationStore.canSave} onClick={visualizationStore.save}>Save</Button>
+        <Button type="default" shape="round" icon={<DownloadOutlined />} disabled={!visualizationStore.canSave} onClick={visualizationStore.save}>Save</Button>
       </Layout>
       {
         // MESSAGGIO DI SUCCESSO
