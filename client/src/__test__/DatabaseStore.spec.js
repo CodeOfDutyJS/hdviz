@@ -41,7 +41,7 @@ describe('DBStore', () => {
       databaseStore.apiService = apiMock;
 
       await databaseStore.setDatabases();
-      expect(rootStore.uiStore.dataError).toStrictEqual([{ status: 'error', message: 'error test message' }]);
+      expect(rootStore.uiStore.dataError).toStrictEqual({ status: 'error', message: 'error test message' });
     });
   });
 
@@ -71,7 +71,7 @@ describe('DBStore', () => {
       databaseStore.databaseSelected = 'db1';
 
       await databaseStore.setTables();
-      expect(rootStore.uiStore.dataError).toStrictEqual([{ status: 'error', message: 'error test message' }]);
+      expect(rootStore.uiStore.dataError).toStrictEqual({ status: 'error', message: 'error test message' });
     });
   });
 

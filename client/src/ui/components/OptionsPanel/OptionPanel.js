@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
-  Layout, Collapse, PageHeader, Button, Alert,
+  Layout, Collapse, PageHeader, Button, Alert, message,
 } from 'antd';
 
 import { DownloadOutlined } from '@ant-design/icons';
@@ -24,16 +24,7 @@ const OptionPanel = observer(() => {
         className="option-panel-header"
         title="Options Panel"
       />
-      { uiStore.dataError?.length > 0
-        ? (
-          uiStore.dataError.map((error) => (
-            <Alert
-              type={uiStore.dataError?.length > 20 ? 'error' : error.status}
-              message={error.message}
-              closable
-            />
-          ))
-        ) : null}
+      { uiStore.dataError ? message.error(uiStore?.dataError?.message) : null }
       <Collapse defaultActiveKey={['1', '2']}>
         <Panel header="Data source" key="1" className="panel-code">
           <DataSource />

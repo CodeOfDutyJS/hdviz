@@ -39,10 +39,7 @@ class ModelStore {
       this.loadingCompleted = true;
       if (results.errors.length > 0) {
         results.errors.forEach((error) => {
-          this.rootStore.uiStore.dataError.push({
-            status: 'warning',
-            message: `Error ${error.code}: ${error.message}`,
-          });
+          this.rootStore.uiStore.addError('warning', `Error ${error.code}: ${error.message}`);
         });
       }
     } catch (error) {

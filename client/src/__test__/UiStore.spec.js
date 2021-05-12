@@ -33,7 +33,7 @@ describe('UiStore', () => {
   });
 
   test('dataError', () => {
-    uiStore.dataError = [{ error: 'Test', message: 'test' }];
-    expect(uiStore.dataError).toStrictEqual([{ error: 'Test', message: 'test' }]);
+    uiStore.addError('error', 'test');
+    expect(uiStore.dataError).toStrictEqual({ status: 'error', message: 'test' });
   });
 });

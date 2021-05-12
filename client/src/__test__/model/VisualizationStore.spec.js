@@ -75,4 +75,9 @@ describe('Options', () => {
     visualizationStore.setSecondoRangeHeatmap(20);
     expect(visualizationStore._visualization._options.finalRangeValue).toBe(20);
   });
+/*
+  test('start', () => {
+    visualizationStore.start();
+    expect(true).toStrictEqual(true);
+  }); */
 });
