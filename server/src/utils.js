@@ -1,11 +1,12 @@
 const fs = require('fs');
 const MysqlDatabase = require('./modules/MySQLDB');
 const MongoDB = require('./modules/MongoDB');
-// const PostgreDB = require('./modules/PostgreDB');
+// const PostgreDB = require('./modules/PostgreDB')
+;
 const MySqlDatabase = require('./modules/MySQLDB');
 
 
-module.exports.findDB = function (config) {
+const findDB = function (config) {
   const dbType = {
     'mysql': () => { return new MySqlDatabase(config)},
     'mongodb': () => { return new MongoDB(config)},
@@ -15,7 +16,7 @@ module.exports.findDB = function (config) {
 };
 
 
-module.exports.getFiles = function (dir, files_) {
+const getFiles = function (dir, files_) {
   files_ = files_ || [];
   const files = fs.readdirSync(dir);
   for (const i in files) {
@@ -29,3 +30,16 @@ module.exports.getFiles = function (dir, files_) {
   }
   return files_;
 };
+
+const config_files = getFiles(__dirname+'/config');
+
+const selectConfig = function(dbname) {
+
+  for ( i in config_files) {
+    if (dbname == config_files[i].DB_Name) {
+      return config_files[i];
+    }
+  }
+  return 0;
+}
+ module.exports = {selectConfig, getFiles, findDB}

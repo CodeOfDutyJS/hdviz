@@ -4,25 +4,12 @@
 const express = require('express');
 const fs = require('fs');
 //const PostgreDB = require('./modules/PostgreDB');
-const {findDB, getFiles}  = require("./utils");
-
-
-const config_files = getFiles(__dirname+'/config');
+const {findDB, getFiles, selectConfig}  = require("./utils");
 
 const app = express();
 const port = 1337;
 
-
-const selectConfig = function(dbname) {
-
-  for ( i in config_files) {
-    if (dbname == config_files[i].DB_Name) {
-      return config_files[i];
-    }
-  }
-  return 0;
-}
-
+const config_files = getFiles(__dirname+'/config');
 
 app.listen(port, () => {
   console.log('App is running');
@@ -103,6 +90,4 @@ app.get('/api/getData/',async (req, res) => {
   }
 });
 
-module.exports = {
-  getFiles, findDB, selectConfig
-}
+module.exports = app;

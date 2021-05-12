@@ -1,10 +1,9 @@
 const MysqlDatabase = require('../modules/MySQLDB');
 const MongoDB = require('../modules/MongoDB');
 
+const { findDB, getFiles, selectConfig } = require('../utils');
 
-const { findDB, getFiles } = require('../utils');
-
-describe('findDB', () => {
+describe('findDB testing', () => {
   test('trovato db mysql', () => {
     const data = {
       "DB_Name": "iris",
