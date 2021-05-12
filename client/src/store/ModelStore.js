@@ -3,11 +3,10 @@ import Papa from 'papaparse';
 import { DataModel } from '../model/index';
 
 class ModelStore {
-  loadingCompleted = false;
-
   constructor(rootStore) {
     this.rootStore = rootStore;
     this.dataModel = new DataModel();
+    this.loadingCompleted = false;
     makeAutoObservable(this, { rootStore: false }, { autoBind: true });
   }
 
@@ -29,11 +28,12 @@ class ModelStore {
   }
 
   async uploadCSV(file) {
-    const dataError = this.rootStore.getUiStoreDataError() || [];
+    const dataError = this.rootStore.getUiStoreDataError();
     try {
       const results = await this.constructor.parseFile(file);
-      this.dataset = results.data;
       this.loadingCompleted = true;
+      this.setDataset(results.data);
+      dataError.length = 0;
       if (results.errors.length > 0) {
         results.errors.forEach((error) => {
           dataError.push({
@@ -53,11 +53,12 @@ class ModelStore {
   }
 
   checkFeatures() {
+    const maxFeatures = this.rootStore.getVisualizationSelectedMaxFeatures();
     if (
-      this.rootStore.getVisualizationSelectedMaxFeatures()
-      && this.features.length > this.rootStore.getVisualizationSelectedMaxFeatures()
+      maxFeatures
+      && this.features.length > maxFeatures
     ) {
-      this.features = this.features.slice(0, 5);
+      this.features = this.features.slice(0, maxFeatures);
       this.rootStore.setUiStoreMaxFeatures(true);
     } else {
       this.rootStore.setUiStoreMaxFeatures(false);
@@ -69,7 +70,7 @@ class ModelStore {
     return this.dataModel;
   }
 
-  set dataset(value) {
+  setDataset(value) {
     this.dataModel.dataset = value;
     this.rootStore.setUiStoreLoadingDataCompleted(true);
   }
