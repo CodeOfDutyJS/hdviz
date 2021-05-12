@@ -29,7 +29,22 @@ class VisualizationStore {
     this._visualization.addOption({ maxNodes: 150 });
     this._visualization.addOption({ maxLinks: 150 });
 
-    this._visualization.start(this.rootStore.modelStore.data);
+    try {
+      this._visualization.start(this.rootStore.modelStore.data);
+    } catch (e) {
+      console.log(e);
+      console.log(e.message);
+      switch (e.message) {
+        case 'Cannot read property \'visualization\' of null':
+          this.rootStore.uiStore.addError('error', 'Select a visualization');
+          break;
+        case 'distanceFn is not a function':
+          this.rootStore.uiStore.addError('error', 'Select a distance');
+          break;
+        default:
+          break;
+      }
+    }
 
     this.canSave = true;
   }
