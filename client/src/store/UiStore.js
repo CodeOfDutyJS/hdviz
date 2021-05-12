@@ -47,6 +47,10 @@ class UiStore {
   set dataError(value) {
     this._dataError = value;
   }
+
+  addError(status, message) {
+    this.dataError.push({ status, message });
+  }
 }
 
 export default UiStore;

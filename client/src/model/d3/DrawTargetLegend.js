@@ -20,7 +20,7 @@ function drawTargetLegend(color, target, x, y, height, width, column = 0) {
     .paddingInner(0.5)
     .domain(d3.range(0, colorValues.length));
 
-  const bandwidth = yScale.bandwidth() > 50 ? 50 : yScale.bandwidth();
+  // const bandwidth = yScale.bandwidth() > 50 ? 50 : yScale.bandwidth();
 
   const radius = colorValues.length < 8 ? 15 : 5;
   svg.append('g')
