@@ -48,7 +48,7 @@ app.get('/api/getTable', async (req, res) => {
   try{
     const database = await findDB(configurazione);
     const connection = await Promise.resolve( database.connectTo());
-    let tables = await Promise.resolve(database.getTables(connection));
+    const tables = await Promise.resolve(database.getTables(connection));
     res.json(tables);
     database.endConnection(connection);
   }
@@ -78,7 +78,7 @@ app.get('/api/getData/',async (req, res) => {
   try{
     const database = await findDB(configurazione);
     const connection = await Promise.resolve( database.connectTo());
-    let data = await Promise.resolve( database.getData(connection, dbtable));
+    const data = await Promise.resolve( database.getData(connection, dbtable));
     res.json(data);
     database.endConnection(connection);
   }

@@ -1,7 +1,9 @@
 /* eslint-disable linebreak-style */
 // eslint-disable-next-line max-classes-per-file
+
+const Database = require('../modules/Database');
 const mysql = require('mysql');
-const Database = require('./Database');
+
 
 module.exports = class MySqlDatabase extends Database {
   constructor(config) {
@@ -29,7 +31,6 @@ module.exports = class MySqlDatabase extends Database {
       });
     });
   }
-
   async getTables(conn) {
     return new Promise((resolve, reject) => {
         if(conn){
@@ -55,23 +56,16 @@ module.exports = class MySqlDatabase extends Database {
 
   async getData(conn, table) {
     return new Promise((resolve, reject) => {
-      if(conn){
       conn.query(`SELECT * FROM ${table}`, (err, rows, fields) => {
         if (err) {
           reject({
             error: 1,
-            msg:"Error getting the data"
+            msg:"Error executing the query"
           });
-        } else {
-          resolve(rows);
+        } else {.
+          resolve([rows]);
         }
       });
-    } else{
-      reject({
-        error: 1,
-        msg:"Error getting the data"
-      });
-    }
     });
   }
 
@@ -79,3 +73,5 @@ module.exports = class MySqlDatabase extends Database {
     conn.end();
   }
 };
+
+ 
