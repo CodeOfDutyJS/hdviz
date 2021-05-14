@@ -1,5 +1,10 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { max } from 'd3-array';
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals';
 import { makeAutoObservable } from 'mobx';
 import { DataModel } from '../../model/index';
 import {
@@ -89,6 +94,7 @@ describe('#ModelStore', () => {
       expect(maxFeaturesSpy.mock.calls[0][0]).toBeTruthy();
     });
   });
+
   describe('#setTargets', () => {
     const maxTargetsSpy = jest.spyOn(RootStore.prototype, 'setUiStoreMaxTargets');
     let modelStore = {};
