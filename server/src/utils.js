@@ -13,7 +13,7 @@ const findDB = function (config) {
     'default': () => {throw ('Tipo di database non implementato')}
   };
     return (dbType[config.DB_Type] || dbType['default'])();
-};
+}
 
 
 const getFiles = function (dir, files_) {

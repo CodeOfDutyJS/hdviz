@@ -1,42 +1,46 @@
 /* eslint-disable */
-//node --experimental-modules ServerModule.js
 
 const express = require('express');
 const fs = require('fs');
 //const PostgreDB = require('./modules/PostgreDB');
+jest.mock('../utils');
 const {findDB, getFiles, selectConfig}  = require("./utils");
+
 
 const app = express();
 const port = 1337;
 
-const config_files = getFiles(__dirname+'/config');
-console.log(config_files);
+
 
 app.listen(port, () => {
   console.log('App is running');
 });
 
 app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  let databases = [];
 
-  for (i in config_files) {
+
+  const config_files = req.query.test;
+  let databases = [];
+if(config_files){
+    let i = 0;
+  while (config_files[i]) {
     databases[i] = config_files[i].DB_Name;
-  }
-  if (databases=="")  {
-    res.json({
-      error: 1,
-      msg:"No configuration found"
-    });
-    return;
+    i = i+1;
   }
   res.json([{databases}]);
+}else{
+    res.json({
+        error: 1,
+        msg:"No configuration found"
+      });
+}
+
 });
 
 
 app.get('/api/getTable', async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  let dbname = req.query.dbname;
+
+  const dbname = req.query.dbname;
   console.log("getTable called");
 
   const configurazione = selectConfig(dbname);
@@ -65,9 +69,9 @@ app.get('/api/getTable', async (req, res) => {
 
 app.get('/api/getData/',async (req, res) => {
   console.log("getData");
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  let dbname = req.query.dbname;
-  let dbtable = req.query.dbtable;
+
+  const dbname = req.query.dbname;
+  const dbtable = req.query.dbtable;
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
