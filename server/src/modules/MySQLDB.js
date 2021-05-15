@@ -60,7 +60,7 @@ module.exports = class MySqlDatabase extends Database {
         if (err) {
           reject({
             error: 1,
-            msg:"Error getting the data"
+            msg:"Error - unable to get the data"
           });
         } else {
           resolve(rows);

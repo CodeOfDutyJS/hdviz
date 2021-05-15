@@ -1,4 +1,4 @@
-const request = require('supertest');
+
 const MySqlDatabase = require('../modules/MySQLDB');
 
 // const database = require('../modules/Database')
@@ -67,7 +67,7 @@ describe('Mysql database test', () => {
       const db = new MySqlDatabase(config_test_db);
       const error_msg = {
         error: 1,
-        msg: 'Error getting the data',
+        msg: 'Error - unable to get the data',
       };
       try{
         await db.getData();
