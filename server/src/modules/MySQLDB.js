@@ -69,7 +69,7 @@ module.exports = class MySqlDatabase extends Database {
     } else{
       reject({
         error: 1,
-        msg:"Error getting the data"
+        msg:"Error - unable to get the data"
       });
     }
     });
