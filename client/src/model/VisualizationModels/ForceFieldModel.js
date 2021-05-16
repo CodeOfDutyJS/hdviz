@@ -1,5 +1,5 @@
-import * as d3 from 'd3';
-import forceField from '../d3/ForceField';
+import min from 'ml-array-min';
+import { forceField } from '../d3/index';
 import { VisualizationModel } from '../index';
 import VisualizationCollector from '../VisualizationsCollector';
 
@@ -22,7 +22,7 @@ class ForceFieldModel extends VisualizationModel {
       .forEach(
         (distanceFrom, i) => {
           featureColumns
-            .slice(i + 1, d3.min([maxLinks, featureColumns.length]))
+            .slice(i + 1, min([maxLinks, featureColumns.length]))
             .forEach((distanceTo, j) => {
               const dist = distanceFn(Object.values(distanceFrom), Object.values(distanceTo));
               links.push(
