@@ -3,7 +3,7 @@ const Database = require('./Database');
 
 module.exports = class MySqlDatabase extends Database {
   async connectTo() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const connection = mysql.createConnection({
         host: this.config.DB_Address,
         user: this.config.DB_Username,
@@ -13,6 +13,7 @@ module.exports = class MySqlDatabase extends Database {
 
       connection.connect((err) => {
         if (err) {
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject({
             error: 1,
             msg: 'Error connecting to the DB',
@@ -25,10 +26,11 @@ module.exports = class MySqlDatabase extends Database {
   }
 
   async getTables(conn) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${this.config.DB_Name}'`;
       conn.query(table, (error, columns) => {
         if (error) {
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject({
             error: 1,
             msg: 'Error executing the query',
@@ -42,9 +44,10 @@ module.exports = class MySqlDatabase extends Database {
 
   // eslint-disable-next-line class-methods-use-this
   async getData(conn, table) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       conn.query(`SELECT * FROM ${table}`, (err, rows) => {
         if (err) {
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject({
             error: 1,
             msg: 'Error executing the query',
