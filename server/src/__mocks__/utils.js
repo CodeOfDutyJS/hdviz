@@ -22,7 +22,7 @@ const getFiles = jest.fn((dir, files_)=> {
     "DB_Username": 'root',
     "DB_Password": '',
     "DB_Type": 'mysql'
-  },  
+  },
   {
     "DB_Name": "Mongodb",
     "DB_Address": "mongodb://localhost:27017/",

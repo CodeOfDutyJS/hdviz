@@ -26,7 +26,7 @@ app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare
   if (databases=="")  {
     res.json({
       error: 1,
-      msg:"No configuration found"
+      msg:"No configuration file found"
     });
     return;
   }

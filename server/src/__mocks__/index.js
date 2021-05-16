@@ -3,7 +3,9 @@
 const express = require('express');
 const fs = require('fs');
 //const PostgreDB = require('./modules/PostgreDB');
-jest.mock('../utils');
+
+
+
 const {findDB, getFiles, selectConfig}  = require("./utils");
 
 
@@ -19,7 +21,7 @@ app.listen(port, () => {
 app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
 
 
-  const config_files = req.query.test;
+  const config_files = getFiles();
   let databases = [];
 if(config_files){
     let i = 0;
@@ -31,7 +33,7 @@ if(config_files){
 }else{
     res.json({
         error: 1,
-        msg:"No configuration found"
+        msg:"No configuration file found"
       });
 }
 
