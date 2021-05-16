@@ -6,12 +6,12 @@ import VisualizationCollector from '../VisualizationsCollector';
 import StandardScore from '../normalizations/StandardScore';
 
 class UmapModel extends VisualizationModel {
-  Umap(label) {
+  Umap(nNeighbors, minDistance, spread) {
     const uMap = new UMAP({
-      nComponents: 2,
-      minDist: 0.1,
-      spread: 1,
-      nNeighbors: 15,
+      nComponents: 3,
+      minDist: minDistance,
+      spread,
+      nNeighbors,
     });
     const data = this.dataModel
       .setNorm(StandardScore)
@@ -21,13 +21,12 @@ class UmapModel extends VisualizationModel {
     // umap.setSupervisedProjection(label);
     uMap.fit(data);
     const trasformed = uMap.getEmbedding();
-
     return { points: trasformed };
   }
 
-  getPreparedDataset() {
+  getPreparedDataset({ nNeighbors = 15, minDistance = 0.1, spread = 1 }) {
     const label = this.dataModel.getTargetColumns();
-    const projection = this.Umap([...new Set(label.map((d) => d[this.dataModel.targets[0]]))]);
+    const projection = this.Umap(nNeighbors, minDistance, spread);
 
     const preparedPoints = [];
     projection.points
@@ -35,14 +34,13 @@ class UmapModel extends VisualizationModel {
         .push({
           x: d[0],
           y: d[1],
+          z: d[2],
           color: this.dataModel.targets.length > 0 ? label[i][this.dataModel.targets[0]] : null,
           shape: this.dataModel.targets.length > 1 ? label[i][this.dataModel.targets[1]] : null,
+          description: this.dataModel.setNorm(null).getSelectedDataset()[i],
         }));
-
     return {
       points: preparedPoints,
-      points_rangeX: extent(preparedPoints.map((d) => d.x)),
-      points_rangeY: extent(preparedPoints.map((d) => d.y)),
       target1: this.dataModel.targets.length > 0 ? [...new Set(label.map((d) => d[this.dataModel.targets[0]]))] : null,
       target2: this.dataModel.targets.length > 1 ? [...new Set(label.map((d) => d[this.dataModel.targets[1]]))] : null,
     };
@@ -50,11 +48,10 @@ class UmapModel extends VisualizationModel {
 }
 
 export default UmapModel;
-
 VisualizationCollector.addVisualization({
   id: 'umap',
   label: 'UMAP',
   model: new UmapModel(),
   visualization: umap,
-  options: { distance: false },
+  options: { nNeighbors: true, minDistance: true, spread: true },
 });

@@ -49,8 +49,6 @@ function forceField(data) {
     },
   );
 
-  // const { height } = svg.node().getBoundingClientRect();
-
   width -= 150;
 
   const simulation = d3.forceSimulation(nodes)

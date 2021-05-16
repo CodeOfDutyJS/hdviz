@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 
 import {
-  Form, Select, Checkbox,
+  Form, Select, Checkbox, Slider, InputNumber,
 } from 'antd';
 
 import { observer } from 'mobx-react-lite';
+import NeighborsSlider from './NeighborsSlider';
+import MinDistanceSlider from './MinDistanceSlider';
+import SpreadSlider from './SpreadSlider';
 import { DistanceType, ClusteringType } from '../../../utils/options';
 import FeatureSelection from './FeatureSelection';
 import TargetSelection from './TargetSelection';
@@ -45,30 +48,42 @@ const DatasetManipulation = observer(() => {
           </Item>
         ) : null}
 
-      <Item
-        className="no-point"
-        label={(
+      {/* visualizationStore.isNormalized */}
+      { visualizationStore._visualization._visualizationSelected?.id !== 'umap' ? (
+        <>
           <Checkbox
             onChange={visualizationStore.setIsNormalized}
             checked={visualizationStore.isNormalized}
           >
             Normalization
           </Checkbox>
-)}
-      >
-        {visualizationStore.isNormalized ? (
-          <Select
-            defaultValue={NormalizationCollector._normalizations.noNorm.id}
-            onChange={visualizationStore.setNormalization}
-          >
-            {Object.values(NormalizationCollector.normalizations).map((item) => (
-              <Option key={item.id}>
-                {item.label}
-              </Option>
-            ))}
-          </Select>
-        ) : null}
-      </Item>
+          {visualizationStore.isNormalized ? (
+            <Select
+              defaultValue={NormalizationCollector._normalizations.noNorm.id}
+              onChange={visualizationStore.setNormalization}
+            >
+              {Object.values(NormalizationCollector.normalizations).map((item) => (
+                <Option key={item.id}>
+                  {item.label}
+                </Option>
+              ))}
+            </Select>
+          ) : null}
+
+        </>
+      ) : (
+        <>
+          <Item label="Neighbors number">
+            <NeighborsSlider />
+          </Item>
+          <Item label="Min. distance">
+            <MinDistanceSlider />
+          </Item>
+          <Item label="Spread">
+            <SpreadSlider />
+          </Item>
+        </>
+      )}
 
     </Form>
   );

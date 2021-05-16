@@ -1,5 +1,4 @@
 import { DistanceType, ClusteringType } from '../../utils/options';
-// eslint-disable-next-line import/no-cycle
 import HeatMapModel from './HeatMapModel';
 import VisualizationCollector from '../VisualizationsCollector';
 import { correlationHeatmap } from '../d3';

@@ -34,10 +34,7 @@ class DatabaseStore {
 
       this.databasesLoading = false;
     } catch (error) {
-      this.rootStore.uiStore.dataError.push({
-        status: 'error',
-        message: `${error}`,
-      });
+      this.rootStore.uiStore.addError('error', error);
     }
   }
 
@@ -53,10 +50,7 @@ class DatabaseStore {
       }
       this.tablesLoading = false;
     } catch (error) {
-      this.rootStore.uiStore.dataError.push({
-        status: 'error',
-        message: `${error}`,
-      });
+      this.rootStore.uiStore.addError('error', error);
     }
   }
 
@@ -83,10 +77,7 @@ class DatabaseStore {
     try {
       await this.setDatabases();
     } catch (error) {
-      this.rootStore.uiStore.dataError.push({
-        status: 'error',
-        message: `${error}`,
-      });
+      this.rootStore.uiStore.addError('error', error);
     }
   }
 
@@ -111,10 +102,7 @@ class DatabaseStore {
     try {
       await this.setTables();
     } catch (error) {
-      this.rootStore.uiStore.dataError.push({
-        status: 'error',
-        message: `${error}`,
-      });
+      this.rootStore.uiStore.addError('error', error);
     }
   }
 
@@ -147,10 +135,7 @@ class DatabaseStore {
     try {
       await this.getData();
     } catch (error) {
-      this.rootStore.uiStore.dataError.push({
-        status: 'error',
-        message: `${error}`,
-      });
+      this.rootStore.uiStore.addError('error', error);
     }
   }
 }
