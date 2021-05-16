@@ -2,7 +2,7 @@ import {
   describe, expect, test, jest, beforeEach, afterEach,
 } from '@jest/globals';
 import { makeAutoObservable } from 'mobx';
-import { RootStore, UiStore } from '../store/index';
+import { RootStore, UiStore } from '../../store/index';
 
 jest.mock('mobx');
 
