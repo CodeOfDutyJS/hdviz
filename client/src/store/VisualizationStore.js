@@ -28,8 +28,13 @@ class VisualizationStore {
     // TEST FORCEFIELD
     this._visualization.addOption({ maxNodes: 150 });
     this._visualization.addOption({ maxLinks: 150 });
-
     try {
+      if (this.rootStore.modelStore.features.length === 0) {
+        throw new Error('Select at least one feature');
+      }
+      if (this.visualizationSelected?.id === 'heatmap' && this.rootStore.modelStore.targets.length === 0) {
+        throw new Error('Select at least one target');
+      }
       this._visualization.start(this.rootStore.modelStore.data);
     } catch (e) {
       console.log(e);
@@ -38,8 +43,14 @@ class VisualizationStore {
         case 'Cannot read property \'visualization\' of null':
           this.rootStore.uiStore.addError('error', 'Select a visualization');
           break;
-        case 'distanceFn is not a function':
+        case 'distanceFn is not a function' || 'this._distanceFn is not a function':
           this.rootStore.uiStore.addError('error', 'Select a distance');
+          break;
+        case 'Select at least one feature':
+          this.rootStore.uiStore.addError('error', 'Select at least one feature');
+          break;
+        case 'Select at least one target':
+          this.rootStore.uiStore.addError('error', 'Select at least one target');
           break;
         default:
           break;
@@ -50,7 +61,6 @@ class VisualizationStore {
   }
 
   save() {
-    this.ci = 1;
     if (document.getElementById('area') && this.canSave) {
       saver.saveSvgAsPng(document.getElementById('area'), 'graph.png', { backgroundColor: '#ffffff' });
     } else {

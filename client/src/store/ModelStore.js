@@ -36,10 +36,7 @@ class ModelStore {
       dataError.length = 0;
       if (results.errors.length > 0) {
         results.errors.forEach((error) => {
-          dataError.push({
-            status: 'warning',
-            message: `Error ${error.code}: ${error.message}`,
-          });
+          this.rootStore.uiStore.addError('warning', `Error ${error.code}: ${error.message}`);
         });
       }
     } catch (error) {

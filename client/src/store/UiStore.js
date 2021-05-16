@@ -6,7 +6,7 @@ class UiStore {
   _maxFeatures = false;
   _maxTargets = false;
 
-  _dataError = [];
+  _dataError = null;
   _loadingDataCompleted = false;
 
   constructor(rootStore) {
@@ -49,7 +49,7 @@ class UiStore {
   }
 
   addError(status, message) {
-    this.dataError.push({ status, message });
+    this.dataError = { status, message };
   }
 }
 

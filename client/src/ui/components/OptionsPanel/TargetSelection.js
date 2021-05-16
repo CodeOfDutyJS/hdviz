@@ -18,7 +18,7 @@ const TargetSelection = observer(() => {
         validateStatus={uiStore.maxTargets ? 'warning' : null}
         hasFeedback
         // eslint-disable-next-line
-        help={uiStore.maxTargets ? 'Max 2 target variables' : ( visualizationStore._visualization._visualizationSelected.id !== 'heatmap' ? 'First target is color, second is shape.' : null )}
+        help={uiStore.maxTargets ? 'Max 2 target variables' : (  visualizationStore.visualizationSelected?.id !== 'heatmap' ? 'First target is color, second is shape.' : null )}
       >
         <Select
           placeholder="Select target"
@@ -30,7 +30,7 @@ const TargetSelection = observer(() => {
         </Select>
       </Item>
 
-      { visualizationStore._visualization._visualizationSelected.options.color === true
+      { visualizationStore.visualizationSelected?.options?.color === true
         ? (
           <>
             <Item label="Initial range color">
@@ -41,7 +41,7 @@ const TargetSelection = observer(() => {
             </Item>
           </>
         ) : null}
-      { visualizationStore._visualization._visualizationSelected.options.range === true
+      { visualizationStore.visualizationSelected?.options?.range === true
         ? (
           <>
             <Item label="Heatmap visualization range" className="range-number">
