@@ -62,8 +62,11 @@ function scatterPlotMatrix({
   const symbol = d3.symbol();
   const shape = d3.scaleOrdinal(d3.symbols);
 
+  const target1 = targets[1];
+  const target0 = targets[0];
+
   const color = d3.scaleOrdinal()
-    .domain(data.map((d) => d[targets[0]]))
+    .domain(data.map((d) => d[target0]))
     .range(d3.schemeCategory10);
 
   const xAxis = (() => {
@@ -108,6 +111,7 @@ function scatterPlotMatrix({
     .selectAll('g')
     .data(d3.cross(d3.range(columns.length), d3.range(columns.length)))
     .join('g')
+    .attr('class', 'square')
     .attr('transform', ([i, j]) => `translate(${i * size},${j * size})`);
 
   cell.append('rect')
@@ -127,9 +131,10 @@ function scatterPlotMatrix({
 
   const circle = cell.selectAll('g')
     .append('path')
-    .attr('d', symbol.type((d) => shape(d[targets[1]])))
+    .attr('class', 'circle')
+    .attr('d', symbol.type((d) => shape(d[target1])))
     .attr('fill-opacity', 0.7)
-    .attr('fill', (d) => color(d[targets[0]]));
+    .attr('fill', (d) => color(d[target0]));
 
   cell.call(startBrush, circle, svg);
 

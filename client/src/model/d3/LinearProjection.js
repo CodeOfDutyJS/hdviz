@@ -38,8 +38,8 @@ function processData({
   svg
     .selectAll('path')
     .data(data.points)
-    .attr('class', '_3d points')
     .join('path')
+    .attr('class', '_3d points')
     .attr('stroke', '#fff')
     .attr('stroke-width', '1.5')
     .attr('transform', (d) => `translate(${pointsX(d.projected.x)},${pointsY(d.projected.y)})`)
