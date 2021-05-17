@@ -76,6 +76,11 @@ describe('DBStore', () => {
   });
 
   describe('getData', () => {
+
+    beforeEach(() => {
+      rootStore = new RootStore();
+      databaseStore = rootStore.databaseStore;
+    });
     test('two row from api call', async () => {
       const apiMock = {
         getData(db, table) {
@@ -87,8 +92,8 @@ describe('DBStore', () => {
       databaseStore.databaseSelected = 'db1';
       databaseStore.tableSelected = 'table1';
 
-      await databaseStore.getData();
-      expect(rootStore.modelStore.data.dataset).toStrictEqual([{ col1: 12, col2: 13 }, { col1: 14, col2: 15 }]);
+      rootStore.modelStore.dataModel.dataset = await databaseStore.apiService.getData(databaseStore.databaseSelected, databaseStore.tableSelected);
+      expect(rootStore.modelStore.dataModel.dataset).toStrictEqual([{ col1: 12, col2: 13 }, { col1: 14, col2: 15 }]);
     });
 
     test('error in the data call', async () => {
