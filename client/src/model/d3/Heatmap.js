@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import drawColorScale from './DrawColorScale';
 import drawTargetLegend from './DrawTargetLegend';
+import hideLegend from './hideLegend';
 
 function getLeaves(cluster) {
   let leaves = [];
@@ -87,9 +88,8 @@ function drawTargetRows(cluster, cols, margin, selectedTarget) {
     .style('opacity', 1e-5)
     .transition()
     .style('opacity', 1);
-
   drawTargetLegend(color, selectedTarget, width + (cols.length * 25) + 50, 120, height - 120, 25);
-  if (Object.keys(selectedTarget[0]).length === 2) drawTargetLegend(color, selectedTarget, width + (cols.length * 25) + 125, 120, height - 120, 25, 1);
+  if (Object.keys(selectedTarget[0]).length === 2) drawTargetLegend(color, selectedTarget, width + (cols.length * 25) + 225, 120, height - 120, 25, 1);
 }
 
 function heatmap({
@@ -181,7 +181,6 @@ function heatmap({
 
   drawTargetRows(cluster, targetCols, margin, selectedTarget);
   drawColorScale(c, range, width + (targetCols.length * 25) + 50, 30, 100, 25, 'Cell value');
-
   d3.select(window)
     .on('resize', () => {
       d3.select('#area').selectAll('*').remove();

@@ -16,7 +16,6 @@ function drawColorScale(color, range, x, y, width, height, name) {
     .tickValues([values[0], values[125], values[250], values[375], values[499]]);
 
   svg.append('g')
-    .attr('class', 'x axis3')
     .attr('transform', `translate(0, ${y + height})`)
     .call(xAxis)
     .selectAll('text')

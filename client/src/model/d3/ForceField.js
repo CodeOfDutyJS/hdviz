@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
 import drawTargetLegend from './DrawTargetLegend';
+import drawShapeLegend from './DrawShapeLegend';
+import hideLegend from './hideLegend';
 
 function forceField(data) {
   /* eslint-disable no-param-reassign */
@@ -51,7 +53,7 @@ function forceField(data) {
 
   // const { height } = svg.node().getBoundingClientRect();
 
-  width -= 150;
+  width -= 300;
 
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links)
@@ -79,7 +81,8 @@ function forceField(data) {
   });
 
   drawTargetLegend(color, data.selectedTarget, width + 50, 20, height - 100, 25);
-
+  drawShapeLegend(shape, data.selectedTarget, width + 50, 20, height - 100, 25);
+  hideLegend(width - 80, 0, width / 3, height, 1);
   d3.select(window)
     .on('resize', () => {
       d3.select('#area').selectAll('*').remove();

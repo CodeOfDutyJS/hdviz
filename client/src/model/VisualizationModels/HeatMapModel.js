@@ -85,7 +85,7 @@ class HeatMapModel extends VisualizationModel {
     return matrix;
   }
 
-  getAlphaticallySorted() {
+  getAlphabeticallySorted() {
     const col = this.dataModel.targets[0];
     const d = this.dataModel.getSelectedDataset();
     d.sort((a, b) => {
@@ -185,7 +185,7 @@ class HeatMapModel extends VisualizationModel {
     this.setDistance(DistanceType.PEARSONS);
     if (clustering === ClusteringType.ALPHABETICAL) {
       return {
-        cluster: this.getAlphaticallySorted(),
+        cluster: this.getAlphabeticallySorted(),
         clusterCols: this.getLinkage(ClusteringType.SINGLE),
         targetCols: this.dataModel.targets,
         selectedTarget: this.dataModel.getTargetColumns(),
