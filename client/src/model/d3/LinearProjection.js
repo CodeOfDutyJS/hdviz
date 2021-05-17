@@ -38,8 +38,8 @@ function processData({
   svg
     .selectAll('path')
     .data(data.points)
-    .attr('class', '_3d points')
     .join('path')
+    .attr('class', '_3d points')
     .attr('stroke', '#fff')
     .attr('stroke-width', '1.5')
     .attr('transform', (d) => `translate(${pointsX(d.projected.x)},${pointsY(d.projected.y)})`)
@@ -65,7 +65,7 @@ function processData({
     .attr('x', (d) => pointsX(d[1].projected.x * ratio) + 5)
     .attr('y', (d) => pointsY(d[1].projected.y * ratio) - 5)
     .attr('font-weight', 600)
-    .text((d, i) => data.feature[1]);
+    .text((d, i) => data.feature[i]);
 
   d3.selectAll('._3d').sort(_3d().sort);
 }

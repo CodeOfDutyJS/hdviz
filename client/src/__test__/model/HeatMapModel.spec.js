@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   describe,
   it,
@@ -6,8 +7,6 @@ import {
 import { DataModel } from '../../model';
 import { HeatMapModel } from '../../model/VisualizationModels';
 import { ClusteringType } from '../../utils/options';
-
-// jest.mock(DataModel);
 
 describe('clustering', () => {
   const model = new DataModel();

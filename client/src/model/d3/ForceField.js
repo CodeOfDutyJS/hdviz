@@ -50,9 +50,6 @@ function forceField(data) {
       d.value = scaleLinks(d.value);
     },
   );
-
-  // const { height } = svg.node().getBoundingClientRect();
-
   width -= 300;
 
   const simulation = d3.forceSimulation(nodes)
