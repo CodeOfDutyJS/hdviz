@@ -76,7 +76,6 @@ describe('DBStore', () => {
   });
 
   describe('getData', () => {
-
     beforeEach(() => {
       rootStore = new RootStore();
       databaseStore = rootStore.databaseStore;
