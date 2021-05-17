@@ -36,14 +36,10 @@ describe('testing mongo db',() => {
         
             it('lancia errore', async () => {
               const db = new MongoDB(config_test_db);
-              const error_msg = {
-                error: 1,
-                msg: 'Error executing the query',
-              };
               try {
                 await db.getTables();
               } catch (e) {
-                expect(e).toEqual(error_msg);
+                expect(e).toEqual('Error executing the query');
               }
             });
           });
@@ -55,18 +51,15 @@ describe('testing mongo db',() => {
               const test1 = await db.getData(conn, "collezione1");
         
               expect(test1).toHaveLength(150);
-            })
+            });
+            //scrivere test per collezione vuota -> da errore
         
             it('ritorna un errore nel prendere i dati', async() => {
               const db = new MongoDB(config_test_db);
-              const error_msg = {
-                error: 1,
-                msg: 'Error - unable to get the data',
-              };
               try{
                 await db.getData();
               } catch(e){
-                expect(e).toEqual(error_msg);
+                expect(e).toEqual('Error - unable to get the data');
               }
             })
           })

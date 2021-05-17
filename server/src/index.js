@@ -3,14 +3,12 @@
 
 const express = require('express');
 const fs = require('fs');
-//const PostgreDB = require('./modules/PostgreDB');
 const {findDB, getFiles, selectConfig}  = require("./utils");
 
 const app = express();
 const port = 1337;
 
 const config_files = getFiles(__dirname+'/config');
-console.log(config_files);
 
 app.listen(port, () => {
   console.log('App is running');
@@ -36,19 +34,20 @@ app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare
 
 app.get('/api/getTable', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  let dbname = req.query.dbname;
+  const dbname = req.query.dbname;
   console.log("getTable called");
 
   const configurazione = selectConfig(dbname);
+
   if (configurazione == 0) {
     res.json({
       error: 1,
-      msg:"No configuration found"
+      msg:"No configuration file found"
     });
     return;
   }
   try{
-    const database = await findDB(configurazione);
+    const database = findDB(configurazione);
     const connection = await Promise.resolve( database.connectTo());
     const tables = await Promise.resolve(database.getTables(connection));
     res.json(tables);

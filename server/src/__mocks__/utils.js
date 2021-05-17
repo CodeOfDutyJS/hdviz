@@ -1,6 +1,7 @@
 
 const MysqlDatabase = require('../modules/MySQLDB');
 const MongoDB = require('../modules/MongoDB');
+const PostgresDB = require('../modules/PostgresDB');
 // const PostgreDB = require('./modules/PostgreDB')
 ;
 
@@ -9,6 +10,7 @@ const findDB = function (config) {
   const dbType = {
     'mysql': () => { return new MysqlDatabase(config)},
     'mongodb': () => { return new MongoDB(config)},
+    'mongodb': () => { return new PostgresDB(config)},
     'default': () => {throw ('Tipo di database non implementato')}
   };
     return (dbType[config.DB_Type] || dbType['default'])();

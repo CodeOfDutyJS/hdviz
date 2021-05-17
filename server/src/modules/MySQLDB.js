@@ -19,10 +19,7 @@ module.exports = class MySqlDatabase extends Database {
 
       connection.connect((err) => {
         if (err) {
-          reject({
-            error: 1,
-            msg:"Error connecting to the DB"
-          });
+          reject("Error connecting to the DB");
         } else {
           resolve(connection);
         }
@@ -36,19 +33,13 @@ module.exports = class MySqlDatabase extends Database {
           const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${this.config.DB_Name}'`;
             conn.query(table, (error, columns, fields) => {
                 if (error) {
-                  reject({
-                    error: 1,
-                    msg:"Error executing the query"
-                  });
+                  reject("Error executing the query");
                 } else {
                   resolve(columns.map(res => res.table_name));
                 }
               });
         }else {
-          reject({
-            error: 1,
-            msg:"Error executing the query"
-          });
+          reject("Error executing the query");
         }
       });
     }
@@ -58,19 +49,13 @@ module.exports = class MySqlDatabase extends Database {
       if(conn){
       conn.query(`SELECT * FROM ${table}`, (err, rows, fields) => {
         if (err) {
-          reject({
-            error: 1,
-            msg:"Error - unable to get the data"
-          });
+          reject("Error - unable to get the data");
         } else {
           resolve(rows);
         }
       });
     } else{
-      reject({
-        error: 1,
-        msg:"Error - unable to get the data"
-      });
+      reject("Error - unable to get the data");
     }
     });
   }

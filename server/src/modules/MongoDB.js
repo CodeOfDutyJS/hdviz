@@ -14,10 +14,7 @@ module.exports = class MongoDb extends Database {
     return new Promise((resolve, reject) => {
       mongo.connect(this.uri, { useUnifiedTopology: true }, (err, db) => {
         if (err) {
-          reject({
-            error: 1,
-            msg: 'Error connecting to the DB',
-          });
+          reject('Error connecting to the DB');
         } else resolve(db);
       });
     });
@@ -30,16 +27,10 @@ module.exports = class MongoDb extends Database {
       conn.db(this.config.DB_Name).listCollections().toArray().then((res) => res.map((out) => out.name)).then(res =>{
         if(res.length != 0){ //non esiste un database mongo senza alcuna collezione
           resolve(res);
-        } else  reject({
-          error: 1,
-          msg: 'Error executing the query',
-        });
+        } else  reject('Error executing the query');
       });
     } else {
-      reject({
-        error: 1,
-        msg: 'Error executing the query',
-      });
+      reject('Error executing the query');
     }
   });
 }
@@ -50,16 +41,10 @@ module.exports = class MongoDb extends Database {
       conn.db(this.config.DB_Name).collection(collectionName).find().toArray().then(res =>{
         if(res.length != 0 ){  //da errore anche se la collezione non ha nessun oggeto, andrà bene?
           resolve(res)
-        }else reject({
-          error: 1,
-          msg:"Error - unable to get the data"
-        });
+        }else reject("Error - unable to get the data");
       });
     } else {
-      reject({
-        error: 1,
-        msg:"Error - unable to get the data"
-      });
+      reject("Error - unable to get the data");
     }
     })
   }

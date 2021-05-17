@@ -12,7 +12,8 @@
     "mongodb": "^3.6.6",
     "mysql": "^2.18.1",
     "oracledb": "^5.1.0",
-    "pg": "^8.5.1",
+    "pg": "^8.6.0",
+    "pg-format": "^1.0.4",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.2",
     "typeorm": "^0.2.31"
