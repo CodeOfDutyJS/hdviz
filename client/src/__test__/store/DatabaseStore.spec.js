@@ -90,9 +90,7 @@ describe('DBStore', () => {
       databaseStore.apiService = apiMock;
       databaseStore.databaseSelected = 'db1';
       databaseStore.tableSelected = 'table1';
-      
       await databaseStore.getData(databaseStore.databaseSelected, databaseStore.tableSelected);
-      
       expect(rootStore.modelStore.dataModel.dataset).toStrictEqual([{ col1: 12, col2: 13 }, { col1: 14, col2: 15 }]);
     });
 
