@@ -28,7 +28,7 @@ class ModelStore {
   }
 
   async uploadCSV(file) {
-    const dataError = this.rootStore.getUiStoreDataError();
+    const dataError = this.rootStore.getUiStoreDataError() || [];
     try {
       const results = await this.constructor.parseFile(file);
       this.loadingCompleted = true;

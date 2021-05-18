@@ -58,7 +58,7 @@ class DatabaseStore {
     const response = await this.apiService.getData(this.databaseSelected, this.tableSelected);
 
     if (!response.error) {
-      this.rootStore.modelStore.dataset = response;
+      this.rootStore.modelStore.setDataset(response);
     } else {
       throw new Error(response.msg);
     }
