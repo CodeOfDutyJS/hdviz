@@ -14,7 +14,7 @@ describe('findDB testing', () => {
 
   test('trovato db mysql', () => {
     const config_test = {
-      "DB_Name": "iris",
+      "DB_Name": "iris_mysql",
       "DB_Address": "localhost",
       "DB_Username": "root",
       "DB_Password": "",
@@ -28,7 +28,7 @@ describe('findDB testing', () => {
 
   test('trovato db mongo', () => {
     const data =  {
-      "DB_Name": "Mongodb",
+      "DB_Name": "mongodb_test_db",
       "DB_Address": "mongodb://localhost:27017/",
       "DB_Type": "mongodb"
     };
@@ -54,7 +54,7 @@ describe('findDB testing', () => {
 
   test('errore - tipo database non implementato', () => {
     const dataError = {
-      "DB_Name": 'iris',
+      "DB_Name": 'iris_mysql',
       "DB_Address": 'localhost',
       "DB_Username": 'root',
       "DB_Password": '',

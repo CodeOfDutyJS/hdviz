@@ -7,7 +7,7 @@ describe('sqlite database test', () => {
     DB_Type: 'sqlite',
   };
   const db = new SqliteDB(config_test_db);
-
+describe('SQlite', () => {
   describe('test costruttore', () => {
     it('non lancia errori nel costruttore', () => {
       expect(() => {
@@ -24,7 +24,7 @@ describe('sqlite database test', () => {
     });
   });
 
-  describe('getTable', () => {
+  describe('getTables', () => {
     it('ritorna correttamente le tabelle', async () => {
       const conn = await db.connectTo();
       const test = await db.getTables(conn);
@@ -32,13 +32,6 @@ describe('sqlite database test', () => {
       expect(test).toEqual(result);
     });
 
-    it('lancia errore', async () => {
-      try {
-        await db.getTables();
-      } catch (e) {
-        expect(e).toEqual('Error executing the query');
-      }
-    });
   });
 
   describe('getData', () => {
@@ -58,3 +51,4 @@ describe('sqlite database test', () => {
     });
   });
 });
+})

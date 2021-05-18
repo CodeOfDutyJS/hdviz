@@ -2,7 +2,7 @@ const MongoDB = require('../modules/MongoDB');
 
 describe('testing mongo db', () => {
   const config_test_db = {
-    DB_Name: 'Mongodb',
+    DB_Name: 'mongodb_test_db',
     DB_Address: 'mongodb://localhost:27017/',
     DB_Type: 'mongodb',
   };

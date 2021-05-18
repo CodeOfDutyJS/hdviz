@@ -1,19 +1,15 @@
 /* eslint-disable */
-
+//MOCK
 const express = require('express');
-const fs = require('fs');
-//const PostgreDB = require('./modules/PostgreDB');
-
-
-
 const {findDB, getFiles, selectConfig}  = require("./utils");
-
+jest.mock('../utils');
 
 const app = express();
 const port = 1337;
 
 
 const config_files = getFiles(__dirname+'/config');
+
 app.listen(port, () => {
   console.log('App is running');
 });
@@ -37,11 +33,11 @@ if(config_files){
 
 
 app.get('/api/getTable', async (req, res) => {
-
+  res.setHeader('Access-Control-Allow-Origin', '*');
   const dbname = req.query.dbname;
   console.log("getTable called");
 
-  const configurazione = selectConfig(dbname,config_files);
+  const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
     res.json({
       error: 1,

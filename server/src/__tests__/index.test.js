@@ -4,9 +4,11 @@ const app = require('../index');
 jest.mock('../index');
 jest.mock('../utils');
 
+describe('index.js test', () => {
+
 describe('getDatabases', () => {
   it('should get the databases', async () => {
-    const dbTest = [{ databases: ['Mongodb', 'iris', 'postgres_test_db', 'sqlite_test_db'] }]; // aggiungere i test per gli altri tipi di db
+    const dbTest = [{ databases: ['mongodb_test_db', 'mysql_test_db', 'postgres_test_db', 'sqlite_test_db'] }]; // aggiungere i test per gli altri tipi di db
     const res = await request(app)
       .get('/api/getDatabases');
     expect(res.body).toEqual(dbTest);
@@ -16,13 +18,13 @@ describe('getDatabases', () => {
 describe('getTable', () => {
   it('should return the tables - mongo', async () => {
     const res = await request(app)
-      .get('/api/getTable?dbname=Mongodb');
+      .get('/api/getTable?dbname=mongodb_test_db');
     expect(res.body).toEqual(['iris_mongodb']);
   });
 
   it('should return the tables - mysql', async () => {
     const res = await request(app)
-      .get('/api/getTable?dbname=iris');
+      .get('/api/getTable?dbname=mysql_test_db');
     expect(res.body).toEqual(['iris_mysql']);
   });
 
@@ -42,12 +44,12 @@ describe('getTable', () => {
 describe('getData', () => {
   it('should get the databases available - mysql', async () => {
     const res = await request(app)
-      .get('/api/getData?dbname=iris&dbtable=iris_mysql');
+      .get('/api/getData?dbname=mysql_test_db&dbtable=iris_mysql');
     expect(res.body).toHaveLength(151);
   });
   it('should get the databases available - mongodb', async () => {
     const res = await request(app)
-      .get('/api/getData?dbname=Mongodb&dbtable=iris_mongodb');
+      .get('/api/getData?dbname=mongodb_test_db&dbtable=iris_mongodb');
     expect(res.body).toHaveLength(150);
   });
   it('should get the databases available - postgres', async () => {
@@ -95,3 +97,4 @@ describe('errors', () => {
     expect(res.body).toEqual(err_msg);
   });
 });
+})

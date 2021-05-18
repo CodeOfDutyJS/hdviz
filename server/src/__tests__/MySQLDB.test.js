@@ -5,7 +5,7 @@ const MySqlDatabase = require('../modules/MySQLDB');
 
 describe('Mysql database test', () => {
   const config_test_db = {
-    DB_Name: 'iris',
+    DB_Name: 'mysql_test_db',
     DB_Address: 'localhost',
     DB_Username: 'root',
     DB_Password: '',
