@@ -57,7 +57,7 @@ describe('#ModelStore', () => {
       await modelStore.uploadCSV('This,is/not a.csv\nfile');
 
       expect(modelStore.loadingCompleted).toBeTruthy();
-      expect(mockDataError.length).toBeGreaterThan(1);
+      expect(mockDataError.length).toBeGreaterThan(0);
     });
     it('should not upload data with exception', async () => {
       const mockDataError = [];
