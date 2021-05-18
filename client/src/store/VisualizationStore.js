@@ -37,8 +37,6 @@ class VisualizationStore {
       }
       this._visualization.start(this.rootStore.modelStore.data);
     } catch (e) {
-      console.log(e);
-      console.log(e.message);
       switch (e.message) {
         case 'Cannot read property \'visualization\' of null':
           this.rootStore.uiStore.addError('error', 'Select a visualization');
@@ -56,7 +54,6 @@ class VisualizationStore {
           break;
       }
     }
-
     this.canSave = true;
   }
 

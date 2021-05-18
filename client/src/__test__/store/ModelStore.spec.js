@@ -4,6 +4,7 @@ import {
   expect,
   it,
   jest,
+  test,
 } from '@jest/globals';
 import { makeAutoObservable } from 'mobx';
 import { DataModel } from '../../model/index';
@@ -111,6 +112,22 @@ describe('#ModelStore', () => {
     it('should check if a max number of targets is set', () => {
       modelStore.setTargets(['exactly', 'two']);
       expect(maxTargetsSpy.mock.calls[0][0]).not.toBeTruthy();
+    });
+  });
+
+  describe('#setColumns, #setFeatures', () => {
+    let modelStore = {};
+    beforeEach(() => {
+      modelStore = new ModelStore(new RootStore());
+    });
+
+    it('should check if columns are setted', () => {
+      modelStore.setColumns(['a', 'b']);
+      expect(modelStore.columns).toStrictEqual(['a', 'b']);
+    });
+    it('should check if features are setted', () => {
+      modelStore.setFeatures(['a', 'b']);
+      expect(modelStore.features).toStrictEqual(['a', 'b']);
     });
   });
 });

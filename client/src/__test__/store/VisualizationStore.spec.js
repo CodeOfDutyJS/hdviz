@@ -75,9 +75,21 @@ describe('Options', () => {
     visualizationStore.setSecondoRangeHeatmap(20);
     expect(visualizationStore._visualization._options.finalRangeValue).toBe(20);
   });
-/*
+  test('setNeighbors', () => {
+    visualizationStore.setNeighbors(50);
+    expect(visualizationStore._visualization._options.nNeighbors).toBe(50);
+  });
+  test('setMinDistance', () => {
+    visualizationStore.setMinDistance(10);
+    expect(visualizationStore._visualization._options.minDistance).toBe(10);
+  });
+
+  test('setSpread', () => {
+    visualizationStore.setSpread(1.5);
+    expect(visualizationStore._visualization._options.spread).toBe(1.5);
+  });
   test('start', () => {
     visualizationStore.start();
     expect(true).toStrictEqual(true);
-  }); */
+  });
 });
