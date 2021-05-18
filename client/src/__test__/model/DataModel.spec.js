@@ -22,8 +22,8 @@ describe('#DataModel', () => {
   describe('#getSelectedDataset', () => {
     const dataset = new DataModel();
     dataset.dataset = mockData;
-    dataset.feature = mockFeature;
-    dataset.target = mockTarget;
+    dataset.features = mockFeature;
+    dataset.targets = mockTarget;
     const selectedData = dataset.getSelectedDataset();
 
     it('should return object with feature and target columns', () => {
@@ -53,8 +53,8 @@ describe('#DataModel', () => {
   describe('#getFeatureColumns', () => {
     const dataset = new DataModel();
     dataset.dataset = mockData;
-    dataset.feature = mockFeature;
-    dataset.target = mockTarget;
+    dataset.features = mockFeature;
+    dataset.targets = mockTarget;
     it('should return all feature columns with data', () => {
       expect(dataset.getFeatureColumns())
         .toEqual([
@@ -66,6 +66,9 @@ describe('#DataModel', () => {
           },
           {
             height: 3,
+          },
+          {
+            height: 8,
           },
         ]);
     });
@@ -81,13 +84,21 @@ describe('#DataModel', () => {
           {
             name: 'Jinx', color: 'red',
           },
+          {
+            name: 'Jinx', color: 'red',
+          },
         ]);
     });
   });
+  /*
+  commmentato perchè queste funzioni sono state spostate da
+  datamodel, ma potrebbero essere utili per altri test
+
   describe('#Statistical Analysis', () => {
-    const dataset = new DataModel(mockData);
-    dataset.feature = mockTarget;
-    dataset.target = mockFeature;
+    const dataset = new DataModel();
+    dataset.dataset = mockData;
+    dataset.features = mockTarget;
+    dataset.targets = mockFeature;
 
     it('should return the mean', () => {
       expect(dataset.getMean('height')).toEqual(3.5);
@@ -109,4 +120,5 @@ describe('#DataModel', () => {
       expect(dataset.getPopulationDeviation('height').toPrecision(3)).toEqual('2.69');
     });
   });
+  */
 });

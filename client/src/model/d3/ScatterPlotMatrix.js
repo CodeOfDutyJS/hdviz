@@ -1,9 +1,17 @@
 import * as d3 from 'd3';
+import drawTargetLegend from './DrawTargetLegend';
 
-function scatterPlotMatrix({ data, features, targets }) {
+function scatterPlotMatrix({
+  data,
+  features,
+  targets,
+  selectedTarget,
+}) {
   const columns = Object.keys(data[0]).filter((value) => features.includes(value));
   const svg = d3.select('#area');
-  const { width } = svg.node().getBoundingClientRect();
+  let { width } = svg.node().getBoundingClientRect();
+  const { height } = svg.node().getBoundingClientRect();
+  width -= 150;
   const padding = 30;
   const size = (width - (columns.length + 1) * padding) / columns.length + padding;
 
@@ -51,9 +59,14 @@ function scatterPlotMatrix({ data, features, targets }) {
 
     cell.call(brush);
   };
+  const symbol = d3.symbol();
+  const shape = d3.scaleOrdinal(d3.symbols);
+
+  const target1 = targets[1];
+  const target0 = targets[0];
 
   const color = d3.scaleOrdinal()
-    .domain(data.map((d) => d[targets[0]]))
+    .domain(data.map((d) => d[target0]))
     .range(d3.schemeCategory10);
 
   const xAxis = (() => {
@@ -83,12 +96,10 @@ function scatterPlotMatrix({ data, features, targets }) {
   })();
 
   svg
-    .attr('viewBox', `${-padding} 0 ${width} ${width}`)
-    .style('max-width', '100%')
-    .style('height', 'auto');
+    .attr('viewBox', `${-padding} 0 ${width} ${width}`);
 
   svg.append('style')
-    .text('circle.hidden { fill: #000; fill-opacity: 1; r: 1px; }');
+    .text('path.hidden { fill: #000; fill-opacity: 1; transform: scale(0.3, 0.3);}');
 
   svg.append('g')
     .call(xAxis);
@@ -100,6 +111,7 @@ function scatterPlotMatrix({ data, features, targets }) {
     .selectAll('g')
     .data(d3.cross(d3.range(columns.length), d3.range(columns.length)))
     .join('g')
+    .attr('class', 'square')
     .attr('transform', ([i, j]) => `translate(${i * size},${j * size})`);
 
   cell.append('rect')
@@ -111,17 +123,18 @@ function scatterPlotMatrix({ data, features, targets }) {
     .attr('height', size - padding);
 
   cell.each(function ([i, j]) {
-    d3.select(this).selectAll('circle')
+    d3.select(this).selectAll('g')
       .data(data.filter((d) => !Number.isNaN(d[columns[i]]) && !Number.isNaN(d[columns[j]])))
-      .join('circle')
-      .attr('cx', (d) => x[i](d[columns[i]]))
-      .attr('cy', (d) => y[j](d[columns[j]]));
+      .join('g')
+      .attr('transform', (d) => `translate(${x[i](d[columns[i]])},${y[j](d[columns[j]])})`);
   });
 
-  const circle = cell.selectAll('circle')
-    .attr('r', 3.5)
+  const circle = cell.selectAll('g')
+    .append('path')
+    .attr('class', 'circle')
+    .attr('d', symbol.type((d) => shape(d[target1])))
     .attr('fill-opacity', 0.7)
-    .attr('fill', (d) => color(d[targets[0]]));
+    .attr('fill', (d) => color(d[target0]));
 
   cell.call(startBrush, circle, svg);
 
@@ -137,6 +150,7 @@ function scatterPlotMatrix({ data, features, targets }) {
     .text((d) => d);
 
   svg.property('value', []);
+  drawTargetLegend(color, selectedTarget, width, 0 + 15, height, 25);
 }
 
 export default scatterPlotMatrix;

@@ -1,10 +1,6 @@
-/* globals describe, expect, it */
-
-import { distance } from 'ml-distance';
-import dataArray from './data';
+import { describe, it, expect } from '@jest/globals';
 import DataModel from '../../model/DataModel';
-import HeatMapModel from '../../model/HeatMapModel';
-import { ClusteringType, DistanceType } from '../../utils';
+import HeatMapModel from '../../model/VisualizationModels/HeatMapModel';
 
 describe('#HeatMapModel', () => {
   const mockData = [

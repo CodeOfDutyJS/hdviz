@@ -1,16 +1,15 @@
-/* eslint-disable react/no-array-index-key */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { Select, Form } from 'antd';
 
 import { observer } from 'mobx-react-lite';
-import { useStore2 } from '../../../store/RootStore';
+import { useStore } from '../../../store/RootStore';
 
 const { Option } = Select;
 const { Item } = Form;
 
 const DatabaseSelection = observer(() => {
-  const { databaseStore } = useStore2();
+  const { databaseStore } = useStore();
 
   useEffect(() => {
     // Call API to get list of database connection available
@@ -27,7 +26,7 @@ const DatabaseSelection = observer(() => {
           onSelect={databaseStore.setDatabaseSelected}
           value={databaseStore.databaseSelected}
         >
-          {databaseStore.databases.map((item) => <Option key={item.databases}>{item.databases}</Option>)}
+          {databaseStore.databases.map((item) => <Option key={item}>{item}</Option>)}
         </Select>
       </Item>
 
@@ -39,7 +38,7 @@ const DatabaseSelection = observer(() => {
           onSelect={databaseStore.setTableSelected}
           value={databaseStore.tableSelected}
         >
-          {databaseStore.tables.map((item) => <Option key={item.table_name}>{item.table_name}</Option>)}
+          {databaseStore.tables.map((item) => <Option key={item}>{item}</Option>)}
         </Select>
       </Item>
     </Form>

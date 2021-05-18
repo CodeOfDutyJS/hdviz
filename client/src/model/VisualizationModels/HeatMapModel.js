@@ -1,19 +1,14 @@
 import { distance } from 'ml-distance';
-import * as jeezy from 'jeezy';
-import { DistanceType, ClusteringType } from '../../utils/constant';
+import { correlation } from 'ml-matrix';
+import { DistanceType, ClusteringType } from '../../utils/options';
+import { VisualizationModel } from '../index';
+import heatmap from '../d3/Heatmap';
+import VisualizationCollector from '../VisualizationsCollector';
 
-class HeatMapModel {
+class HeatMapModel extends VisualizationModel {
   constructor(dataModel, distanceFn = distance.euclidean) {
-    this._dataModel = dataModel;
-    this._distanceFn = distanceFn;
-  }
-
-  get dataModel() {
-    return this._dataModel;
-  }
-
-  set dataModel(value) {
-    this._dataModel = value;
+    super();
+    this._distanceFn = distance.euclidean;
   }
 
   setDistance(distanceFn) {
@@ -21,22 +16,34 @@ class HeatMapModel {
     return this;
   }
 
+  getLeavesNumber(cluster) {
+    let leavesN = 0;
+    if (!cluster.children) {
+      return 1;
+    }
+    cluster.children.forEach((value) => {
+      leavesN += this.getLeavesNumber(value);
+    });
+    return leavesN;
+  }
+
   distanceCalculator(a, b) {
-    const feats = this.dataModel.feature;
+    const feats = this.dataModel.features;
     const aValues = [];
     const bValues = [];
     feats.forEach((value) => {
       aValues.push(a[value]);
       bValues.push(b[value]);
     });
-
-    return distance.euclidean(aValues, bValues);
+    return this._distanceFn(aValues, bValues);
   }
 
   getCorrelationMatrix() {
-    const data = this.dataModel.getSelectedDataset();
-    const cols = this.dataModel.feature;
-    const corr = jeezy.arr.correlationMatrix(data, cols);
+    const d = this.dataModel.getFeatureColumns();
+    const cols = this.dataModel.features;
+    const m = d.map((obj) => Object.values(obj));
+    let c = correlation(m);
+    c = c.to2DArray();
     const matrix = [];
     for (let z = 0; z < cols.length; z++) {
       const entry = {
@@ -46,9 +53,9 @@ class HeatMapModel {
         distances: [],
       };
       for (let i = 0; i < cols.length; i++) {
-        entry.ref.id = corr[z * cols.length + i].column_x;
-        entry.ref[corr[z * cols.length + i].column_y] = corr[z * cols.length + i].correlation;
-        entry.distances.push(Math.sqrt(2 * (1 - corr[z * cols.length + i].correlation)));
+        entry.ref.id = cols[z];
+        entry.ref[cols[i]] = c[z][i];
+        entry.distances.push(Math.sqrt(2 * (1 - c[z][i])));
       }
       matrix.push(entry);
     }
@@ -56,8 +63,7 @@ class HeatMapModel {
   }
 
   getDistanceMatrix() {
-    console.log('dista');
-    const data = this.dataModel.getStandardScore();
+    const data = this.dataModel.getSelectedDataset();
     const matrix = [];
     data.forEach((row) => {
       if (Object.entries(row).length === 0) return;
@@ -79,6 +85,25 @@ class HeatMapModel {
     return matrix;
   }
 
+  getAlphaticallySorted() {
+    const col = this.dataModel.targets[0];
+    const d = this.dataModel.getSelectedDataset();
+    d.sort((a, b) => {
+      const IdA = a[col].toUpperCase(); // ignore upper and lowercase
+      const IdB = b[col].toUpperCase(); // ignore upper and lowercase
+      if (IdA < IdB) {
+        return -1;
+      }
+      if (IdA > IdB) {
+        return 1;
+      }
+      return 0;
+    });
+    return {
+      children: d,
+    };
+  }
+
   getLinkage(clusteringType) {
     const matrix = this.getMatrix();
     let n = 0;
@@ -97,11 +122,10 @@ class HeatMapModel {
         }
       });
       // now that you have the minimum build the cluster
-      const r = matrix[indexes[1]];
-      const l = 'branchLength' in r ? r.branchLength : 0;
+      // const r = matrix[indexes[1]];
+      // const l = 'branchLength' in r ? r.branchLength : 0;
       const cluster = {
         id: `cluster${n}`,
-        branchLength: (min / 2) - l,
         children: [],
       };
       indexes.forEach((index) => {
@@ -109,6 +133,7 @@ class HeatMapModel {
       });
       // calculate the distances
       const dist = matrix[indexes[0]].distances.slice();
+      const clusterElementNumber = this.getLeavesNumber(matrix[indexes[0]].ref) + this.getLeavesNumber(matrix[indexes[1]].ref);
       indexes.forEach((index) => {
         const entry = matrix[index].distances;
         entry.forEach((dista, i) => {
@@ -117,6 +142,9 @@ class HeatMapModel {
           }
           if (clusteringType === ClusteringType.COMPLETE) {
             if (dista > dist[i]) dist[i] = dista;
+          }
+          if (clusteringType === ClusteringType.UPGMA) {
+            dist[i] = matrix[indexes[0]].distances[i] + matrix[indexes[1]].distances[i] / clusterElementNumber;
           }
         });
       });
@@ -150,78 +178,43 @@ class HeatMapModel {
     return this.getDistanceMatrix();
   }
 
-  static correlationMap(cluster) {
-    const leaves = HeatMapModel.getLeaves(cluster);
-    const colnames = [];
-    leaves.forEach((leaf) => colnames.push(leaf.id));
-    const toGrid = [];
-    let row = 1;
-    leaves.forEach((leaf) => {
-      let col = 1;
-      colnames.forEach((name) => {
-        const obj = {};
-        obj.row = row;
-        obj.col = col;
-        obj.column_x = leaf.id;
-        obj.column_y = name;
-        obj.correlation = leaf[name];
-        toGrid.push(obj);
-        col += 1;
-      });
-      row += 1;
-    });
-    return toGrid;
-  }
-
-  static dataGrid(cluster, cols) {
-    const leaves = HeatMapModel.getLeaves(cluster);
-    const colnames = cols;
-    const toGrid = [];
-    let row = 1;
-    leaves.forEach((leaf) => {
-      let col = 1;
-      colnames.forEach((name) => {
-        const obj = {};
-        obj.row = row;
-        obj.col = col;
-        // obj.column_x = leaf.id; optional ? on larger datasets cant even read row names
-        obj.column_y = name;
-        obj.value = leaf[name];
-        toGrid.push(obj);
-        col += 1;
-      });
-      row += 1;
-    });
-    return toGrid;
-  }
-
-  static getLeaves(cluster) {
-    let leaves = [];
-    if (!cluster.children) {
-      leaves.push(cluster);
-      return leaves;
+  getPreparedDataset({
+    normalization, initialColor, finalColor, initialRangeValue, finalRangeValue, distanceFn = DistanceType.PEARSONS, clustering = ClusteringType.UPGMA,
+  }) {
+    this.dataModel.setNorm(normalization ? normalization.func : null);
+    this.setDistance(DistanceType.PEARSONS);
+    if (clustering === ClusteringType.ALPHABETICAL) {
+      return {
+        cluster: this.getAlphaticallySorted(),
+        clusterCols: this.getLinkage(ClusteringType.SINGLE),
+        targetCols: this.dataModel.targets,
+        selectedTarget: this.dataModel.getTargetColumns(),
+        color: [initialColor, '#FFF', finalColor],
+        heatmapRange: [initialRangeValue, finalRangeValue],
+      };
     }
-    cluster.children.forEach((value) => {
-      leaves = leaves.concat(this.getLeaves(value));
-    });
-    return leaves;
+
+    const cols = this.getLinkage(clustering);
+    this.setDistance(distanceFn);
+    return {
+      cluster: this.getLinkage(clustering),
+      clusterCols: cols,
+      targetCols: this.dataModel.targets,
+      selectedTarget: this.dataModel.getTargetColumns(),
+      color: [initialColor, '#FFF', finalColor],
+      heatmapRange: [initialRangeValue, finalRangeValue],
+    };
   }
 }
 
-/*
-matrix = [
-  {
-    cluster: {},
-    distances: []
-  },
-  {
-    cluster: {}
-    distances: [],
-  }
-]
-
-the distance matrix always is n colunms and n rows, easy to update on removal
-and when adding elements, as long as we push on the end.
-*/
-
 export default HeatMapModel;
+
+VisualizationCollector.addVisualization({
+  id: 'heatmap',
+  label: 'Heatmap',
+  model: new HeatMapModel(),
+  visualization: heatmap,
+  options: {
+    distance: true, clustering: true, color: true, range: true,
+  },
+});

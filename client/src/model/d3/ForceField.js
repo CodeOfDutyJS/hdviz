@@ -1,9 +1,10 @@
-/* eslint-disable no-param-reassign */
 import * as d3 from 'd3';
+import drawTargetLegend from './DrawTargetLegend';
 
 function forceField(data) {
+  /* eslint-disable no-param-reassign */
   const drag = (simulation) => {
-    function dragstarted(event) {
+    function dragStart(event) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       event.subject.fx = event.subject.x;
       event.subject.fy = event.subject.y;
@@ -14,25 +15,33 @@ function forceField(data) {
       event.subject.fy = event.y;
     }
 
-    function dragended(event) {
+    function dragEnd(event) {
       if (!event.active) simulation.alphaTarget(0);
       event.subject.fx = null;
       event.subject.fy = null;
     }
 
     return d3.drag()
-      .on('start', dragstarted)
+      .on('start', dragStart)
       .on('drag', dragged)
-      .on('end', dragended);
+      .on('end', dragEnd);
   };
 
+  const svg = d3.select('#area');
   const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+  const symbol = d3.symbol();
+  const shape = d3.scaleOrdinal(d3.symbols);
 
   const { links, nodes } = data;
 
+  let { width } = svg.node().getBoundingClientRect();
+
+  const { height } = svg.node().getBoundingClientRect();
+
   const scaleLinks = d3.scaleLinear()
     .domain(d3.extent(links, (d) => (d.value)))
-    .range([1, 600]);
+    .range([16, Math.min(width - 150, 600)]);
 
   links.forEach(
     (d) => {
@@ -40,10 +49,7 @@ function forceField(data) {
     },
   );
 
-  const svg = d3.select('#area');
-
-  const { width } = svg.node().getBoundingClientRect();
-  const { height } = svg.node().getBoundingClientRect();
+  width -= 150;
 
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links)
@@ -55,10 +61,10 @@ function forceField(data) {
   const node = svg.append('g')
     .attr('stroke', '#fff')
     .attr('stroke-width', 1.5)
-    .selectAll('circle')
+    .selectAll('path')
     .data(nodes)
-    .join('circle')
-    .attr('r', 5)
+    .join('path')
+    .attr('d', symbol.type((d) => shape(d.shape)))
     .attr('fill', (d) => color(d.color))
     .call(drag(simulation));
 
@@ -67,9 +73,16 @@ function forceField(data) {
 
   simulation.on('tick', () => {
     node
-      .attr('cx', (d) => d.x)
-      .attr('cy', (d) => d.y);
+      .attr('transform', (d) => `translate(${d.x},${d.y})`);
   });
+
+  drawTargetLegend(color, data.selectedTarget, width + 50, 20, height - 100, 25);
+
+  d3.select(window)
+    .on('resize', () => {
+      d3.select('#area').selectAll('*').remove();
+      forceField(data);
+    });
 }
 
 export default forceField;
