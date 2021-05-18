@@ -12,26 +12,6 @@ class RootStore {
     this.visualizationStore = new VisualizationStore(this);
     this.uiStore = new UiStore(this);
   }
-
-  getUiStoreDataError() {
-    return this.uiStore.dataError;
-  }
-
-  setUiStoreMaxFeatures(value) {
-    this.uiStore.maxFeatures = value;
-  }
-
-  setUiStoreMaxTargets(value) {
-    this.uiStore.maxTargets = value;
-  }
-
-  setUiStoreLoadingDataCompleted(value) {
-    this.uiStore.loadingDataCompleted = value;
-  }
-
-  getVisualizationSelectedMaxFeatures() {
-    return this.visualizationStore.visualizationSelected.options?.maxFeatures;
-  }
 }
 
 export default RootStore;
