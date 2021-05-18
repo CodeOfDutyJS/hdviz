@@ -3,18 +3,18 @@ const MongoDB = require('../modules/MongoDB');
 const PostgresDB = require('../modules/PostgresDB');
 const SqliteDB = require('../modules/SqliteDB');
 
-const findDB = function (config) {
+const findDB = function findDB(config) {
   const dbType = {
-    'mysql': () => { return new MysqlDatabase(config)},
-    'mongodb': () => { return new MongoDB(config)},
-    'postgres': () => {return new PostgresDB(config)},
-    'sqlite': () => {return new SqliteDB(config)},
-    'default': () => {throw ('Tipo di database non implementato')}
+    mysql: () => new MysqlDatabase(config),
+    mongodb: () => new MongoDB(config),
+    postgres: () => new PostgresDB(config),
+    sqlite: () => new SqliteDB(config),
+    default: () => { throw new Error('Tipo di database non implementato'); },
   };
-  return (dbType[config.DB_Type] || dbType['default'])();
+  return (dbType[config.DB_Type] || dbType.default)();
 };
 
-const getFiles = jest.fn().mockImplementation((dir, files_) => [
+const getFiles = jest.fn().mockImplementation(() => [
   {
     DB_Name: 'mongodb_test_db',
     DB_Address: 'mongodb://localhost:27017/',
@@ -37,17 +37,19 @@ const getFiles = jest.fn().mockImplementation((dir, files_) => [
   },
   {
     DB_Name: 'sqlite_test_db',
-    DB_Address: "C:/Users/Matteo/Desktop/sqlite_db/sqlite_test_db.db",
+    DB_Address: 'C:/Users/Matteo/Desktop/sqlite_db/sqlite_test_db.db',
     DB_Type: 'sqlite',
-  }
+  },
 ]);
 
-const selectConfig = function (dbname) {
-  const config = getFiles();
-  for (i in config) {
-    if (dbname == config[i].DB_Name) {
-      return config[i];
+const selectConfig = function selectConfig(dbname) {
+  const configFiles = getFiles(`${__dirname}/config`);
+  let i = 0;
+  while (i < configFiles.length) {
+    if (dbname === configFiles[i].DB_Name) {
+      return configFiles[i];
     }
+    i += 1;
   }
   return 0;
 };

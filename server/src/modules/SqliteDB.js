@@ -3,55 +3,53 @@ const DataBase = require('./Database');
 
 module.exports = class SQLite extends DataBase {
   constructor(config) {
-    super(config);
+    super();
+    this.config = config;
   }
 
   async connectTo() {
     return new Promise((resolve, reject) => {
       const db = new sqlite.Database(this.config.DB_Adress, (err) => {
-        if (err){
-           reject('impossibile creare la connessione');
+        if (err) {
+          reject(new Error('impossibile creare la connessione'));
         }
-      });
-	  resolve(db);
+      }); resolve(db);
     });
   }
 
-  async getTables(conn) {
-    return new Promise( (resolve, reject) => {
+  async getTables() {
+    const conn = await this.connectTo();
+    return new Promise((resolve, reject) => {
       if (conn) {
         const table = 'SELECT name FROM sqlite_master WHERE type=\'table\' AND name NOT LIKE \'sqlite_%\' ORDER BY name';
         conn.each(table, (error, columns) => {
           if (error) {
-            reject('Error executing the query');
+            reject(new Error('executing the query'));
           } else {
             resolve([columns.name]);
           }
         });
       } else {
-        reject('Error executing the query');
+        reject(new Error('executing the query'));
       }
     });
   }
 
-  async getData(conn, table) {
+  async getData(table) {
+    const conn = await this.connectTo();
     return new Promise((resolve, reject) => {
-      if (conn) {
+      if (conn && table) {
         conn.all(`SELECT * FROM ${table}`, (err, rows) => {
           if (err) {
-            reject('Error - unable to get the data');
+            reject(new Error('unable to get the data'));
           } else {
             resolve(rows);
           }
         });
       } else {
-        reject('Error - unable to get the data');
+        reject(new Error('unable to get the data'));
       }
+      conn.close();
     });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async endConnection(conn) {
-    conn.close();
   }
 };

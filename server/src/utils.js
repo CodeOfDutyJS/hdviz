@@ -4,44 +4,43 @@ const MongoDB = require('./modules/MongoDB');
 const PostgresDB = require('./modules/PostgresDB');
 const SqliteDB = require('./modules/SqliteDB');
 
-
-const findDB = function (config) {
+const findDB = function finDB(config) {
   const dbType = {
-    'mysql': () => { return new MySqlDatabase(config)},
-    'mongodb': () => { return new MongoDB(config)},
-    'postgres': () => {return new PostgresDB(config)},
-    'sqlite': () => {return new SqliteDB(config)},
-    'default': () => {throw ('Tipo di database non implementato')}
+    mysql: () => new MySqlDatabase(config),
+    mongodb: () => new MongoDB(config),
+    postgres: () => new PostgresDB(config),
+    sqlite: () => new SqliteDB(config),
+    default: () => { throw new Error('Tipo di database non implementato'); },
   };
-    return (dbType[config.DB_Type] || dbType['default'])();
-}
-
-
-const getFiles = function (dir, files_) {
-  files_ = files_ || [];
-  const files = fs.readdirSync(dir);
-  for (const i in files) {
-    const name = `${dir}/${files[i]}`;
-    if (fs.statSync(name).isDirectory()) {
-      getFiles(name, files_);
-    } else {
-      const text = fs.readFileSync(name, 'utf8');
-      files_.push(JSON.parse(text));
-    }
-  }
-  return files_;
+  return (dbType[config.DB_Type] || dbType.default)();
 };
 
-
-
-const selectConfig = function(dbname) {
-  const config_files = getFiles(__dirname+'/config');
-
-  for ( i in config_files) {
-    if (dbname == config_files[i].DB_Name) {
-      return config_files[i];
+const getFiles = function getFiles(dir) {
+  const myFiles = [];
+  const files = fs.readdirSync(dir);
+  let i = 0;
+  while (i < files.length) {
+    const name = `${dir}/${files[i]}`;
+    if (fs.statSync(name).isDirectory()) {
+      getFiles(name, myFiles);
+    } else {
+      const text = fs.readFileSync(name, 'utf8');
+      myFiles.push(JSON.parse(text));
     }
+    i += 1;
+  }
+  return myFiles;
+};
+
+const selectConfig = function selectConfig(dbname) {
+  const configFiles = getFiles(`${__dirname}/config`);
+  let i = 0;
+  while (i < configFiles.length) {
+    if (dbname === configFiles[i].DB_Name) {
+      return configFiles[i];
+    }
+    i += 1;
   }
   return 0;
-}
- module.exports = {selectConfig, getFiles, findDB}
+};
+module.exports = { selectConfig, getFiles, findDB };

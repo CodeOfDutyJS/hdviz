@@ -1,92 +1,77 @@
-/* eslint-disable */
-//node --experimental-modules ServerModule.js
-
 const express = require('express');
-const fs = require('fs');
-const {findDB, getFiles, selectConfig}  = require("./utils");
+const { findDB, getFiles, selectConfig } = require('./utils');
 
 const app = express();
 const port = 1337;
 
-const config_files = getFiles(__dirname+'/config');
-app.listen(port, () => {
-  console.log('App is running');
-});
+const configFiles = getFiles(`${__dirname}/config`);
+app.listen(port, () => {});
 
-app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
+app.get('/api/getDatabases', (req, res) => { // controllare se qui deve tornare [{"databases":["iris","due"]}]
   res.setHeader('Access-Control-Allow-Origin', '*');
-  let databases = [];
+  const databases = [];
 
-  for (i in config_files) {
-    databases[i] = config_files[i].DB_Name;
+  let i = 0;
+  while (i < configFiles.length) {
+    databases[i] = configFiles[i].DB_Name;
+    i += 1;
   }
-  if (databases=="")  {
+  if (databases === '') {
     res.json({
       error: 1,
-      msg:"No configuration file found"
+      msg: 'No configuration file found',
     });
     return;
   }
-  res.json([{databases}]);
+  res.json([{ databases }]);
 });
-
 
 app.get('/api/getTable', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  const dbname = req.query.dbname;
-  console.log("getTable called");
-
+  const { dbname } = req.query;
   const configurazione = selectConfig(dbname);
 
-  if (configurazione == 0) {
+  if (configurazione === 0) {
     res.json({
       error: 1,
-      msg:"No configuration file found"
+      msg: 'No configuration file found',
     });
     return;
   }
-  try{
-    const database = findDB(configurazione);
-    const connection = await Promise.resolve( database.connectTo());
-    const tables = await Promise.resolve(database.getTables(connection));
+  try {
+    const db = findDB(configurazione);
+    const tables = await db.getTables();
     res.json(tables);
-    database.endConnection(connection);
-  }
-  catch(e){
+  } catch (e) {
     res.json({
       error: 1,
-      msg: e
-    })
+      msg: e,
+    });
   }
 });
 
-
-app.get('/api/getData/',async (req, res) => {
-  console.log("getData");
+app.get('/api/getData/', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  let dbname = req.query.dbname;
-  let dbtable = req.query.dbtable;
-
+  const { dbname } = req.query;
+  const { dbtable } = req.query;
   const configurazione = selectConfig(dbname);
-  if (configurazione == 0) {
+
+  if (configurazione === 0) {
     res.json({
       error: 1,
-      msg:"No configuration found"
+      msg: 'No configuration found',
     });
     return;
   }
-  try{
-    const database = await findDB(configurazione);
-    const connection = await Promise.resolve( database.connectTo());
-    const data = await Promise.resolve( database.getData(connection, dbtable));
+  try {
+    const db = await findDB(configurazione);
+    const data = await db.getData(dbtable);
     res.json(data);
-    database.endConnection(connection);
-  }
-  catch(e){
+  } catch (e) {
     res.json({
       error: 1,
-      msg: e
-    })
+      msg: e,
+    });
   }
 });
 

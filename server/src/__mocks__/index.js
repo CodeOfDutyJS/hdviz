@@ -11,7 +11,6 @@ const port = 1337;
 const config_files = getFiles(__dirname+'/config');
 
 app.listen(port, () => {
-  console.log('App is running');
 });
 
 app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
@@ -35,7 +34,6 @@ if(config_files){
 app.get('/api/getTable', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const dbname = req.query.dbname;
-  console.log("getTable called");
 
   const configurazione = selectConfig(dbname);
   if (configurazione == 0) {
@@ -47,10 +45,8 @@ app.get('/api/getTable', async (req, res) => {
   }
   try{
     const database = findDB(configurazione);
-    const connection = await Promise.resolve( database.connectTo());
-    const tables = await Promise.resolve(database.getTables(connection));
+    const tables = await Promise.resolve(database.getTables());
     res.json(tables);
-    database.endConnection(connection);
   }
   catch(e){
     res.json({
@@ -62,7 +58,7 @@ app.get('/api/getTable', async (req, res) => {
 
 
 app.get('/api/getData/',async (req, res) => {
-  console.log("getData");
+
   res.setHeader('Access-Control-Allow-Origin', '*');
   const dbname = req.query.dbname;
   const dbtable = req.query.dbtable;
@@ -77,10 +73,8 @@ app.get('/api/getData/',async (req, res) => {
   }
   try{
     const database = await findDB(configurazione);
-    const connection = await Promise.resolve( database.connectTo());
-    const data = await Promise.resolve( database.getData(connection, dbtable));
+    const data = await Promise.resolve( database.getData(dbtable));
     res.json(data);
-    database.endConnection(connection);
   }
   catch(e){
     res.json({
