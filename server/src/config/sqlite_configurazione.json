@@ -1,6 +1,6 @@
 {
     "DB_Name": "sqlite_test_db",
-    "DB_Address": "C:/Users/Matteo/Desktop/sqlite_db/sqlite_test_db.db",
+    "DB_Adress": "C:/Users/Matteo/Desktop/sqlite_db/sqlite_test_db.db",
     "DB_Type": "sqlite"
 }
   

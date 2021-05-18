@@ -9,7 +9,6 @@ const app = express();
 const port = 1337;
 
 const config_files = getFiles(__dirname+'/config');
-
 app.listen(port, () => {
   console.log('App is running');
 });

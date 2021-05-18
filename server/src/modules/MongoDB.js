@@ -8,7 +8,7 @@ module.exports = class MongoDb extends Database {
   constructor(config) {
     super(config);
     this.uri = config.DB_Address + config.DB_Name;
-  }
+    }
 
   async connectTo() {
     return new Promise((resolve, reject) => {

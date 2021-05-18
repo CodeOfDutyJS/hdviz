@@ -18,8 +18,8 @@ module.exports = class PostgresDB extends Database{
         user: this.config.DB_Username,
         host: this.config.DB_Address,
         database: this.config.DB_Name,
-        password: 'password',
-        port: 5432,
+        password: this.config.DB_Password,
+        port: this.config.DB_Port,
       });
 ;
       conn.connect((err) => {
@@ -37,13 +37,13 @@ module.exports = class PostgresDB extends Database{
     // let conn = await this.connectTo();
     return new Promise((resolve, reject) => {
       //const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${this.config.DB_Name}' AND table_type='BASE TABLE'`;
-      const table = 'SELECT table_name FROM information_schema.tables WHERE table_type=\'BASE TABLE\' AND table_schema=\'public\'';
+      const table =  `SELECT table_schema,table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_schema,table_name`;
       if(conn){
       conn.query(table, (error, columns, fields) => {
         if (error) {
           reject('Error in the postgresql table query');
         } else {
-          resolve(columns);
+          resolve(columns.rows.map(res => res.table_name));
         }
       });
       } else {
@@ -59,7 +59,7 @@ module.exports = class PostgresDB extends Database{
         if (err) {
           reject('Error - unable to get the data');
         } else {
-          resolve(rows);
+          resolve(rows.rows);
         }
       });
         }else {

@@ -13,21 +13,17 @@ const app = express();
 const port = 1337;
 
 
-
+const config_files = getFiles(__dirname+'/config');
 app.listen(port, () => {
   console.log('App is running');
 });
 
 app.get('/api/getDatabases', (req, res) => {   //controllare se qui deve tornare [{"databases":["iris","due"]}]
 
-
-  const config_files = getFiles();
   let databases = [];
 if(config_files){
-    let i = 0;
-  while (config_files[i]) {
+  for (i in config_files) {
     databases[i] = config_files[i].DB_Name;
-    i = i+1;
   }
   res.json([{databases}]);
 }else{
@@ -45,7 +41,7 @@ app.get('/api/getTable', async (req, res) => {
   const dbname = req.query.dbname;
   console.log("getTable called");
 
-  const configurazione = selectConfig(dbname);
+  const configurazione = selectConfig(dbname,config_files);
   if (configurazione == 0) {
     res.json({
       error: 1,
@@ -54,7 +50,7 @@ app.get('/api/getTable', async (req, res) => {
     return;
   }
   try{
-    const database = await findDB(configurazione);
+    const database = findDB(configurazione);
     const connection = await Promise.resolve( database.connectTo());
     const tables = await Promise.resolve(database.getTables(connection));
     res.json(tables);
@@ -71,11 +67,11 @@ app.get('/api/getTable', async (req, res) => {
 
 app.get('/api/getData/',async (req, res) => {
   console.log("getData");
-
+  res.setHeader('Access-Control-Allow-Origin', '*');
   const dbname = req.query.dbname;
   const dbtable = req.query.dbtable;
 
-  const configurazione = selectConfig(dbname);
+  const configurazione = selectConfig(dbname,config_files);
   if (configurazione == 0) {
     res.json({
       error: 1,

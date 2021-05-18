@@ -31,9 +31,7 @@ describe('findDB testing', () => {
       "DB_Name": "Mongodb",
       "DB_Address": "mongodb://localhost:27017/",
       "DB_Type": "mongodb"
-    }
-    
-    
+    };
 
     const mongoTest = new MongoDB(data);
 
@@ -64,7 +62,7 @@ describe('findDB testing', () => {
     };
     expect(() => {findDB(dataError)}).toThrowError('Tipo di database non implementato');
   });
-
+/*
   describe('getFiles', () => {
     it('should return the files', () => {
       const res = [{ 
@@ -81,7 +79,7 @@ describe('findDB testing', () => {
     }];
       expect( getFiles() ).toEqual(res);
     })
-  })
+  })*/
 
 });
 

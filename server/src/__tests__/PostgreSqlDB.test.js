@@ -12,6 +12,8 @@ describe('Postgres database test', () => {
     "DB_Password": "password",
     "DB_Type": "postgres"
   };
+  const db = new PostgresDB(config_test_db);
+
   describe('test costruttore', () => {
     it('non lancia errori nel costruttore', () => {
       expect(() => {
@@ -22,25 +24,22 @@ describe('Postgres database test', () => {
 
   describe('test connectTo', () => {
     it('connette correttamente', () => {
-      const testdb = new PostgresDB(config_test_db);
 
       expect(async () => {
-        await testdb.connectTo();
+        await db.connectTo();
       }).not.toThrowError();
     });
   });
 
   describe('getTable', () => {
     it('ritorna correttamente le tabelle', async () => {
-      const db = new PostgresDB(config_test_db);
       const conn = await db.connectTo();
       const test = await db.getTables(conn);
-      const result = ['tabella2', 'tbl_name'];
+      const result = ['iris_postgres'];
       expect(test).toEqual(result);
     });
 
     it('lancia errore', async () => {
-      const db = new PostgresDB(config_test_db);
       try {
         await db.getTables();
       } catch (e) {
@@ -51,15 +50,13 @@ describe('Postgres database test', () => {
 
   describe('getData', () => {
     it('ritorna i dati', async() => {
-      const db = new PostgresDB(config_test_db);
       const conn = await db.connectTo();
-      const test1 = await db.getData(conn, "iris_postgres_2");
+      const test1 = await db.getData(conn, "iris_postgres");
 
-      expect(test1).toHaveLength(151);
+      expect(test1).toHaveLength(150);
     })
 
     it('ritorna un errore nel prendere i dati', async() => {
-      const db = new PostgresDB(config_test_db);
       try{
         await db.getData();
       } catch(e){

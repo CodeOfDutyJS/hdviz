@@ -1,22 +1,17 @@
+const SqliteDB = require('../modules/SqliteDB');
 
-const MySqlDatabase = require('../modules/MySQLDB');
-
-// const database = require('../modules/Database')
-
-describe('Mysql database test', () => {
+describe('sqlite database test', () => {
   const config_test_db = {
-    DB_Name: 'iris',
-    DB_Address: 'localhost',
-    DB_Username: 'root',
-    DB_Password: '',
-    DB_Type: 'mysql'
+    DB_Name: 'sqlite_test_db',
+    DB_Adress: 'C:/Users/Matteo/Desktop/sqlite_db/sqlite_test_db.db',
+    DB_Type: 'sqlite',
   };
-  const db = new MySqlDatabase(config_test_db);
+  const db = new SqliteDB(config_test_db);
 
   describe('test costruttore', () => {
     it('non lancia errori nel costruttore', () => {
       expect(() => {
-        new MySqlDatabase(config_test_db);
+        new SqliteDB(config_test_db);
       }).not.toThrowError();
     });
   });
@@ -33,7 +28,7 @@ describe('Mysql database test', () => {
     it('ritorna correttamente le tabelle', async () => {
       const conn = await db.connectTo();
       const test = await db.getTables(conn);
-      const result = ['iris_mysql'];
+      const result = ['iris_sqlite'];
       expect(test).toEqual(result);
     });
 
@@ -47,20 +42,19 @@ describe('Mysql database test', () => {
   });
 
   describe('getData', () => {
-    it('ritorna i dati', async() => {
+    it('ritorna i dati', async () => {
       const conn = await db.connectTo();
-      const test1 = await db.getData(conn, "iris_mysql");
+      const test1 = await db.getData(conn, 'iris_sqlite');
 
-      expect(test1).toHaveLength(151);
-    })
+      expect(test1).toHaveLength(150);
+    });
 
-    it('ritorna un errore nel prendere i dati', async() => {
-      try{
+    it('ritorna un errore nel prendere i dati', async () => {
+      try {
         await db.getData();
-      } catch(e){
+      } catch (e) {
         expect(e).toEqual('Error - unable to get the data');
       }
-    })
-  })
-
+    });
+  });
 });

@@ -1,7 +1,7 @@
   {
   "DB_Name": "postgres_test_db",
   "DB_Address": "localhost",
-  "DB_PORT": "5432",
+  "DB_Port": "5432",
   "DB_Username": "postgres",
   "DB_Password": "password",
   "DB_Type": "postgres"
