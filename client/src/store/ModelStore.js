@@ -116,8 +116,4 @@ class ModelStore {
   }
 }
 
-<<<<<<< HEAD
 export default ModelStore;
-=======
-export default ModelStore;
->>>>>>> main
