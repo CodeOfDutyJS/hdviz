@@ -11,24 +11,25 @@ import { DataModel } from '../../model/index';
 import {
   RootStore,
   ModelStore,
+  UiStore,
+  VisualizationStore,
 } from '../../store/index';
 
 jest.mock('../../model/DataModel');
-jest.mock('../../store/RootStore');
 jest.mock('mobx');
 
 beforeEach(() => {
   makeAutoObservable.mockClear();
   DataModel.mockClear();
-  RootStore.mockClear();
 });
 
 describe('#ModelStore', () => {
   describe('constructor', () => {
     it('should make right calls', () => {
-      const modelStore = new ModelStore(new RootStore());
+      const rootStore = new RootStore();
+      const { modelStore } = rootStore.modelStore;
       expect(makeAutoObservable).toHaveBeenCalled();
-      expect(RootStore).toHaveBeenCalled();
+      // expect(RootStore).toHaveBeenCalled();
       expect(DataModel).toHaveBeenCalledTimes(1);
     });
   });
@@ -36,45 +37,45 @@ describe('#ModelStore', () => {
   describe('#UploadCSV', () => {
     let modelStore = {};
     beforeEach(() => {
-      modelStore = new ModelStore(new RootStore());
+      const rootStore = new RootStore();
+      modelStore = rootStore.modelStore;
     });
     it('should upload data correctly', async () => {
-      const loadingDataSpy = jest.spyOn(RootStore.prototype, 'setUiStoreLoadingDataCompleted');
+      const loadingDataSpy = jest.spyOn(UiStore.prototype, 'loadingDataCompleted', 'set');
       const setDatasetSpy = jest.spyOn(ModelStore.prototype, 'setDataset');
-      const dataErrorSpy = jest.spyOn(RootStore.prototype, 'getUiStoreDataError')
+      const dataErrorSpy = jest.spyOn(UiStore.prototype, 'addError')
         .mockImplementationOnce(() => []);
 
       await modelStore.uploadCSV('Hello,Beautiful,World\n1,2,3');
 
       expect(modelStore.loadingCompleted).toBeTruthy();
-      expect(dataErrorSpy).toHaveBeenCalled();
+      expect(dataErrorSpy).not.toHaveBeenCalled();
       expect(setDatasetSpy).toHaveBeenCalled();
       expect(loadingDataSpy).toHaveBeenCalled();
     });
     it('should upload data but with error', async () => {
-      const mockDataError = [];
-      jest.spyOn(RootStore.prototype, 'getUiStoreDataError')
+      const mockDataError = {};
+      jest.spyOn(UiStore.prototype, 'dataError', 'get')
         .mockImplementationOnce(() => mockDataError);
       await modelStore.uploadCSV('This,is/not a.csv\nfile');
-
       expect(modelStore.loadingCompleted).toBeTruthy();
-      expect(mockDataError.length).toBeGreaterThan(0);
+      expect(mockDataError).toBeTruthy();
     });
     it('should not upload data with exception', async () => {
-      const mockDataError = [];
-      jest.spyOn(RootStore.prototype, 'getUiStoreDataError')
+      const mockDataError = {};
+      jest.spyOn(UiStore.prototype, 'dataError', 'get')
         .mockImplementationOnce(() => mockDataError);
       jest.spyOn(ModelStore, 'parseFile')
         .mockImplementationOnce(() => { throw new Error('HELLO :('); });
       await modelStore.uploadCSV('hello world');
 
       expect(modelStore.loadingCompleted).not.toBeTruthy();
-      expect(mockDataError.length).toBeGreaterThan(0);
+      expect(mockDataError).toBeTruthy();
     });
   });
 
   describe('#checkFeatures', () => {
-    const maxFeaturesSpy = jest.spyOn(RootStore.prototype, 'setUiStoreMaxFeatures');
+    const maxFeaturesSpy = jest.spyOn(UiStore.prototype, 'maxFeatures', 'set');
     let modelStore = {};
 
     beforeEach(() => {
@@ -88,7 +89,11 @@ describe('#ModelStore', () => {
     });
 
     it('should check if a max number of features is set', () => {
-      const maxFeaturesSelectedSpy = jest.spyOn(RootStore.prototype, 'getVisualizationSelectedMaxFeatures').mockReturnValueOnce(5);
+      const maxFeaturesSelectedSpy = jest.spyOn(VisualizationStore.prototype, 'visualizationSelected', 'get').mockImplementation(() => ({
+        options: {
+          maxFeatures: 5,
+        },
+      }));
       modelStore.features = [];
       modelStore.features.length = 7;
       modelStore.checkFeatures();
@@ -97,12 +102,13 @@ describe('#ModelStore', () => {
   });
 
   describe('#setTargets', () => {
-    const maxTargetsSpy = jest.spyOn(RootStore.prototype, 'setUiStoreMaxTargets');
+    const maxTargetsSpy = jest.spyOn(UiStore.prototype, 'maxTargets', 'set').mockImplementation(() => 2);
     let modelStore = {};
 
     beforeEach(() => {
       maxTargetsSpy.mockClear();
-      modelStore = new ModelStore(new RootStore());
+      const rootStore = new RootStore();
+      modelStore = rootStore.modelStore;
     });
 
     it('should check if targets are more than 2', () => {
