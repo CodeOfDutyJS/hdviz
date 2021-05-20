@@ -194,7 +194,7 @@ quando selezionati, questi punti saranno evidenziati anche negli altri grafici d
 vedere come cambia la loro distribuzione a seconda delle feature che sono associate ad un singolo grafico.\
 In questa visualizzaione non è possibile selezionare un numero di feature maggiore di 5, per prevenire la creazione di griglie troppo "dense".
 
-<img src="https://i.imgur.com/Oby9ato.png" width="200" height="200"/>
+<img src="https://i.imgur.com/Oby9ato.png" width="400" height="400"/>
 
 #### opzioni
 1. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
@@ -206,7 +206,7 @@ La Heatmap è una matrice che ha come colonne le features selezionate e come rig
 Ogni casella della heatmap viene colorata in base al valore che assume il record di quella riga nella feature della colonna corrispondente, 
 più alto sarà il valore e più scura risulterà la casella.
 
-<img src="https://imgur.com/mCHdxaP.png" width="200" height="200"/>
+<img src="https://imgur.com/mCHdxaP.png" width="400" height="400"/>
 
 #### opzioni
 1. Range Color: è possibile selezionare i colori con cui visualizzare la heatmap
@@ -219,7 +219,7 @@ La correlation Heatmap è un tipo particolare di Heatmap in cui sia le colonne c
 il colore di una singola casella è determinato quindi dalla dipendenza tra le due feature corrispondenti alla casella,
 la dipendenza tra le feature è calcolata tramite il coefficiente di Pearson, tanto più alto sarà questo valore tanto piu scura risulterà la casella.
 
-<img src="https://imgur.com/fGu1b91.png" width="200" height="200"/>
+<img src="https://imgur.com/fGu1b91.png" width="400" height="400"/>
 
 #### opzioni
 1. Range Color: è possibile selezionare i colori con cui visualizzare la heatmap
@@ -232,7 +232,7 @@ Nella visualizzazione i nodi del grafo sono i record del dataset, l'arco che uni
 più due record sono vicini (cioè i valori delle loro feature sono simili) più l'arco che unisce i due nodi eserciterà una forza maggiore e i nodi risulteranno più vicini nel grafo visualizzato.\
 Per avere una visualizzazione più chiara gli archi non vengono visualizzati.
 
-<img src="https://imgur.com/Kyg6fst.png" width="200" height="200"/>
+<img src="https://imgur.com/Kyg6fst.png" width="400" height="400"/>
 
 #### opzioni
 1. Matrice di Distanza: è possibile scegliere la funzione di distanza (Euclidea o Manhattan) necessaria per calcolare la distanza tra i record e quindi il peso degli archi
@@ -246,12 +246,12 @@ Hdviz utilizza due diversi algoritmi per eseguire la riduzione dimensionale.
 La Principal Components Analysis riduce il numero di variabili originali a un numero minore di nuove variabili tramite una trasformazione lineare che minimizzi la perdita d'informazione.\
 Nella linear projection con PCA vengono visualizzati anche gli assi originali, proiettati nel nuovo sistema cartesiano.
 
-<img src="https://imgur.com/gzOX99y.png" width="200" height="200"/>
+<img src="https://imgur.com/gzOX99y.png" width="400" height="400"/>
 
 #### UMAP
 Uniform Manifold Approximation and Projection è un algoritmo di riduzione dimensionale non lineare, UMAP costruisce un grafo a multidimensioni per rappresentare i dati, dopo ottimizza un grafo a minore dimensione in modo tale che sia il più simile possibile a quello originale.
 
-<img src="https://imgur.com/Tr8TFvj.png" width="200" height="200"/>
+<img src="https://imgur.com/Tr8TFvj.png" width="400" height="400"/>
 
 #### opzioni
 1. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
@@ -262,7 +262,7 @@ Uniform Manifold Approximation and Projection è un algoritmo di riduzione dimen
 ### Parallel Coordinates
 In questa visualizzazione le varibili (feature) vengono disposte su linee parallele verticali, un punto (record) del dataset è rappresentato dalla linea spezzata che va a intersecare le linee verticali delle variabili, il punto in cui la linea che rappresenta il record va a intersecare la linea della variabile dipende dal valore che assume quel record in quella determinata variabile.
 
-<img src="https://imgur.com/smI7pNU.png" width="200" height="200"/>
+<img src="https://imgur.com/smI7pNU.png" width="400" height="400"/>
 
 #### opzioni
 1. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
