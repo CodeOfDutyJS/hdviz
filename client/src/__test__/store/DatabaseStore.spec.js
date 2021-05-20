@@ -76,6 +76,10 @@ describe('DBStore', () => {
   });
 
   describe('getData', () => {
+    beforeEach(() => {
+      rootStore = new RootStore();
+      databaseStore = rootStore.databaseStore;
+    });
     test('two row from api call', async () => {
       const apiMock = {
         getData(db, table) {
@@ -86,9 +90,8 @@ describe('DBStore', () => {
       databaseStore.apiService = apiMock;
       databaseStore.databaseSelected = 'db1';
       databaseStore.tableSelected = 'table1';
-
-      await databaseStore.getData();
-      expect(rootStore.modelStore.data.dataset).toStrictEqual([{ col1: 12, col2: 13 }, { col1: 14, col2: 15 }]);
+      await databaseStore.getData(databaseStore.databaseSelected, databaseStore.tableSelected);
+      expect(rootStore.modelStore.dataModel.dataset).toStrictEqual([{ col1: 12, col2: 13 }, { col1: 14, col2: 15 }]);
     });
 
     test('error in the data call', async () => {
@@ -107,6 +110,66 @@ describe('DBStore', () => {
       } catch (error) {
         expect(error).toStrictEqual(new Error('error test message'));
       }
+    });
+  });
+
+  describe('getDatabaseConnections', () => {
+    beforeEach(() => {
+      rootStore = new RootStore();
+      databaseStore = rootStore.databaseStore;
+    });
+    test('two databases from api call', async () => {
+      const apiMock = {
+        getDatabases() {
+          return [{ databases: ['db1', 'db2'] }];
+        },
+      };
+
+      databaseStore.apiService = apiMock;
+
+      await databaseStore.getDatabaseConnections();
+      expect(databaseStore.databases).toStrictEqual(['db1', 'db2']);
+    });
+
+    test('error in the data call', async () => {
+      const apiMock = {
+        getDatabases() {
+          return { error: 'Error test', msg: 'error test message' };
+        },
+      };
+
+      databaseStore.apiService = apiMock;
+
+      await databaseStore.getDatabaseConnections();
+      expect(rootStore.uiStore.dataError).toStrictEqual({ status: 'error', message: 'error test message' });
+    });
+  });
+
+  describe('setTables', () => {
+    test('two tables from api call', async () => {
+      const apiMock = {
+        getTables(db) {
+          return ['table1', 'table2'];
+        },
+      };
+
+      databaseStore.apiService = apiMock;
+
+      await databaseStore.setDatabaseSelected('db1');
+      expect(databaseStore.tables).toStrictEqual(['table1', 'table2']);
+    });
+
+    test('error in the table name call', async () => {
+      const apiMock = {
+        getTables(db) {
+          return { error: 'Error test', msg: 'error test message' };
+        },
+      };
+
+      databaseStore.apiService = apiMock;
+
+      await databaseStore.setDatabaseSelected('db1');
+      expect(rootStore.uiStore.dataError).toStrictEqual({ status: 'error', message: 'error test message' });
     });
   });
 });

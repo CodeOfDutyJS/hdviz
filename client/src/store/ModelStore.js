@@ -28,21 +28,17 @@ class ModelStore {
   }
 
   async uploadCSV(file) {
-    const dataError = this.rootStore.getUiStoreDataError() || [];
     try {
       const results = await this.constructor.parseFile(file);
       this.loadingCompleted = true;
       this.setDataset(results.data);
-      dataError.length = 0;
       if (results.errors.length > 0) {
         results.errors.forEach((error) => {
           this.rootStore.uiStore.addError('warning', `Error ${error.code}: ${error.message}`);
         });
       }
     } catch (error) {
-      // TODO: visualizzare errore
-      dataError.length = 0;
-      dataError.push({
+      this.rootStore.uiStore.addError({
         status: 'error',
         message: `Error: ${error.message}`,
       });
@@ -50,15 +46,15 @@ class ModelStore {
   }
 
   checkFeatures() {
-    const maxFeatures = this.rootStore.getVisualizationSelectedMaxFeatures();
+    const maxFeatures = this.rootStore.visualizationStore.visualizationSelected?.options?.maxFeatures;
     if (
       maxFeatures
       && this.features.length > maxFeatures
     ) {
       this.features = this.features.slice(0, maxFeatures);
-      this.rootStore.setUiStoreMaxFeatures(true);
+      this.rootStore.uiStore.maxFeatures = true;
     } else {
-      this.rootStore.setUiStoreMaxFeatures(false);
+      this.rootStore.uiStore.maxFeatures = false;
     }
   }
 
@@ -69,7 +65,7 @@ class ModelStore {
 
   setDataset(value) {
     this.dataModel.dataset = value;
-    this.rootStore.setUiStoreLoadingDataCompleted(true);
+    this.rootStore.uiStore.loadingDataCompleted = true;
   }
 
   get columns() {
@@ -108,9 +104,9 @@ class ModelStore {
   setTargets(value) {
     if (value.length > 2) {
       value.pop();
-      this.rootStore.setUiStoreMaxTargets(true);
+      this.rootStore.uiStore.maxTargets = true;
     } else {
-      this.rootStore.setUiStoreMaxTargets(false);
+      this.rootStore.uiStore.maxTargets = false;
     }
     this.targets = value;
   }
