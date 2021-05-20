@@ -194,7 +194,7 @@ quando selezionati, questi punti saranno evidenziati anche negli altri grafici d
 vedere come cambia la loro distribuzione a seconda delle feature che sono associate ad un singolo grafico.\
 In questa visualizzaione non è possibile selezionare un numero di feature maggiore di 5, per prevenire la creazione di griglie troppo "dense".
 
-![Imgur](https://i.imgur.com/Oby9ato.png)
+<img src="https://i.imgur.com/Oby9ato.png" width="200" height="200"/>
 
 #### opzioni
 1. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
@@ -206,7 +206,8 @@ La Heatmap è una matrice che ha come colonne le features selezionate e come rig
 Ogni casella della heatmap viene colorata in base al valore che assume il record di quella riga nella feature della colonna corrispondente, 
 più alto sarà il valore e più scura risulterà la casella.
 
-![Imgur](https://imgur.com/mCHdxaP.png)
+<img src="https://imgur.com/mCHdxaP.png" width="200" height="200"/>
+
 #### opzioni
 1. Range Color: è possibile selezionare i colori con cui visualizzare la heatmap
 2. Distanza: è possibile scegliere con quale matrice di distanza calcolare il clustering
@@ -218,20 +219,20 @@ La correlation Heatmap è un tipo particolare di Heatmap in cui sia le colonne c
 il colore di una singola casella è determinato quindi dalla dipendenza tra le due feature corrispondenti alla casella,
 la dipendenza tra le feature è calcolata tramite il coefficiente di Pearson, tanto più alto sarà questo valore tanto piu scura risulterà la casella.
 
-![Imgur](https://imgur.com/fGu1b91.png)
+<img src="https://imgur.com/fGu1b91.png" width="200" height="200"/>
 
 #### opzioni
 1. Range Color: è possibile selezionare i colori con cui visualizzare la heatmap
 3. Clustering: è possibile scegliere come verranno cluterizzate le righe
 2. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
 
-###Forcefield 
+### Forcefield 
 Il Forcefield simula l'interazione tra forze in un grafo, gli archi esercitano una forza attrativa sui nodi da essi collegati e i nodi esercitano una forza repulsiva tra di loro.\
 Nella visualizzazione i nodi del grafo sono i record del dataset, l'arco che unisce un nodo A ad un nodo B è pesato in base alla distanza tra i record raffigurati da A e B, 
 più due record sono vicini (cioè i valori delle loro feature sono simili) più l'arco che unisce i due nodi eserciterà una forza maggiore e i nodi risulteranno più vicini nel grafo visualizzato.\
 Per avere una visualizzazione più chiara gli archi non vengono visualizzati.
 
-![Imgur](https://imgur.com/Kyg6fst.png)
+<img src="https://imgur.com/Kyg6fst.png" width="200" height="200"/>
 
 #### opzioni
 1. Matrice di Distanza: è possibile scegliere la funzione di distanza (Euclidea o Manhattan) necessaria per calcolare la distanza tra i record e quindi il peso degli archi
@@ -245,25 +246,25 @@ Hdviz utilizza due diversi algoritmi per eseguire la riduzione dimensionale.
 La Principal Components Analysis riduce il numero di variabili originali a un numero minore di nuove variabili tramite una trasformazione lineare che minimizzi la perdita d'informazione.\
 Nella linear projection con PCA vengono visualizzati anche gli assi originali, proiettati nel nuovo sistema cartesiano.
 
-![Imgur](https://imgur.com/gzOX99y.png)
+<img src="https://imgur.com/gzOX99y.png" width="200" height="200"/>
 
 #### UMAP
 Uniform Manifold Approximation and Projection è un algoritmo di riduzione dimensionale non lineare, UMAP costruisce un grafo a multidimensioni per rappresentare i dati, dopo ottimizza un grafo a minore dimensione in modo tale che sia il più simile possibile a quello originale.
 
-![Imgur](https://imgur.com/Tr8TFvj.png)
+<img src="https://imgur.com/Tr8TFvj.png" width="200" height="200"/>
 
-####opzioni
+#### opzioni
 1. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
 2. Neighbors number (UMAP): indica il numero di vicini da considerare nella costruzione del grafo originale, più il valore è basso e più l'algoritmo si concentrerà sulle strutture locali del dataset, viceversa più è alto e più la visualizzazione mostrerà le strutture globali del dataset.
 3. Min distance (UMAP): è la distanza minima tra i punti mostrati nella visualizzazione.
 4. Spread (UMAP): definisce la scala dei punti proiettati, insieme a Min distance controlla la dispersione dei punti visualizzati.
 
-###Parallel Coordinates
+### Parallel Coordinates
 In questa visualizzazione le varibili (feature) vengono disposte su linee parallele verticali, un punto (record) del dataset è rappresentato dalla linea spezzata che va a intersecare le linee verticali delle variabili, il punto in cui la linea che rappresenta il record va a intersecare la linea della variabile dipende dal valore che assume quel record in quella determinata variabile.
 
-![Imgur](https://imgur.com/smI7pNU.png)
+<img src="https://imgur.com/smI7pNU.png" width="200" height="200"/>
 
-####opzioni
+#### opzioni
 1. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
 
 
