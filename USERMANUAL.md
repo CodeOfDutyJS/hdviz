@@ -207,8 +207,13 @@ Ogni casella della heatmap viene colorata in base al valore che assume il record
 più alto sarà il valore e più scura risulterà la casella.
 
 ![Imgur](https://imgur.com/mCHdxaP.png)
+#### opzioni
+1. Range Color: è possibile selezionare i colori con cui visualizzare la heatmap
+2. Distanza: è possibile scegliere con quale matrice di distanza calcolare il clustering
+3. Clustering: è possibile scegliere come verranno cluterizzate le righe
+2. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
 
-#### Correlation Heatmap
+### Correlation Heatmap
 La correlation Heatmap è un tipo particolare di Heatmap in cui sia le colonne che le righe sono rappresentate dalle feature,
 il colore di una singola casella è determinato quindi dalla dipendenza tra le due feature corrispondenti alla casella,
 la dipendenza tra le feature è calcolata tramite il coefficiente di Pearson, tanto più alto sarà questo valore tanto piu scura risulterà la casella.
@@ -217,6 +222,8 @@ la dipendenza tra le feature è calcolata tramite il coefficiente di Pearson, ta
 
 #### opzioni
 1. Range Color: è possibile selezionare i colori con cui visualizzare la heatmap
+3. Clustering: è possibile scegliere come verranno cluterizzate le righe
+2. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
 
 ###Forcefield 
 Il Forcefield simula l'interazione tra forze in un grafo, gli archi esercitano una forza attrativa sui nodi da essi collegati e i nodi esercitano una forza repulsiva tra di loro.\
