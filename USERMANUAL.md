@@ -85,6 +85,8 @@ Ci sono 4 tipi di database compatibili con la componente server di HD Viz e sono
 ### Installazione
 1. Scaricare `server.zip` dall'ultima [release](https://github.com/CodeOfDutyJS/hdviz/releases/latest) presente su GitHub
 2. Estrarre lo zip
+3. Posizionarsi nella cartella del server in cui è presente il file `package.json`
+4. Eseguire il comando `yarn` da terminale per installare le dipendenze necessarie
 
 ### Configurazione
 Prima di poter eseguire l'applicazione è necessario configurare i file per le connessioni ai database.
