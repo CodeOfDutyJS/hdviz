@@ -27,6 +27,7 @@ function processData({
     .data(data.points)
     .join('path')
     .attr('class', '_3d points')
+    .attr('stroke', '#fff')
     .attr('d', symbol.type((d) => shape(d.shape)))
     .attr('transform', (d) => `translate(${pointsX(d.projected.x)},${pointsY(d.projected.y)})`)
     .style('fill', (d) => color(d.color))
@@ -88,7 +89,6 @@ function umap(data) {
     color: d3.scaleOrdinal(d3.schemeCategory10),
     shape: d3.scaleOrdinal(d3.symbols),
     svg: d3.select('#area')
-      .attr('stroke', '#fff')
       .attr('stroke-width', '1.5'),
     startAngle: Math.PI / 4,
     get point3d() {
