@@ -7,11 +7,11 @@
   * [Prerequisiti](#prerequisiti)
   * [Requisiti Software](#requisiti-software)
   * [Requisiti Hardware](#requisiti-hardware)
-- [Server (opzionale)](#server-opzionale)
+- [Server (Installazione opzionale)](#server-installazione-opzionale)
   * [Installazione](#installazione)
   * [Configurazione](#configurazione)
   * [Esecuzione](#esecuzione)
-- [Web App (necessario)](#web-app-necessario)
+- [Web App (Installazione obbligatoria)](#web-app-installazione-obbligatoria)
   * [Installazione](#installazione-1)
   * [Esecuzione](#esecuzione-1)
 - [Istruzioni per l'utilizzo di HD Viz](#istruzioni-per-lutilizzo-di-hd-viz)
@@ -53,11 +53,10 @@ Se si vuole eseguire il server è necessario:
 
 ### Requisiti Software
 - **Sistema Operativo**:
-    - Windows;
-    - MacOS;
-    - Debian;
-    - Ubuntu;
-    - RPM-based Linux.
+    - Windows 10;
+    - MacOS 10.13;
+    - Debian 8.10;
+    - Ubuntu 18.10.
 - **Browser**:
     - Google Chrome v57 o superiore;
     - Microsoft Edge v15 o superiore;
@@ -73,8 +72,15 @@ HD Viz consiste in una web app, perciò le configurazioni minime prevedono:
 
 ---
 
-## Server (opzionale)
+## Server (installazione opzionale)
 Il server è necessario solo per il recupero dati da database, per questo la sua installazione ed esecuzione non è obbligatoria.
+
+L'utente può collegarsi ai vari tipi di database soltanto se precedentemente già installati su una macchina.
+Ci sono 4 tipi di database compatibili con la componente server di HD Viz e sono:
+- MySQL
+- SQLite
+- PostgreSQL
+- MongoDB
 
 ### Installazione
 1. Scaricare `server.zip` dall'ultima [release](https://github.com/CodeOfDutyJS/hdviz/releases/latest) presente su GitHub
@@ -112,7 +118,7 @@ Il server è ora in esecuzione nella porta `1337`.
 
 ---
 
-## Web App (necessario)
+## Web App (Installazione obbligatoria)
 
 ### Installazione 
 
