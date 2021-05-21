@@ -32,6 +32,10 @@ class VisualizationManager {
   set visualizationSelected(value) {
     this._visualizationSelected = value;
   }
+
+  getPreparedDataset(data) {
+    return this._visualizationSelected.model.addData(data).getPreparedDataset(this._options);
+  }
 }
 
 export default VisualizationManager;
