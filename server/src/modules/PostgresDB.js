@@ -1,7 +1,7 @@
-const mysql = require('mysql');
+const { Client } = require('pg');
 const Database = require('./Database');
 
-module.exports = class MySqlDatabase extends Database {
+module.exports = class PostgresDB extends Database {
   constructor(config) {
     super();
     this.config = config;
@@ -9,18 +9,19 @@ module.exports = class MySqlDatabase extends Database {
 
   async connectTo() {
     return new Promise((resolve, reject) => {
-      const connection = mysql.createConnection({
-        host: this.config.DB_Address,
+      const conn = new Client({
         user: this.config.DB_Username,
-        password: this.config.DB_Password,
+        host: this.config.DB_Address,
         database: this.config.DB_Name,
+        password: this.config.DB_Password,
+        port: this.config.DB_Port,
       });
 
-      connection.connect((err) => {
+      conn.connect((err) => {
         if (err) {
-          reject(new Error('Error connecting to the DB'));
+          reject(new Error('unable to connect to the database'));
         } else {
-          resolve(connection);
+          resolve(conn);
         }
       });
     });
@@ -29,19 +30,18 @@ module.exports = class MySqlDatabase extends Database {
   async getTables() {
     const conn = await this.connectTo();
     return new Promise((resolve, reject) => {
+      const table = 'SELECT table_schema,table_name FROM information_schema.tables WHERE table_schema=\'public\' ORDER BY table_schema,table_name';
       if (conn) {
-        const table = `SELECT table_name FROM information_schema.tables WHERE table_schema ='${this.config.DB_Name}'`;
         conn.query(table, (error, columns) => {
           if (error) {
-            reject(new Error('executing the query'));
+            reject(new Error('in the postgresql table query'));
           } else {
-            resolve(columns.map((res) => res.table_name));
+            resolve(columns.rows.map((res) => res.table_name));
           }
         });
       } else {
-        reject(new Error('executing the query'));
+        reject(new Error('in the postgresql table query'));
       }
-      conn.end();
     });
   }
 
@@ -53,13 +53,12 @@ module.exports = class MySqlDatabase extends Database {
           if (err) {
             reject(new Error('unable to get the data'));
           } else {
-            resolve(rows);
+            resolve(rows.rows);
           }
         });
       } else {
         reject(new Error('unable to get the data'));
       }
-      conn.end();
     });
   }
 };

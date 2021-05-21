@@ -1,6 +1,5 @@
-
-  {
-  "DB_Name": "test",
+{
+  "DB_Name": "mysql_test_db",
   "DB_Address": "localhost",
   "DB_Username": "root",
   "DB_Password": "",
