@@ -246,7 +246,7 @@ Per avere una visualizzazione più chiara gli archi non vengono visualizzati.
 1. Matrice di Distanza: è possibile scegliere la funzione di distanza (Euclidea o Manhattan) necessaria per calcolare la distanza tra i record e quindi il peso degli archi
 2. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
 
-###Linear Projection
+### Linear Projection
 Questa visualizzazione proietta dei punti multidimensionali, cioè record di un dataset contenente diverse feature, in uno spazio a 2 dimensioni.
 Hdviz utilizza due diversi algoritmi per eseguire la riduzione dimensionale.
 
