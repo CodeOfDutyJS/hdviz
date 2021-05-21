@@ -82,16 +82,66 @@ class DataModel {
     return r;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  stratifiedSampling(data, targetCols, numberOfItems) {
+    const firstTarget = targetCols[0];
+    const secondTarget = targetCols[1] ? targetCols[1] : null;
+    const sortContainer = {};
+    data.forEach((row) => {
+      const target = secondTarget ? row[firstTarget] + row[secondTarget] : row[firstTarget];
+      if (!(target in sortContainer)) {
+        sortContainer[target] = [];
+        sortContainer[target].push(row);
+      } else {
+        sortContainer[target].push(row);
+      }
+    });
+    const fraction = numberOfItems / data.length;
+    const returnValue = [];
+    Object.keys(sortContainer).forEach((key) => {
+      const frac = Math.floor(sortContainer[key].length * fraction);
+      for (let i = 0; i < frac; i++) {
+        const index = Math.floor(Math.random() * (sortContainer[key].length));
+        returnValue.push(sortContainer[key][index]);
+        sortContainer[key].splice(index, 1);
+      }
+    });
+    return returnValue;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  kthSampling(data, numberOfItems) {
+    data.sort((a, b) => {
+      const IdA = a[this.targets[0]].toUpperCase(); // ignore upper and lowercase
+      const IdB = b[this.targets[0]].toUpperCase(); // ignore upper and lowercase
+      if (IdA < IdB) {
+        return -1;
+      }
+      if (IdA > IdB) {
+        return 1;
+      }
+      return 0;
+    });
+    const returnValue = [];
+    const k = Math.floor(Math.random() * 6) + 1;
+    for (let i = 0; i < numberOfItems; i++) {
+      const index = (k * i + k) % data.length;
+      returnValue.push(data[index]);
+      data.splice(index, 1);
+    }
+    return returnValue;
+  }
+
   getSelectedDataset() {
     const targetCols = this.getTargetColumns();
     const featureCols = this.getFeatureColumns();
-    const r = featureCols
+    let r = featureCols
       .map((value, index) => ({
         ...value,
         ...targetCols[index],
       }));
-    if (this.toNorm) return this.toNorm(r, this.features);
-    return r;
+    if (this.toNorm) r = this.toNorm(r, this.features);
+    return this.stratifiedSampling(r, this.targets, 50);
   }
 }
 

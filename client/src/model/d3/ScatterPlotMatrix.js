@@ -151,6 +151,16 @@ function scatterPlotMatrix({
 
   svg.property('value', []);
   drawTargetLegend(color, selectedTarget, width, 0 + 15, height, 25);
+  d3.select(window)
+    .on('resize', () => {
+      d3.select('#area').selectAll('*').remove();
+      scatterPlotMatrix({
+        data,
+        features,
+        targets,
+        selectedTarget,
+      });
+    });
 }
 
 export default scatterPlotMatrix;

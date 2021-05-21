@@ -78,7 +78,7 @@ function forceField(data) {
   });
 
   drawTargetLegend(color, data.selectedTarget, width + 50, 20, height - 100, 25);
-  if (data.selectedTarget.length === 2) {
+  if (nodes[0].shape) {
     drawShapeLegend(shape, data.selectedTarget, width + 50, 20, height - 100, 25);
     hideLegend(width - 80, 0, width / 3, height, 1);
   }

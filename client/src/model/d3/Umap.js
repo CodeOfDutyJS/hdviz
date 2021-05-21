@@ -112,5 +112,10 @@ function umap(data) {
     .append('g');
 
   processData(props);
+  d3.select(window)
+    .on('resize', () => {
+      d3.select('#area').selectAll('*').remove();
+      umap(data);
+    });
 }
 export default umap;
