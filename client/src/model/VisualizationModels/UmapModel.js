@@ -6,19 +6,14 @@ import VisualizationCollector from '../VisualizationsCollector';
 import StandardScore from '../normalizations/StandardScore';
 
 class UmapModel extends VisualizationModel {
-  Umap(nNeighbors, minDistance, spread) {
+  // eslint-disable-next-line class-methods-use-this
+  Umap(data, nNeighbors, minDistance, spread) {
     const uMap = new UMAP({
       nComponents: 3,
       minDist: minDistance,
       spread,
       nNeighbors,
     });
-    const data = this.dataModel
-      .setNorm(StandardScore)
-      .getFeatureColumnsNormalized()
-      .map((row) => Object.values(row));
-
-    // umap.setSupervisedProjection(label);
     uMap.fit(data);
     const trasformed = uMap.getEmbedding();
     return { points: trasformed };
@@ -26,8 +21,11 @@ class UmapModel extends VisualizationModel {
 
   getPreparedDataset({ nNeighbors = 15, minDistance = 0.1, spread = 1 }) {
     const label = this.dataModel.getTargetColumns();
-    const projection = this.Umap(nNeighbors, minDistance, spread);
-
+    const data = this.dataModel
+      .setNorm(StandardScore)
+      .getFeatureColumnsNormalized()
+      .map((row) => Object.values(row));
+    const projection = this.Umap(data, nNeighbors, minDistance, spread);
     const preparedPoints = [];
     projection.points
       .map((d, i) => preparedPoints
