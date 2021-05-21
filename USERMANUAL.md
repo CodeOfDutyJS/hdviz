@@ -7,11 +7,11 @@
   * [Prerequisiti](#prerequisiti)
   * [Requisiti Software](#requisiti-software)
   * [Requisiti Hardware](#requisiti-hardware)
-- [Server (opzionale)](#server-opzionale)
+- [Server (Installazione opzionale)](#server-installazione-opzionale)
   * [Installazione](#installazione)
   * [Configurazione](#configurazione)
   * [Esecuzione](#esecuzione)
-- [Web App (necessario)](#web-app-necessario)
+- [Web App (Installazione obbligatoria)](#web-app-installazione-obbligatoria)
   * [Installazione](#installazione-1)
   * [Esecuzione](#esecuzione-1)
 - [Istruzioni per l'utilizzo di HD Viz](#istruzioni-per-lutilizzo-di-hd-viz)
@@ -53,11 +53,10 @@ Se si vuole eseguire il server è necessario:
 
 ### Requisiti Software
 - **Sistema Operativo**:
-    - Windows;
-    - MacOS;
-    - Debian;
-    - Ubuntu;
-    - RPM-based Linux.
+    - Windows 10;
+    - MacOS 10.13;
+    - Debian 8.10;
+    - Ubuntu 18.10.
 - **Browser**:
     - Google Chrome v57 o superiore;
     - Microsoft Edge v15 o superiore;
@@ -73,12 +72,21 @@ HD Viz consiste in una web app, perciò le configurazioni minime prevedono:
 
 ---
 
-## Server (opzionale)
+## Server (installazione opzionale)
 Il server è necessario solo per il recupero dati da database, per questo la sua installazione ed esecuzione non è obbligatoria.
+
+L'utente può collegarsi ai vari tipi di database soltanto se precedentemente già installati su una macchina.
+Ci sono 4 tipi di database compatibili con la componente server di HD Viz e sono:
+- MySQL
+- SQLite
+- PostgreSQL
+- MongoDB
 
 ### Installazione
 1. Scaricare `server.zip` dall'ultima [release](https://github.com/CodeOfDutyJS/hdviz/releases/latest) presente su GitHub
 2. Estrarre lo zip
+3. Posizionarsi nella cartella del server in cui è presente il file `package.json`
+4. Eseguire il comando `yarn` da terminale per installare le dipendenze necessarie
 
 ### Configurazione
 Prima di poter eseguire l'applicazione è necessario configurare i file per le connessioni ai database.
@@ -112,7 +120,7 @@ Il server è ora in esecuzione nella porta `1337`.
 
 ---
 
-## Web App (necessario)
+## Web App (Installazione obbligatoria)
 
 ### Installazione 
 
@@ -238,7 +246,7 @@ Per avere una visualizzazione più chiara gli archi non vengono visualizzati.
 1. Matrice di Distanza: è possibile scegliere la funzione di distanza (Euclidea o Manhattan) necessaria per calcolare la distanza tra i record e quindi il peso degli archi
 2. Normalizzazione: è possibile normalizzare il dataset prima di visualizzare il grafico, le funzioni di normalizzazione disponibili sono Standard Score, Euclidean Length Normalization e Manhattan Length Normalization
 
-###Linear Projection
+### Linear Projection
 Questa visualizzazione proietta dei punti multidimensionali, cioè record di un dataset contenente diverse feature, in uno spazio a 2 dimensioni.
 Hdviz utilizza due diversi algoritmi per eseguire la riduzione dimensionale.
 
