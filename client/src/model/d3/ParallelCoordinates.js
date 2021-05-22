@@ -91,6 +91,11 @@ function parallelCoordinates(data) {
     .style('fill', 'black');
 
   drawTargetLegend(color, selectedTarget, width, 0 + 15, height, 25);
+  d3.select(window)
+    .on('resize', () => {
+      d3.select('#area').selectAll('*').remove();
+      parallelCoordinates(data);
+    });
 }
 
 export default parallelCoordinates;

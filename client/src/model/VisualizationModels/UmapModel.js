@@ -41,6 +41,7 @@ class UmapModel extends VisualizationModel {
       points: preparedPoints,
       target1: this.dataModel.targets.length > 0 ? [...new Set(label.map((d) => d[this.dataModel.targets[0]]))] : null,
       target2: this.dataModel.targets.length > 1 ? [...new Set(label.map((d) => d[this.dataModel.targets[1]]))] : null,
+      selectedTarget: this.dataModel.getTargetColumns(),
     };
   }
 }
