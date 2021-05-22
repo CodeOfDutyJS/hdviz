@@ -97,7 +97,7 @@ describe('#DataModel', () => {
     dataset.features = mockFeature;
     dataset.targets = mockTarget;
     it('should return 2 object with data', () => {
-      expect(dataset.kthSampling(mockData, 2).length).toBe(2);
+      expect(dataset.kthSampling(2).length).toBe(2);
     });
   });
   /*
