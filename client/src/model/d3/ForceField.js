@@ -77,10 +77,10 @@ function forceField(data) {
       .attr('transform', (d) => `translate(${d.x},${d.y})`);
   });
 
-  drawTargetLegend(color, data.selectedTarget, width + 50, 20, height - 100, 25);
+  drawTargetLegend(color, data.selectedTarget, width + 50, 100, height - 100, 25);
   if (nodes[0].shape) {
-    drawShapeLegend(shape, data.selectedTarget, width + 50, 20, height - 100, 25);
-    hideLegend(width - 80, 0, width / 3, height, 1);
+    drawShapeLegend(shape, data.selectedTarget, width + 50, 100, height - 100, 25);
+    hideLegend(width + 50, 0, width / 3, height, 1);
   }
   d3.select(window)
     .on('resize', () => {

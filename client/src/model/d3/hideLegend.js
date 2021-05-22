@@ -9,10 +9,11 @@ function hideLegend(x, y, width, height) {
     .attr('opacity', '0');
 
   svg.append('rect')
-    .attr('fill', 'gray')
+    .attr('class', 'legendButton')
+    .attr('fill', 'lightgray')
     .attr('stroke', 'black')
-    .attr('width', '50')
-    .attr('height', '50')
+    .attr('width', '160')
+    .attr('height', '25')
     .attr('x', x)
     .attr('y', y)
     .on('mouseover', () => {
@@ -20,13 +21,22 @@ function hideLegend(x, y, width, height) {
         .attr('opacity', '0');
       d3.selectAll('.legendShape')
         .attr('opacity', '1');
+      d3.selectAll('.legendButton')
+        .attr('fill', 'gray');
     })
     .on('mouseout', () => {
       d3.selectAll('.legend')
         .attr('opacity', '1');
       d3.selectAll('.legendShape')
         .attr('opacity', '0');
+      d3.selectAll('.legendButton')
+        .attr('fill', 'lightgray');
     });
+
+  svg.append('text')
+    .attr('x', x + 10)
+    .attr('y', y + 12.5)
+    .text('hover to switch legend');
 }
 
 export default hideLegend;

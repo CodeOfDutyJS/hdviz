@@ -141,7 +141,7 @@ class DataModel {
         ...targetCols[index],
       }));
     if (this.toNorm) r = this.toNorm(r, this.features);
-    return this.stratifiedSampling(r, this.targets, 50);
+    return r;
   }
 }
 

@@ -1,5 +1,8 @@
 import * as d3 from 'd3';
 import { _3d } from 'd3-3d';
+import drawTargetLegend from './DrawTargetLegend';
+import drawShapeLegend from './DrawShapeLegend';
+import hideLegend from './hideLegend';
 
 function processData({
   data,
@@ -102,9 +105,8 @@ function umap(data) {
     },
     data,
   };
-  props.width = props.svg.node().getBoundingClientRect().width;
-  props.height = props.svg.node().getBoundingClientRect().height;
-
+  props.width = props.svg.node().getBoundingClientRect().width - 100;
+  props.height = props.svg.node().getBoundingClientRect().height - 100;
   props.data.points = props.point3d(props.data.points);
 
   props.svg = props.svg
@@ -112,6 +114,12 @@ function umap(data) {
     .append('g');
 
   processData(props);
+
+  drawTargetLegend(props.color, data.selectedTarget, props.width - 130, 100, props.height - 100, 25);
+  if (data.target2) {
+    drawShapeLegend(props.shape, data.selectedTarget, props.width - 130, 100, props.height - 100, 25);
+    hideLegend(props.width - 130, 0, props.width / 3, props.height, 1);
+  }
   d3.select(window)
     .on('resize', () => {
       d3.select('#area').selectAll('*').remove();

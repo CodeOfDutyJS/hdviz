@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
 import drawTargetLegend from './DrawTargetLegend';
+import drawShapeLegend from './DrawShapeLegend';
+import hideLegend from './hideLegend';
 
 function scatterPlotMatrix({
   data,
@@ -150,7 +152,11 @@ function scatterPlotMatrix({
     .text((d) => d);
 
   svg.property('value', []);
-  drawTargetLegend(color, selectedTarget, width, 0 + 15, height, 25);
+  drawTargetLegend(color, selectedTarget, width, 100, height - 100, 25);
+  if (targets[1]) {
+    drawShapeLegend(shape, selectedTarget, width, 100, height - 100, 25);
+    hideLegend(width, 0, width / 3, height, 1);
+  }
   d3.select(window)
     .on('resize', () => {
       d3.select('#area').selectAll('*').remove();

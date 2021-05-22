@@ -171,6 +171,7 @@ function heatmap({
     .data(grid, (d) => d.column_a + d.column_b)
     .enter().append('rect')
     .attr('x', (d) => x(d.col))
+    .attr('class', 'heatmapRect')
     .attr('y', (d) => y(d.row))
     .attr('width', x.bandwidth())
     .attr('height', y.bandwidth())
