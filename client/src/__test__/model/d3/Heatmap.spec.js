@@ -1,8 +1,8 @@
+import { distance } from 'ml-distance';
 import { heatmap } from '../../../model/d3/index';
 import { iris } from '../data/index';
 import { HeatMapModel } from '../../../model/VisualizationModels/index';
 import { DataModel } from '../../../model/index';
-import { distance } from 'ml-distance';
 
 window.document.body.innerHTML = '<svg '
   + 'id="area" '
