@@ -35,24 +35,18 @@ describe('clustering', () => {
         },
         {
           a: 'fourth',
-          b:
-      9,
-          c:
-      12,
+          b: 9,
+          c: 12,
         },
         {
           a: 'second',
-          b:
-      3,
-          c:
-      5,
+          b: 3,
+          c: 5,
         },
         {
           a: 'third',
-          b:
-      10,
-          c:
-      7,
+          b: 10,
+          c: 7,
         },
       ],
     });
@@ -216,7 +210,7 @@ describe('Heatmap Model Helper Funcs', () => {
     ];
     testModel.getCorrelationMatrix().forEach((row, i) => {
       row.distances.forEach((dist, z) => {
-        expect(dist).toBeCloseTo(expectedDistances[i][z], 2)
+        expect(dist).toBeCloseTo(expectedDistances[i][z], 2);
       });
     });
   });

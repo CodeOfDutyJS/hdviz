@@ -43,7 +43,6 @@ describe('#(Integration) Check Linear Projection Distance Matrix', () => {
   test('verify matrix', () => {
     // calcolare matrice di distanza
     expect(visualizationStore._visualization.getPreparedDataset(rootStore.modelStore.data)).toStrictEqual({
-
       axis: [
         [
           {
