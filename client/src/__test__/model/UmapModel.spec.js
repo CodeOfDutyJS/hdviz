@@ -89,6 +89,24 @@ describe('#UmapModel', () => {
         }],
         target1: ['setosa', 'versicolor', 'virginica'],
         target2: ['a', 'b', 'c', 'd'],
+        selectedTarget: [
+          {
+            b: 'a',
+            species: 'setosa',
+          },
+          {
+            b: 'b',
+            species: 'setosa',
+          },
+          {
+            b: 'c',
+            species: 'versicolor',
+          },
+          {
+            b: 'd',
+            species: 'virginica',
+          },
+        ],
       });
       spy.mockRestore();
     });
