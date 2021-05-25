@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-const API_URL = window.SERVER_URL;
+const API_URL = `${window.SERVER_URL}/api`;
 
 class ApiService {
   async getDatabases() {

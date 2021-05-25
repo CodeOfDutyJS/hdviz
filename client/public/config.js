@@ -1,1 +1,1 @@
-window.SERVER_URL = 'http://localhost:1337/api';
+window.SERVER_URL = 'http://localhost:1337';
