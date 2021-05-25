@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-function hideLegend(x, y, width, height) {
+function hideLegend(x, y) {
   const svg = d3.select('#area');
 
   d3.selectAll('.legend')

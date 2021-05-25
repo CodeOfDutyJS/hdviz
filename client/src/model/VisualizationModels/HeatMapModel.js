@@ -8,7 +8,7 @@ import VisualizationCollector from '../VisualizationsCollector';
 class HeatMapModel extends VisualizationModel {
   constructor(dataModel, distanceFn = distance.euclidean) {
     super();
-    this._distanceFn = distance.euclidean;
+    this._distanceFn = distanceFn;
   }
 
   setDistance(distanceFn) {

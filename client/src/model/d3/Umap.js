@@ -118,7 +118,7 @@ function umap(data) {
   drawTargetLegend(props.color, data.selectedTarget, props.width - 130, 100, props.height - 100, 25);
   if (data.target2) {
     drawShapeLegend(props.shape, data.selectedTarget, props.width - 130, 100, props.height - 100, 25);
-    hideLegend(props.width - 130, 0, props.width / 3, props.height, 1);
+    hideLegend(props.width - 130, 0);
   }
   d3.select(window)
     .on('resize', () => {

@@ -50,6 +50,19 @@ describe('#DataModel', () => {
     });
   });
 
+  describe('#sampling', () => {
+    const dataset = new DataModel();
+    dataset.dataset = mockData;
+    dataset.features = mockFeature;
+    dataset.targets = mockTarget;
+    const selectedData = dataset.getSelectedDataset();
+    it('stratified sampling', () => {
+      expect(dataset.stratifiedSampling(selectedData, 'color', 2).length).toStrictEqual(2);
+    });
+    it('kthSampling', () => {
+      expect(dataset.kthSampling(selectedData, 2).length).toStrictEqual(2);
+    });
+  });
   describe('#getFeatureColumns', () => {
     const dataset = new DataModel();
     dataset.dataset = mockData;

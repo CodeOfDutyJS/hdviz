@@ -155,7 +155,7 @@ function scatterPlotMatrix({
   drawTargetLegend(color, selectedTarget, width, 100, height - 100, 25);
   if (targets[1]) {
     drawShapeLegend(shape, selectedTarget, width, 100, height - 100, 25);
-    hideLegend(width, 0, width / 3, height, 1);
+    hideLegend(width, 0);
   }
   d3.select(window)
     .on('resize', () => {

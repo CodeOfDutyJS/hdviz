@@ -83,12 +83,9 @@ class DataModel {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  stratifiedSampling(data, targetCols, numberOfItems) {
-    const firstTarget = targetCols[0];
-    const secondTarget = targetCols[1] ? targetCols[1] : null;
+  stratifiedSampling(data, target, numberOfItems) {
     const sortContainer = {};
     data.forEach((row) => {
-      const target = secondTarget ? row[firstTarget] + row[secondTarget] : row[firstTarget];
       if (!(target in sortContainer)) {
         sortContainer[target] = [];
         sortContainer[target].push(row);
