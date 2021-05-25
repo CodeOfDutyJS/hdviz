@@ -126,9 +126,9 @@ Per eseguire il server è sufficiente:
 
 1. aprire un terminale;
 2. posizionarsi nella cartella del server in cui è presente il file `index.js`;
-3. avviare il server immettendo da terminale il seguente comando:`node index.js`;
+3. avviare il server immettendo da terminale il seguente comando: `node index.js`;
 
-Il server è ora in esecuzione nella porta `1337`.
+Il server è ora in esecuzione nella porta `1337` se non specificato differentemente nel file `config.json` all'interno della cartella pricipale.
 
 ---
 
@@ -136,7 +136,7 @@ Il server è ora in esecuzione nella porta `1337`.
 
 ### Installazione
 
-1. Scaricare `client.zip` dall'ultima [release](https://github.com/CodeOfDutyJS/hdviz/releases/latest) presente su GitHub;
+1. scaricare `client.zip` dall'ultima [release](https://github.com/CodeOfDutyJS/hdviz/releases/latest) presente su GitHub;
 2. estrarre lo zip;
 3. aprire un terminale e installare `serve` utilizzando il comando `yarn global add serve`.
 
@@ -145,8 +145,9 @@ Il server è ora in esecuzione nella porta `1337`.
 Per eseguire la web app è sufficiente:
 
 1. posizionarsi all'interno della cartella dove si è estratto lo zip;
-2. aprire il terminale;
-3. immettere il comando `serve -s .` per avviare l'applicazione.
+2. se necessario aggiornare l'url del server nel file `config.js` nella cartella principale;
+3. aprire il terminale;
+4. immettere il comando `serve -s .` per avviare l'applicazione.
 
 La web app è ora in funzione e disponibile nella porta `5000` (se non specificato differentemente da `serve`).
 
