@@ -7,6 +7,7 @@ function euclideanNorm(obj, columns) {
   });
   return Math.sqrt(length);
 }
+
 function taxicabNorm(obj, columns) {
   let length = 0;
   columns.forEach((feat) => {
