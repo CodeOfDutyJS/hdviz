@@ -103,16 +103,6 @@ describe('#DataModel', () => {
         ]);
     });
   });
-
-  describe('#kthSampling', () => {
-    const dataset = new DataModel();
-    dataset.dataset = mockData;
-    dataset.features = mockFeature;
-    dataset.targets = mockTarget;
-    it('should return 2 object with data', () => {
-      expect(dataset.kthSampling(2).length).toBe(2);
-    });
-  });
   /*
   commmentato perchè queste funzioni sono state spostate da
   datamodel, ma potrebbero essere utili per altri test

@@ -107,8 +107,7 @@ class DataModel {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  kthSampling(numberOfItems) {
-    const data = this.dataset;
+  kthSampling(data, numberOfItems) {
     data.sort((a, b) => {
       const IdA = a[this.targets[0]].toUpperCase(); // ignore upper and lowercase
       const IdB = b[this.targets[0]].toUpperCase(); // ignore upper and lowercase
