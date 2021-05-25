@@ -118,17 +118,14 @@ class VisualizationStore {
 
   setSpread(value) {
     this._visualization.addOption({ spread: value });
-    console.log(this._visualization._options);
   }
 
   setNeighbors(value) {
     this._visualization.addOption({ nNeighbors: value });
-    console.log(this._visualization._options);
   }
 
   setMinDistance(value) {
     this._visualization.addOption({ minDistance: value });
-    console.log(this._visualization._options);
   }
 }
 
