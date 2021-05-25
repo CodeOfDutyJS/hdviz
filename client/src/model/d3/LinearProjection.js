@@ -188,6 +188,11 @@ function linearProjection(data) {
     .append('g');
 
   processData(props);
+  d3.select(window)
+    .on('resize', () => {
+      d3.select('#area').selectAll('*').remove();
+      linearProjection(data);
+    });
 }
 
 export default linearProjection;

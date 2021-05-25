@@ -95,6 +95,7 @@ function correlationHeatmap({ color, cluster }) {
     .enter().append('rect')
     .attr('x', (d) => x(d.col))
     .attr('y', (d) => y(d.row))
+    .attr('class', 'heatmapRect')
     .attr('width', x.bandwidth())
     .attr('height', y.bandwidth())
     .style('fill', (d) => c(d.correlation))

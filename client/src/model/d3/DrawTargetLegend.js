@@ -24,6 +24,7 @@ function drawTargetLegend(color, target, x, y, height, width, column = 0) {
 
   const radius = colorValues.length < 8 ? 15 : 5;
   svg.append('g')
+    .attr('class', 'legend')
     .selectAll('circle')
     .data(colorValues)
     .join('circle')
@@ -34,6 +35,7 @@ function drawTargetLegend(color, target, x, y, height, width, column = 0) {
     .style('opacity', 1);
 
   svg.append('g')
+    .attr('class', 'legend')
     .selectAll('text')
     .data(colorValues)
     .join('text')
