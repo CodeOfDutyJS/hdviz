@@ -83,31 +83,28 @@ class DataModel {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  // stratifiedSampling(data, targetCols, numberOfItems) {
-  //   const firstTarget = targetCols[0];
-  //   const secondTarget = targetCols[1] ? targetCols[1] : null;
-  //   const sortContainer = {};
-  //   data.forEach((row) => {
-  //     const target = secondTarget ? row[firstTarget] + row[secondTarget] : row[firstTarget];
-  //     if (!(target in sortContainer)) {
-  //       sortContainer[target] = [];
-  //       sortContainer[target].push(row);
-  //     } else {
-  //       sortContainer[target].push(row);
-  //     }
-  //   });
-  //   const fraction = numberOfItems / data.length;
-  //   const returnValue = [];
-  //   Object.keys(sortContainer).forEach((key) => {
-  //     const frac = Math.floor(sortContainer[key].length * fraction);
-  //     for (let i = 0; i < frac; i++) {
-  //       const index = Math.floor(Math.random() * (sortContainer[key].length));
-  //       returnValue.push(sortContainer[key][index]);
-  //       sortContainer[key].splice(index, 1);
-  //     }
-  //   });
-  //   return returnValue;
-  // }
+  stratifiedSampling(data, target, numberOfItems) {
+    const sortContainer = {};
+    data.forEach((row) => {
+      if (!(target in sortContainer)) {
+        sortContainer[target] = [];
+        sortContainer[target].push(row);
+      } else {
+        sortContainer[target].push(row);
+      }
+    });
+    const fraction = numberOfItems / data.length;
+    const returnValue = [];
+    Object.keys(sortContainer).forEach((key) => {
+      const frac = Math.floor(sortContainer[key].length * fraction);
+      for (let i = 0; i < frac; i++) {
+        const index = Math.floor(Math.random() * (sortContainer[key].length));
+        returnValue.push(sortContainer[key][index]);
+        sortContainer[key].splice(index, 1);
+      }
+    });
+    return returnValue;
+  }
 
   // eslint-disable-next-line class-methods-use-this
   kthSampling(numberOfItems) {
