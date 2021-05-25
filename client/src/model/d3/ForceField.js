@@ -80,7 +80,7 @@ function forceField(data) {
   drawTargetLegend(color, data.selectedTarget, width + 50, 100, height - 100, 25);
   if (nodes[0].shape) {
     drawShapeLegend(shape, data.selectedTarget, width + 50, 100, height - 100, 25);
-    hideLegend(width + 50, 0, width / 3, height, 1);
+    hideLegend(width + 50, 0);
   }
   d3.select(window)
     .on('resize', () => {
