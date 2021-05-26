@@ -1,5 +1,8 @@
 # HD Viz Manuale Utente v1.0.0
 
+## Segnalazioni
+Per segnalare la rilevazione di un malfunzionamento è sufficiente inviare una mail a info[at]codeofduty.it oppure una [Issue](https://github.com/CodeOfDutyJS/hdviz/issues/new) su GitHub.
+
 ## Indice
 
 - [Introduzione](#introduzione)
