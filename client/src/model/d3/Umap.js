@@ -33,15 +33,15 @@ function processData({
     .attr('stroke', '#fff')
     .attr('d', symbol.type((d) => shape(d.shape)))
     .attr('transform', (d) => `translate(${pointsX(d.projected.x)},${pointsY(d.projected.y)})`)
-    .style('fill', (d) => color(d.color))
-    .append('svg:title')
-    .text((d) => {
-      let description = '';
-      Object.keys(d.description).forEach((key) => {
-        description += `${key}: ${d.description[key]};\n`;
-      });
-      return description;
-    });
+    .style('fill', (d) => color(d.color));
+  // .append('svg:title')
+  // .text((d) => {
+  //   let description = '';
+  //   Object.keys(d.description).forEach((key) => {
+  //     description += `${key}: ${d.description[key]};\n`;
+  //   });
+  //   return description;
+  // });
 
   d3.selectAll('._3d').sort(_3d().sort);
 }
