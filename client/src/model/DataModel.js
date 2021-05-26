@@ -78,6 +78,7 @@ class DataModel {
 
   getFeatureColumnsNormalized() {
     const r = this.getFeatureColumns();
+
     if (this.toNorm) return this.toNorm(r, this.features);
     return r;
   }
@@ -137,6 +138,9 @@ class DataModel {
         ...value,
         ...targetCols[index],
       }));
+
+    if (r.length > 200) r = this.stratifiedSampling(this.dataset, this.features, 200);
+
     if (this.toNorm) r = this.toNorm(r, this.features);
     return r;
   }

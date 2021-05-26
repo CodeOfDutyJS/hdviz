@@ -1,13 +1,13 @@
 const express = require('express');
 const { findDB, getFiles, selectConfig } = require('./utils');
+const { port } = require('./config.json');
 
 const app = express();
-const port = 1337;
 
 const configFiles = getFiles(`${__dirname}/config`);
-app.listen(port, () => {});
+app.listen(port, () => { console.log(`Server start at port ${port}`); });
 
-app.get('/api/getDatabases', (req, res) => { // controllare se qui deve tornare [{"databases":["iris","due"]}]
+app.get('/api/getDatabases', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const databases = [];
 

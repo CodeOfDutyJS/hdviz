@@ -35,7 +35,7 @@ class UmapModel extends VisualizationModel {
           z: d[2],
           color: this.dataModel.targets.length > 0 ? label[i][this.dataModel.targets[0]] : null,
           shape: this.dataModel.targets.length > 1 ? label[i][this.dataModel.targets[1]] : null,
-          description: this.dataModel.setNorm(null).getSelectedDataset()[i],
+          // description: this.dataModel.setNorm(null).getSelectedDataset()[i],
         }));
     return {
       points: preparedPoints,
@@ -49,7 +49,7 @@ class UmapModel extends VisualizationModel {
 export default UmapModel;
 VisualizationCollector.addVisualization({
   id: 'umap',
-  label: 'UMAP',
+  label: 'Linear Projection (UMAP)',
   model: new UmapModel(),
   visualization: umap,
   options: { nNeighbors: true, minDistance: true, spread: true },

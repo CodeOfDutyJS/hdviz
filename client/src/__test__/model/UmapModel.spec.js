@@ -56,36 +56,24 @@ describe('#UmapModel', () => {
           z: -1.33,
           color: 'setosa',
           shape: 'a',
-          description: {
-            sepal_length: 5.1, sepal_width: 3.5, petal_length: 1.4, petal_width: 0.2, species: 'setosa', b: 'a',
-          },
         }, {
           x: -1.13,
           y: -0.12,
           z: -1.33,
           color: 'setosa',
           shape: 'b',
-          description: {
-            sepal_length: 4.9, sepal_width: 3.0, petal_length: 1.4, petal_width: 0.2, species: 'setosa', b: 'b',
-          },
         }, {
           x: -1.38,
           y: 0.33,
           z: -1.39,
           color: 'versicolor',
           shape: 'c',
-          description: {
-            sepal_length: 4.7, sepal_width: 3.2, petal_length: 1.3, petal_width: 0.2, species: 'versicolor', b: 'c',
-          },
         }, {
           x: -1.50,
           y: 0.10,
           z: -1.28,
           color: 'virginica',
           shape: 'd',
-          description: {
-            sepal_length: 4.6, sepal_width: 3.1, petal_length: 1.5, petal_width: 0.2, species: 'virginica', b: 'd',
-          },
         }],
         target1: ['setosa', 'versicolor', 'virginica'],
         target2: ['a', 'b', 'c', 'd'],

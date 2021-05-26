@@ -66,7 +66,7 @@ class LinearProjectionModel extends VisualizationModel {
 
 VisualizationCollector.addVisualization({
   id: 'linear',
-  label: 'Linear Projection',
+  label: 'Linear Projection (PCA)',
   model: new LinearProjectionModel(),
   visualization: linearProjection,
   options: { distance: false },
