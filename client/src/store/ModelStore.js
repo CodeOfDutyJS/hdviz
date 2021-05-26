@@ -64,6 +64,8 @@ class ModelStore {
   }
 
   setDataset(value) {
+    this.features = [];
+    this.targets = [];
     this.dataModel.dataset = value;
     this.rootStore.uiStore.loadingDataCompleted = true;
   }
