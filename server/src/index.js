@@ -26,7 +26,7 @@ app.get('/api/getDatabases', (req, res) => {
   res.json([{ databases }]);
 });
 
-app.get('/api/getTable', async (req, res) => {
+app.get('/api/getTables', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const { dbname } = req.query;
   const configurazione = selectConfig(dbname);
